@@ -14,12 +14,11 @@ class Repository(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False, unique=True, index=True, comment="仓库名称，如 linux-kernel")
     repo_url = Column(String(500), nullable=False, comment="Git 仓库 URL，如 https://git.kernel.org/.../linux.git")
-    local_path = Column(String(500), nullable=True, comment="本地克隆路径，如 /data/linux")
     default_branch = Column(String(100), nullable=False, default="master", comment="默认分支，如 master/main")
     is_active = Column(Boolean, default=True, comment="是否启用监测")
     last_fetched_at = Column(DateTime, nullable=True, comment="最后一次拉取更新的时间")
     created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
 
     def __repr__(self):
         return f"<Repository(name={self.name}, url={self.repo_url})>"
@@ -38,7 +37,6 @@ class GithubCommit(Base):
     repo_url = Column(String(500), nullable=True, comment="来源仓库 URL")
     branch = Column(String(100), nullable=True, default="master")
     created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     # 关联到分析结果（一个 commit 可以有多条分析记录）
     analyses = relationship("LLMAnalyse", back_populates="commit", cascade="all, delete-orphan")
@@ -84,3 +82,9 @@ class LLMAnalyse(Base):
         Index("ix_commit_severity", "commit_id", "severity"),
         Index("ix_is_security_date", "is_security_related", "analyzed_at"),
     )
+
+# 首次运行创建数据库表
+if __name__ == "__main__":
+    from server.db.database import engine
+
+    Base.metadata.create_all(bind=engine)

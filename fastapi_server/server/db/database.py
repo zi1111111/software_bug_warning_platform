@@ -1,6 +1,7 @@
 import os
 
-from flask.cli import load_dotenv
+from dotenv import load_dotenv
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -15,7 +16,12 @@ engine = create_engine(
     pool_size=20,       # 常规连接数
     max_overflow=30,    # 最大溢出连接数
     pool_timeout=60,    # 获取连接超时时间(秒)
-    pool_recycle=3600   # 连接回收时间(秒)
+    pool_recycle=3600, # 连接回收时间(秒)
+    connect_args={
+        "init_command": "SET time_zone = '+00:00'"  # 强制 UTC
+    },
+
+
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
