@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="数据收集层">
-      <change afterPath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" afterDir="false" />
+    <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="前端创建">
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,12 +88,30 @@
       <option name="project" value="LOCAL" />
       <updated>1775224049953</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="LLM分析层">
+      <option name="closed" value="true" />
+      <created>1775290600824</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1775290600825</updated>
+    </task>
+    <task id="LOCAL-00004" summary="前端创建">
+      <option name="closed" value="true" />
+      <created>1775290778905</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1775290778905</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="项目创建" />
     <MESSAGE value="数据收集层" />
-    <option name="LAST_COMMIT_MESSAGE" value="数据收集层" />
+    <MESSAGE value="LLM分析层" />
+    <MESSAGE value="前端创建" />
+    <option name="LAST_COMMIT_MESSAGE" value="前端创建" />
   </component>
 </project>
