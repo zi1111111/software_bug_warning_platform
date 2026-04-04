@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="项目创建">
-      <change afterPath="$PROJECT_DIR$/fastapi_server/server/service/data_collector.py" afterDir="false" />
+    <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="数据收集层">
+      <change afterPath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/db/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/db/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/data_collcter.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,17 +49,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.app.executor": "Run",
-    "Python.models.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.models.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -89,11 +83,20 @@
       <option name="project" value="LOCAL" />
       <updated>1775120204858</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="数据收集层">
+      <option name="closed" value="true" />
+      <created>1775224049953</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1775224049953</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="项目创建" />
-    <option name="LAST_COMMIT_MESSAGE" value="项目创建" />
+    <MESSAGE value="数据收集层" />
+    <option name="LAST_COMMIT_MESSAGE" value="数据收集层" />
   </component>
 </project>
