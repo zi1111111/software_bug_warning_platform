@@ -1,0 +1,43 @@
+2026-04-03 21:35:10,826 - app - INFO - 应用启动中...
+2026-04-03 21:35:10,946 - app - ERROR - 启动过程中发生错误: (pymysql.err.ProgrammingError) (1146, "Table 'softwarebugdatabase.repository' doesn't exist")
+[SQL: SELECT repository.id AS repository_id, repository.name AS repository_name, repository.repo_url AS repository_repo_url, repository.default_branch AS repository_default_branch, repository.is_active AS repository_is_active, repository.last_fetched_at AS repository_last_fetched_at, repository.created_at AS repository_created_at 
+FROM repository 
+WHERE repository.is_active = true]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-04-03 21:36:05,442 - app - INFO - 应用关闭中...
+2026-04-03 21:36:05,442 - app - ERROR - 关闭调度器时出错: Scheduler is not running
+2026-04-03 21:37:45,818 - app - INFO - 应用启动中...
+2026-04-03 21:37:45,851 - server.service.data_collector - INFO - 开始同步0
+2026-04-03 21:37:45,851 - app - ERROR - 启动过程中发生错误: func must be a callable or a textual reference to one
+2026-04-03 21:41:59,204 - app - INFO - 应用关闭中...
+2026-04-03 21:41:59,205 - app - ERROR - 关闭调度器时出错: Scheduler is not running
+2026-04-03 21:42:00,486 - app - INFO - 应用启动中...
+2026-04-03 21:42:00,518 - server.service.data_collector - INFO - 开始同步0 个活跃仓库
+2026-04-03 21:42:00,518 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-03 21:42:00,520 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-03 21:42:00,520 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-03 21:42:00,520 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务
+2026-04-03 21:42:06,958 - app - INFO - 应用启动中...
+2026-04-03 21:42:06,980 - server.service.data_collector - INFO - 开始同步0 个活跃仓库
+2026-04-03 21:42:06,981 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-03 21:42:06,982 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-03 21:42:06,982 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-03 21:42:06,982 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务
+2026-04-03 21:42:42,447 - app - INFO - 应用关闭中...
+2026-04-03 21:42:42,447 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-03 21:42:42,448 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-03 21:42:42,448 - app - INFO - 定时任务调度器已关闭
+2026-04-04 16:07:40,641 - app - INFO - 应用启动中...
+2026-04-04 16:07:40,731 - server.service.data_collector - INFO - 开始同步0 个活跃仓库
+2026-04-04 16:07:41,169 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-04 16:07:41,174 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-04 16:07:41,175 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-04 16:07:41,175 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-04 16:07:41,175 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-04 16:07:41,175 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-04 16:07:41,175 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-04 16:07:41,176 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-04 16:15:23,944 - app - INFO - 应用关闭中...
+2026-04-04 16:15:23,951 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-04 16:15:23,952 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-04 16:15:23,953 - app - INFO - 定时任务调度器已关闭
