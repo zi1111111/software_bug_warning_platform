@@ -6,7 +6,7 @@ from apscheduler.triggers.cron import CronTrigger
 from server.service.data_collector import GitHubCollector
 
 scheduler = BackgroundScheduler()
-collector = GitHubCollector()
+
 logger = logging.getLogger(__name__)
 
 from server.service.analysis_service import AnalysisService
@@ -16,8 +16,8 @@ def start_scheduler():
     """
     定时调度器 凌晨两点同步所有仓库
     """
-
-    #在app启动时收集一次并交给模型分析一次
+    # 在app启动时收集一次并交给模型分析一次
+    collector = GitHubCollector()
     collector.sync_all_repositories()
     analysis_service = AnalysisService(model_type="deepseek")
     analysis_service.analyze_unanalyzed_commits()

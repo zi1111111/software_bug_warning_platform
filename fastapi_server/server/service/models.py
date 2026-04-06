@@ -28,6 +28,7 @@ class GithubCommit(Base):
     __tablename__ = "github_commits"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    repo_id = Column(Integer,ForeignKey("repository.id",ondelete="CASCADE"),nullable=False,index=True)
     commit_hash = Column(String(40), unique=True, nullable=False, index=True, comment="Git commit SHA")
     author = Column(String(255), nullable=False)
     author_email = Column(String(255), nullable=True)
@@ -37,6 +38,7 @@ class GithubCommit(Base):
     repo_url = Column(String(500), nullable=True, comment="来源仓库 URL")
     branch = Column(String(100), nullable=True, default="master")
     created_at = Column(DateTime, server_default=func.now())
+    is_analysed =  Column(Boolean, default=False, comment="是否被监测")
 
     # 关联到分析结果（一个 commit 可以有多条分析记录）
     analyses = relationship("LLMAnalyse", back_populates="commit", cascade="all, delete-orphan")
@@ -86,5 +88,4 @@ class LLMAnalyse(Base):
 # 首次运行创建数据库表
 if __name__ == "__main__":
     from server.db.database import engine
-
     Base.metadata.create_all(bind=engine)

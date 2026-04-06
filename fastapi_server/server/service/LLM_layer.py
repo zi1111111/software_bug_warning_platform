@@ -6,6 +6,7 @@ from typing import Dict
 
 from click import prompt
 from django.db.models.functions import JSONObject
+from dotenv import load_dotenv
 from openai import OpenAI
 from openai.types import ResponseFormatJSONObject
 
@@ -29,7 +30,7 @@ class LLMAnalyzer:
         self.model_type = model_type
         self.client = None
         self.model_name = None
-
+        load_dotenv()
         if model_type == "deepseek":
             api_key = os.getenv("DEEPSEEK_API_KEY")
             if not api_key:

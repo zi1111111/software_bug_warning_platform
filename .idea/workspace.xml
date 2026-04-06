@@ -5,7 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="前端创建">
+      <change afterPath="$PROJECT_DIR$/vue_client/frontend/src/request/request.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vue_client/frontend/src/response/response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vue_client/frontend/src/stores/repository.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/data_collector.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/data_collector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/stores/repository.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,23 +63,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;Python.models.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.app.executor": "Run",
+    "Python.base_service.executor": "Debug",
+    "Python.data_collector.executor": "Run",
+    "Python.models.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "settings.editor.selected.configurable": "promo.database"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
         <option value="bundled-python-sdk-53e2683a6804-9cdd278e9d02-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.26094.141" />
       </set>
     </attachedChunks>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\17810\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
@@ -104,7 +126,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775290778905</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="前端创建">
+      <option name="closed" value="true" />
+      <created>1775319134577</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1775319134578</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

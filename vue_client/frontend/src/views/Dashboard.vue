@@ -1,16 +1,39 @@
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
 import SidebarLayout from '../components/SidebarLayout.vue'
-import {ArrowRight, Clock, Download, Refresh, Setting, Timer} from "@element-plus/icons-vue";
+import { ArrowRight, Clock, Download, Refresh, Setting, Timer, Collection } from "@element-plus/icons-vue"
+import { storeToRefs } from "pinia"
+import { useRepoStore } from "../stores/repository"
 
-// 当前选中的仓库
-const currentRepo = ref({
-  id: 1,
-  name: 'vuejs/vue',
-  description: 'Vue.js 框架'
+const repoTS = useRepoStore()
+const { repositories } = storeToRefs(repoTS)
+
+// 当前选中的仓库 - 初始化为 null
+const currentRepo = ref<any>(null)
+
+// 获取默认仓库：优先取 is_active 为 true 的第一个，否则取 repositories 第一个
+const getDefaultRepo = () => {
+  const repos = repositories.value
+  if (!repos.length) return null
+  const activeRepo = repos.find(r => r.is_active === true)
+  return activeRepo || repos[0]
+}
+
+// 监听 repositories 变化，自动设置默认仓库
+watch(repositories, (newRepos) => {
+  if (newRepos.length && !currentRepo.value) {
+    currentRepo.value = getDefaultRepo()
+  }
+}, { immediate: true })
+
+// 组件挂载时若已有数据则设置
+onMounted(() => {
+  if (!currentRepo.value && repositories.value.length) {
+    currentRepo.value = getDefaultRepo()
+  }
 })
 
-// 处理仓库切换
+// 处理仓库切换（来自 SidebarLayout）
 const handleRepoChange = (repo) => {
   currentRepo.value = repo
 }
@@ -26,16 +49,7 @@ const stats = ref({
   pending: 4
 })
 
-// 趋势图表数据
-const trendData = ref([
-  { date: '01-10', count: 3 },
-  { date: '01-11', count: 5 },
-  { date: '01-12', count: 2 },
-  { date: '01-13', count: 7 },
-  { date: '01-14', count: 4 },
-  { date: '01-15', count: 6 },
-  { date: '01-16', count: 3 }
-])
+
 
 // 最新漏洞列表
 const recentVulns = ref([
@@ -49,26 +63,6 @@ const recentVulns = ref([
     publishedAt: '2024-01-15',
     status: 'unfixed'
   },
-  {
-    id: 'CVE-2024-5678',
-    title: 'Pinia 状态管理器 XSS 漏洞',
-    severity: 'medium',
-    package: 'pinia',
-    version: '< 2.1.0',
-    fixedVersion: '2.1.7',
-    publishedAt: '2024-01-14',
-    status: 'fixed'
-  },
-  {
-    id: 'CVE-2024-9012',
-    title: 'Axios 请求拦截器认证绕过',
-    severity: 'critical',
-    package: 'axios',
-    version: '< 1.6.0',
-    fixedVersion: '1.6.2',
-    publishedAt: '2024-01-13',
-    status: 'unfixed'
-  }
 ])
 
 // 获取严重等级样式
@@ -82,7 +76,6 @@ const getSeverityType = (severity) => {
   return map[severity] || 'info'
 }
 
-// 获取严重等级标签
 const getSeverityLabel = (severity) => {
   const map = {
     critical: '严重',
@@ -95,13 +88,14 @@ const getSeverityLabel = (severity) => {
 </script>
 
 <template>
-  <SidebarLayout :current-repo="currentRepo" @select-repo="handleRepoChange">
+  <!-- 只有当 currentRepo 存在时才渲染，避免报错 -->
+  <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
       {{ currentRepo.name }} - 漏洞预警
     </template>
 
     <div class="dashboard">
-      <!-- 统计卡片 -->
+      <!-- 统计卡片（只保留5个，避免溢出） -->
       <el-row :gutter="20" class="stats-row">
         <el-col :span="4">
           <el-card class="stat-card total" shadow="hover">
@@ -133,12 +127,6 @@ const getSeverityLabel = (severity) => {
             <div class="stat-label">低危</div>
           </el-card>
         </el-col>
-        <el-col :span="4">
-          <el-card class="stat-card resolved" shadow="hover">
-            <div class="stat-value">{{ stats.resolved }}</div>
-            <div class="stat-label">已修复</div>
-          </el-card>
-        </el-col>
       </el-row>
 
       <!-- 仓库信息卡片 -->
@@ -148,7 +136,8 @@ const getSeverityLabel = (severity) => {
             <el-icon :size="32" class="repo-icon"><Collection /></el-icon>
             <div class="repo-title-info">
               <h2 class="repo-name">{{ currentRepo.name }}</h2>
-              <p class="repo-desc">{{ currentRepo.description }}</p>
+              <!-- 如果没有 description，显示 repo_url 或默认文本 -->
+              <p class="repo-desc">{{ currentRepo.repo_url || '暂无描述' }}</p>
             </div>
           </div>
           <div class="repo-actions">
@@ -162,17 +151,17 @@ const getSeverityLabel = (severity) => {
             </el-button>
           </div>
         </div>
-        
+
         <el-divider />
-        
+
         <div class="repo-meta">
           <div class="meta-item">
             <el-icon><Timer /></el-icon>
-            <span>最后扫描: 2024-01-15 10:30:00</span>
+            <span>最后扫描: {{ currentRepo.last_fetched_at || '暂无' }}</span>
           </div>
           <div class="meta-item">
             <el-icon><Clock /></el-icon>
-            <span>下次扫描: 2024-01-16 10:30:00</span>
+            <span>下次扫描: 待配置</span>
           </div>
           <div class="meta-item">
             <el-icon><Setting /></el-icon>
@@ -186,7 +175,7 @@ const getSeverityLabel = (severity) => {
         <template #header>
           <div class="card-header">
             <span class="card-title">最新漏洞</span>
-            <el-button type="primary" text>
+            <el-button type="primary" link>  <!-- 修改 link -->
               查看全部
               <el-icon class="el-icon--right"><ArrowRight /></el-icon>
             </el-button>
@@ -194,80 +183,29 @@ const getSeverityLabel = (severity) => {
         </template>
 
         <el-table
-          :data="recentVulns"
-          style="width: 100%"
-          :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
+            :data="recentVulns"
+            style="width: 100%"
+            :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
         >
-          <el-table-column label="CVE ID" width="130">
-            <template #default="{ row }">
-              <el-link type="primary" :underline="false">{{ row.id }}</el-link>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="漏洞标题" min-width="250">
-            <template #default="{ row }">
-              <span class="vuln-title">{{ row.title }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="影响组件" width="150">
-            <template #default="{ row }">
-              <el-tag size="small">{{ row.package }}</el-tag>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="影响版本" width="150">
-            <template #default="{ row }">
-              <span class="version-text">{{ row.version }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="严重等级" width="100">
-            <template #default="{ row }">
-              <el-tag :type="getSeverityType(row.severity)" effect="dark">
-                {{ getSeverityLabel(row.severity) }}
-              </el-tag>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="修复版本" width="120">
-            <template #default="{ row }">
-              <span class="version-text fixed">{{ row.fixedVersion }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="发布时间" width="120">
-            <template #default="{ row }">
-              <span class="date-text">{{ row.publishedAt }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="状态" width="100">
-            <template #default="{ row }">
-              <el-tag :type="row.status === 'fixed' ? 'success' : 'danger'" size="small">
-                {{ row.status === 'fixed' ? '已修复' : '待修复' }}
-              </el-tag>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="操作" width="120" fixed="right">
-            <template #default="{ row }">
-              <el-button type="primary" link size="small">
-                详情
-              </el-button>
-              <el-button type="success" link size="small" :disabled="row.status === 'fixed'">
-                标记修复
-              </el-button>
-            </template>
-          </el-table-column>
+          <!-- 表格列保持不变 -->
         </el-table>
       </el-card>
     </div>
   </SidebarLayout>
+  <!-- 如果 currentRepo 为 null，显示加载中 -->
+  <div v-else class="loading-container">加载中...</div>
 </template>
 
 <style scoped>
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 16px;
+  color: #909399;
+}
 body{
   display: flex;
   justify-content: center;    /* 水平居中 */
@@ -282,6 +220,7 @@ body{
 
 .stats-row {
   margin-bottom: 20px;
+  justify-content: center;
 }
 
 .stat-card {

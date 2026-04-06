@@ -1,37 +1,34 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   ArrowDown,
   Collection,
   Expand,
-  Fold,
+  Fold, Link,
   Management,
   Monitor,
-  Odometer, Setting,
+  Odometer, Plus, Setting,
   TrendCharts,
   Warning
 } from "@element-plus/icons-vue";
-
-const props = defineProps({
+import {useRepoStore} from "../stores/repository";
+import {storeToRefs} from "pinia";
+defineProps({
   currentRepo: {
     type: Object,
     default: null
   }
-})
-
-const emit = defineEmits(['select-repo', 'manage-repos'])
+});
+const emit = defineEmits(['select-repo'])
 
 const router = useRouter()
 const isCollapse = ref(false)
 const showRepoDrawer = ref(false)
+//repoTS调用
+const repoTS = useRepoStore()
 
-// 示例仓库数据
-const repositories = ref([
-  { id: 1, name: 'vuejs/vue', url: 'https://github.com/vuejs/vue', description: 'Vue.js 框架', active: true },
-  { id: 2, name: 'facebook/react', url: 'https://github.com/facebook/react', description: 'React 库', active: false },
-  { id: 3, name: 'angular/angular', url: 'https://github.com/angular/angular', description: 'Angular 框架', active: false },
-])
+const { repositories } = storeToRefs(repoTS)
 
 const activeMenu = ref('dashboard')
 
@@ -59,7 +56,6 @@ const selectRepo = (repo) => {
 
 const openRepoManager = () => {
   showRepoDrawer.value = false
-  emit('manage-repos')
   router.push('/repositories')
 }
 
@@ -69,6 +65,7 @@ const toggleCollapse = () => {
 
 const currentRepoName = computed(() => {
   const active = repositories.value.find(r => r.active)
+  console.log('active', active)
   return active ? active.name : '未选择仓库'
 })
 </script>
@@ -83,7 +80,7 @@ const currentRepoName = computed(() => {
         <el-button
             v-show="!isCollapse"
             class="collapse-btn"
-            type="text"
+            link
             @click="toggleCollapse"
         >
           <el-icon><Fold /></el-icon>
@@ -91,7 +88,7 @@ const currentRepoName = computed(() => {
         <el-button
             v-show="isCollapse"
             class="expand-btn"
-            type="text"
+            link
             @click="toggleCollapse"
         >
           <el-icon><Expand /></el-icon>
@@ -214,7 +211,7 @@ const currentRepoName = computed(() => {
               v-for="repo in repositories"
               :key="repo.id"
               class="repo-item"
-              :class="{ 'repo-item-active': repo.active }"
+              :class="{ 'repo-item-active': repo.is_active }"
               shadow="hover"
               @click="selectRepo(repo)"
           >
@@ -224,10 +221,10 @@ const currentRepoName = computed(() => {
                 <span class="repo-item-name">{{ repo.name }}</span>
                 <el-tag v-if="repo.active" type="success" size="small">当前</el-tag>
               </div>
-              <p class="repo-item-desc">{{ repo.description }}</p>
+              <p class="repo-item-desc">上次扫描时间:{{ repo.last_fetched_at }}</p>
               <a :href="repo.url" target="_blank" class="repo-item-url" @click.stop>
                 <el-icon><Link /></el-icon>
-                {{ repo.url }}
+                {{ repo.repo_url }}
               </a>
             </div>
           </el-card>

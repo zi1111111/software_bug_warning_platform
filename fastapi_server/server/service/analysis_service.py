@@ -16,8 +16,13 @@ class AnalysisService:
         分析单个 commit 并存储结果，返回是否成功
         """
         # 预过滤
+
         if not self.analyzer.should_analyze(message, diff):
             logger.info(f"Commit {commit_hash[:7]} 预过滤跳过（无安全关键词）")
+            commit = db.query(GithubCommit).filter(GithubCommit.id == commit_id).first()
+            commit.is_analysed = True
+            db.add(commit)
+            db.commit()
             return False
 
         logger.info(f"分析 Commit {commit_hash[:7]} ...")
@@ -36,6 +41,9 @@ class AnalysisService:
             analysis_cost=result.get("analysis_cost"),
             raw_response=result.get("raw_response")
         )
+        commit = db.query(GithubCommit).filter(GithubCommit.id == commit_id).first()
+        commit.is_analysed = True
+        db.add(commit)
         db.add(analyse)
         db.commit()
         logger.info(f"Commit {commit_hash[:7]} 分析完成，安全相关: {result.get('is_security_related')}")
@@ -46,9 +54,7 @@ class AnalysisService:
         db = SessionLocal()
         try:
             # 查询未分析过的 commit（没有关联的 LLMAnalyse 记录）
-            unanalyzed = db.query(GithubCommit).outerjoin(
-                LLMAnalyse, GithubCommit.id == LLMAnalyse.commit_id
-            ).filter(LLMAnalyse.id is None).all()
+            unanalyzed = db.query(GithubCommit).filter(GithubCommit.is_analysed == False).all()
 
             logger.info(f"发现 {len(unanalyzed)} 个未分析的 commits")
             for commit in unanalyzed:

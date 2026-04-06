@@ -1,79 +1,54 @@
-<script setup>
-import { ref, reactive } from 'vue'
+<script setup lang = "ts">
+import {ref, reactive, computed} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import {CircleCheck, Collection, Plus, Timer, Warning} from "@element-plus/icons-vue";
+import {CircleCheck, Collection, Delete, Edit, House, Plus, Refresh, Timer, Warning} from "@element-plus/icons-vue";
+import {useRepoStore} from "../stores/repository";
+import {Repository} from "../response/response";
+import {storeToRefs} from "pinia";
+import {http} from "../request/request";
+import { useRouter } from 'vue-router'   // 新增
+
+const router = useRouter()
 const dialogVisible = ref(false)
 const isEditing = ref(false)
-const currentRepo = ref(null)
+const currentRepo = ref<Repository>(null)
+//repoTS调用
+const repoTS = useRepoStore()
+
+//仓库列表
+const { repositories } = storeToRefs(repoTS)
 
 
 // 表单数据
 const form = reactive({
-  name: '',
-  url: '',
-  description: '',
-  webhook_url: '',
-  notify_email: '',
-  auto_scan: true,
-  scan_frequency: 'daily'
+  name: "",
+  repo_url: "",
+  default_branch: "",
+  is_active: true,
 })
-
 // 搜索关键词
 const searchQuery = ref('')
-
-// 仓库列表
-const repositories = ref([
-  {
-    id: 1,
-    name: 'vuejs/vue',
-    url: 'https://github.com/vuejs/vue',
-    description: 'Vue.js 是一个用于构建用户界面的渐进式框架',
-    status: 'active',
-    last_scan: '2024-01-15 10:30:00',
-    vuln_count: 2,
-    webhook_url: '',
-    notify_email: 'admin@example.com',
-    auto_scan: true,
-    scan_frequency: 'daily'
-  },
-  {
-    id: 2,
-    name: 'facebook/react',
-    url: 'https://github.com/facebook/react',
-    description: '用于构建用户界面的 JavaScript 库',
-    status: 'active',
-    last_scan: '2024-01-14 15:20:00',
-    vuln_count: 5,
-    webhook_url: '',
-    notify_email: 'admin@example.com',
-    auto_scan: true,
-    scan_frequency: 'weekly'
-  },
-  {
-    id: 3,
-    name: 'angular/angular',
-    url: 'https://github.com/angular/angular',
-    description: '现代 Web 开发平台',
-    status: 'inactive',
-    last_scan: '2024-01-10 09:00:00',
-    vuln_count: 0,
-    webhook_url: '',
-    notify_email: '',
-    auto_scan: false,
-    scan_frequency: 'manual'
-  }
-])
 
 // 过滤后的仓库列表
 const filteredRepos = computed(() => {
   if (!searchQuery.value) return repositories.value
   const query = searchQuery.value.toLowerCase()
   return repositories.value.filter(repo =>
-    repo.name.toLowerCase().includes(query) ||
-    repo.description.toLowerCase().includes(query)
+    repo.name.toLowerCase().includes(query)
   )
 })
 
+//最近时间
+const latestScanTime = computed(() => {
+  const times = repositories.value
+      .map(repo => repo.last_fetched_at)
+      .filter(time => time) // 过滤掉 null/undefined/空字符串
+      .sort()
+      .reverse(); // 降序排序（最新的在前）
+
+  if (times.length === 0) return '暂无扫描记录';
+  return times[0]; // 返回最新的时间字符串
+});
 // 打开添加对话框
 const openAddDialog = () => {
   isEditing.value = false
@@ -92,35 +67,42 @@ const openEditDialog = (repo) => {
 // 重置表单
 const resetForm = () => {
   form.name = ''
-  form.url = ''
-  form.description = ''
-  form.webhook_url = ''
-  form.notify_email = ''
-  form.auto_scan = true
-  form.scan_frequency = 'daily'
+  form.repo_url = ''
+  form.default_branch= ""
+  form.is_active= true
   currentRepo.value = null
 }
 
 // 保存仓库
-const saveRepo = () => {
+const saveRepo = async () => {
   if (isEditing.value) {
     // 更新现有仓库
     const index = repositories.value.findIndex(r => r.id === currentRepo.value.id)
     if (index !== -1) {
-      repositories.value[index] = { ...repositories.value[index], ...form }
+      repositories[index] = { ...repositories[index], ...form }
     }
-    ElMessage.success('仓库更新成功')
+    const res = await repoTS.changeRepository({
+      id:currentRepo.value.id,
+      default_branch: form.default_branch,
+      is_active: form.is_active})
+    if(res === true)
+      ElMessage.success('仓库更新成功')
+
+    else
+      ElMessage.error("仓库更新失败")
+
   } else {
-    // 添加新仓库
-    const newRepo = {
-      id: Date.now(),
-      ...form,
-      status: 'active',
-      last_scan: '-',
-      vuln_count: 0
+    const res = await repoTS.addRepository({
+      name:form.name,
+      repo_url:form.repo_url,
+      default_branch:form.default_branch,
+      is_active:form.is_active,
+    })
+    if (res === true) {
+      ElMessage.success('仓库添加成功')
     }
-    repositories.value.push(newRepo)
-    ElMessage.success('仓库添加成功')
+    else
+      ElMessage.error("仓库添加失败")
   }
   dialogVisible.value = false
   resetForm()
@@ -136,35 +118,56 @@ const deleteRepo = (repo) => {
       cancelButtonText: '取消',
       type: 'warning'
     }
-  ).then(() => {
+  ).then(async() => {
     const index = repositories.value.findIndex(r => r.id === repo.id)
     if (index !== -1) {
-      repositories.value.splice(index, 1)
+      const res = await repoTS.deleteRepository({id: repo.id})
+      if(res === true) {
+        repositories.value.splice(index, 1)
+        ElMessage.success('仓库删除成功')
+      }
+      else
+        ElMessage.error("仓库删除失败")
     }
-    ElMessage.success('仓库删除成功')
   })
 }
 
 // 切换仓库状态
-const toggleStatus = (repo) => {
-  repo.status = repo.status === 'active' ? 'inactive' : 'active'
-  ElMessage.success(`仓库已${repo.status === 'active' ? '启用' : '禁用'}`)
+const toggleStatus = async (repo: Repository) => {
+  const newStatus = !repo.is_active   // 计算新状态（布尔取反）
+  const res = await repoTS.changeRepository({
+    id: repo.id,
+    default_branch: repo.default_branch,
+    is_active: newStatus
+  })
+  if (res === true) {
+    repo.is_active = newStatus   // 请求成功后更新本地状态
+    ElMessage.success(`仓库已${newStatus ? '启用' : '禁用'}`)
+  } else {
+    ElMessage.error('操作失败，请重试')
+  }
 }
 
 // 手动扫描
-const manualScan = (repo) => {
+const manualScan = async(repo) => {
   ElMessage.info(`正在扫描仓库: ${repo.name}`)
   // 模拟扫描过程
-  setTimeout(() => {
-    repo.last_scan = new Date().toLocaleString()
-    ElMessage.success('扫描完成')
-  }, 2000)
+    const res = await http.post("/api/searchCommit",{id:repo.id})
+    if(res.code === 200) {
+      repo.last_fetched_at = new Date().toLocaleString()
+      ElMessage.success('扫描完成')
+    }
 }
 
 // 查看漏洞详情
 const viewVulns = (repo) => {
   // 跳转到漏洞预警页面，并传入仓库ID
   // router.push(`/warnings?repo=${repo.id}`)
+}
+
+// 返回首页
+const goToHome = () => {
+  router.push('/')   // 替换为你的实际首页路径
 }
 </script>
 
@@ -174,7 +177,7 @@ const viewVulns = (repo) => {
     <div class="page-header">
       <div class="header-left">
         <h1 class="title">仓库管理</h1>
-        <p class="subtitle">管理您的代码仓库，配置自动扫描和预警设置</p>
+        <p class="subtitle">管理您的代码仓库</p>
       </div>
       <div class="header-right">
         <el-input
@@ -185,6 +188,10 @@ const viewVulns = (repo) => {
           class="search-input"
           style="width: 240px; margin-right: 16px;"
         />
+        <el-button @click="goToHome" style="margin-right: 16px;">
+          <el-icon><House /></el-icon>
+          返回首页
+        </el-button>
         <el-button type="primary" @click="openAddDialog">
           <el-icon><Plus /></el-icon>
           添加仓库
@@ -214,7 +221,7 @@ const viewVulns = (repo) => {
               <el-icon><CircleCheck /></el-icon>
             </div>
             <div class="stat-info">
-              <div class="stat-value">{{ repositories.filter(r => r.status === 'active').length }}</div>
+              <div class="stat-value">{{ repositories.filter(r => r.is_active === true).length }}</div>
               <div class="stat-label">活跃仓库</div>
             </div>
           </div>
@@ -240,8 +247,8 @@ const viewVulns = (repo) => {
               <el-icon><Timer /></el-icon>
             </div>
             <div class="stat-info">
-              <div class="stat-value">{{ repositories.filter(r => r.auto_scan).length }}</div>
-              <div class="stat-label">自动扫描</div>
+              <div class="stat-value">{{ latestScanTime }}</div>
+              <div class="stat-label">上次扫描时间</div>
             </div>
           </div>
         </el-card>
@@ -256,23 +263,22 @@ const viewVulns = (repo) => {
         :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
       >
         <el-table-column type="index" width="50" />
-        
+
         <el-table-column label="仓库信息" min-width="280">
           <template #default="{ row }">
             <div class="repo-info-cell">
               <el-avatar :size="40" :icon="Collection" class="repo-avatar" />
               <div class="repo-meta">
                 <div class="repo-name">{{ row.name }}</div>
-                <div class="repo-desc">{{ row.description }}</div>
               </div>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column label="状态" width="100">
+        <el-table-column label="状态" width="150">
           <template #default="{ row }">
-            <el-tag :type="row.status === 'active' ? 'success' : 'info'">
-              {{ row.status === 'active' ? '活跃' : '停用' }}
+            <el-tag :type="row.is_active === true ? false : 'info'">
+              {{ row.is_active === true ? '活跃' : '停用' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -280,33 +286,34 @@ const viewVulns = (repo) => {
         <el-table-column label="扫描设置" width="150">
           <template #default="{ row }">
             <div class="scan-settings">
-              <el-tag v-if="row.auto_scan" type="primary" size="small">
-                {{ row.scan_frequency === 'daily' ? '每天' : row.scan_frequency === 'weekly' ? '每周' : '每月' }}
-              </el-tag>
-              <el-tag v-else type="info" size="small">手动</el-tag>
+              <el-tag type="info" size="small">自动</el-tag>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column label="漏洞" width="100">
+        <el-table-column label="漏洞" width="180" fixed="right">
           <template #default="{ row }">
-            <el-badge
-              :value="row.vuln_count"
-              :type="row.vuln_count > 0 ? 'danger' : 'success'">
-              <el-button
-                type="text"
-                :disabled="row.vuln_count === 0"
-                @click="viewVulns(row)"
+            <div style=" text-align: start">
+              <el-badge
+                  :value="row.vuln_count"
+                  :type="row.vuln_count > 0 ? 'danger' : 'success'"
+                  :offset="[0, 0]"
               >
-                查看
-              </el-button>
-            </el-badge>
+                <el-button
+                    type="text"
+                    :disabled="row.vuln_count === 0"
+                    @click="viewVulns(row)"
+                >
+                  查看
+                </el-button>
+              </el-badge>
+            </div>
           </template>
         </el-table-column>
 
-        <el-table-column label="最后扫描" width="160">
+        <el-table-column label="最后扫描" width="180">
           <template #default="{ row }">
-            <span class="last-scan">{{ row.last_scan }}</span>
+            <span class="last-scan">{{ row.last_fetched_at }}</span>
           </template>
         </el-table-column>
 
@@ -317,11 +324,11 @@ const viewVulns = (repo) => {
                 <el-icon><Edit /></el-icon>
               </el-button>
               <el-button
-                :type="row.status === 'active' ? 'warning' : 'success'"
+                :type="row.is_active === true ? false :'success'"
                 size="small"
                 @click="toggleStatus(row)"
               >
-                <el-icon><component :is="row.status === 'active' ? 'CircleClose' : 'CircleCheck'" /></el-icon>
+                <el-icon><component :is="row.is_active === true ?  'CircleClose' : 'CircleCheck'" /></el-icon>
               </el-button>
               <el-button type="info" size="small" @click="manualScan(row)">
                 <el-icon><Refresh /></el-icon>
@@ -344,42 +351,23 @@ const viewVulns = (repo) => {
     >
       <el-form :model="form" label-width="120px" class="repo-form">
         <el-form-item label="仓库名称" required>
-          <el-input v-model="form.name" placeholder="例如: vuejs/vue" />
+          <el-input v-model="form.name" placeholder="例如: vuejs/vue" :readonly ="isEditing"/>
         </el-form-item>
 
         <el-form-item label="仓库地址" required>
-          <el-input v-model="form.url" placeholder="https://github.com/owner/repo" />
+          <el-input v-model="form.repo_url" placeholder="例如:https://github.com/owner/repo" :readonly ="isEditing"/>
         </el-form-item>
 
-        <el-form-item label="描述">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="2"
-            placeholder="仓库描述信息"
+        <el-form-item label="分支" required>
+          <el-input v-model="form.default_branch" placeholder="例如:master" />
+        </el-form-item>
+
+        <el-form-item label="状态" required>
+          <el-switch
+            v-model="form.is_active"
+            active-text="活跃"
+            inactive-text="不活跃"
           />
-        </el-form-item>
-
-        <el-divider content-position="left">预警设置</el-divider>
-
-        <el-form-item label="通知邮箱">
-          <el-input v-model="form.notify_email" placeholder="接收漏洞预警的邮箱地址" />
-        </el-form-item>
-
-        <el-form-item label="Webhook URL">
-          <el-input v-model="form.webhook_url" placeholder="接收通知的 Webhook 地址" />
-        </el-form-item>
-
-        <el-form-item label="自动扫描">
-          <el-switch v-model="form.auto_scan" />
-        </el-form-item>
-
-        <el-form-item v-if="form.auto_scan" label="扫描频率">
-          <el-select v-model="form.scan_frequency" style="width: 100%;">
-            <el-option label="每天" value="daily" />
-            <el-option label="每周" value="weekly" />
-            <el-option label="每月" value="monthly" />
-          </el-select>
         </el-form-item>
       </el-form>
 
@@ -392,6 +380,13 @@ const viewVulns = (repo) => {
 </template>
 
 <style scoped>
+:deep(.el-table .el-table__cell) {
+  overflow: visible;
+}
+:deep(.el-table .cell) {
+  overflow: visible;
+}
+
 .repo-management {
   padding: 0;
   min-height: 100vh;
@@ -474,7 +469,7 @@ const viewVulns = (repo) => {
 }
 
 .stat-value {
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 700;
   color: #303133;
   line-height: 1;
