@@ -1,7 +1,7 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios'
 
 //定义基础相应类型
-interface BaseResponse <T>{
+export interface  BaseResponse <T = any>{
     code: number;
     data: T;
     message: string;

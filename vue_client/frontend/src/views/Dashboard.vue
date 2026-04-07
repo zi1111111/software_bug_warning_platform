@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import SidebarLayout from '../components/SidebarLayout.vue'
-import { ArrowRight, Clock, Download, Refresh, Setting, Timer, Collection, Plus } from "@element-plus/icons-vue"
+import { Clock, Download, Refresh, Setting, Timer, Collection, Plus } from "@element-plus/icons-vue"
 import { storeToRefs } from "pinia"
 import { useRepoStore } from "../stores/repository"
-import { http } from "../request/request"
+import {BaseResponse, http} from "../request/request"
+import {Stats, VulnItem} from "../response/response";
 
 const repoTS = useRepoStore()
 const { repositories } = storeToRefs(repoTS)
@@ -14,16 +15,17 @@ const { repositories } = storeToRefs(repoTS)
 const currentRepo = ref<any>(null)
 
 // 统计数据
-const stats = ref({
+const stats = ref<Stats>({
   totalVulns: 0,
   critical: 0,
   high: 0,
   medium: 0,
   low: 0,
-})
+})// 添加类型注解
+
 
 // 漏洞列表（分页）
-const vulnList = ref([])
+const vulnList = ref<VulnItem[]>([])
 const loading = ref(false)
 const total = ref(0)
 const currentPage = ref(1)
@@ -42,10 +44,17 @@ const getDefaultRepo = () => {
   return activeRepo || repos[0]
 }
 
+
+
 // 加载统计卡片数据
 const loadStats = async () => {
   if (!currentRepo.value) return
-    const res = await http.post('/api/getVulnStats',
+    const res = await http.post<
+  {
+    'stats':Stats,
+    'code':number
+  }
+  >('/api/getVulnStats',
         { id: currentRepo.value.id  })
     if (res.code === 200 && res.data) {
       stats.value = res.data.stats
@@ -58,7 +67,11 @@ const loadStats = async () => {
 const loadVulnList = async () => {
   if (!currentRepo.value) return
   loading.value = true
-    const res = await http.post('/api/getVulnerabilities', {
+    const res = await http.post<{
+      'vulnList': VulnItem[],
+      'total':number,
+      'code':number
+    }>('/api/getVulnerabilities', {
         id: currentRepo.value.id,
         page: currentPage.value,
         page_size: pageSize.value,
@@ -212,7 +225,7 @@ const getSeverityLabel = (severity: string) => {
 <template>
   <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
-      {{ currentRepo.name }} - 漏洞预警
+      {{ currentRepo.name }} - 仪表盘
     </template>
 
     <div class="dashboard">
@@ -285,7 +298,7 @@ const getSeverityLabel = (severity: string) => {
           </div>
           <div class="meta-item">
             <el-icon><Clock /></el-icon>
-            <span>下次扫描: 待配置</span>
+            <span>下次扫描: 今天凌晨2点</span>
           </div>
           <div class="meta-item">
             <el-icon><Setting /></el-icon>
@@ -490,9 +503,7 @@ body {
   color: #606266;
   font-size: 13px;
 }
-.meta-item .el-icon {
-  color: #909399;
-}
+
 .vuln-list-card {
   border-radius: 8px;
 }
@@ -518,15 +529,5 @@ body {
 .commit-info p {
   margin: 8px 0;
   font-size: 14px;
-}
-.raw-response {
-  background: #f5f7fa;
-  padding: 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 300px;
-  overflow: auto;
 }
 </style>

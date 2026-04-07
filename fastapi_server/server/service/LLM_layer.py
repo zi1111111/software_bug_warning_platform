@@ -19,7 +19,10 @@ class LLMAnalyzer:
         r'use-after-free|buffer[- ]overflow|race[- ]condition|'
         r'out[- ]of[- ]bounds|null[- ]pointer[- ]dereference|'
         r'denial[- ]of[- ]service|privilege[- ]escalation|'
-        r'information[- ]leak|memory[- ]corruption)\b'
+        r'information[- ]leak|memory[- ]corruption|'
+        r'fix(es|ed)?|patch(es|ed)?|resolve([sd])?|repair(s|ed)?|'
+        r'mitigate([sd])?|remediate([sd])?|address(es|ed)?|correct(s|ed)?|'
+        r'rectif(y|ies|ied)?|amend(s|ed)?)\b'
     )
 
     def __init__(self, model_type: str = "deepseek"):

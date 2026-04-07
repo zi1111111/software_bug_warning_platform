@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import RepositoryManagement from '../views/RepositoryManagement.vue'
 
+import TrendAnalysis from '../views/TrendAnalysis.vue'
+import RiskAssessment from '../views/RiskAssessment.vue'
+import DailyVulnUpdate from '../views/DailyVulnUpdate.vue'
+
 const routes = [
   {
     path: '/',
@@ -14,14 +18,24 @@ const routes = [
     component: RepositoryManagement
   },
   {
-    path: '/warnings',
-    name: 'Warnings',
-    component: () => import('../views/Dashboard.vue') // 暂时复用仪表盘
+    path: '/analysis/trend',
+    name: 'TrendAnalysis',
+    component: TrendAnalysis
+  },
+  {
+    path: '/analysis/risk',
+    name: 'RiskAssessment',
+    component: RiskAssessment
+  },
+  {
+    path: '/daily-update',
+    name: 'DailyVulnUpdate',
+    component: DailyVulnUpdate
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: () => import('../views/Dashboard.vue') // 暂时复用仪表盘
+    component: () => import('../views/Dashboard.vue')
   }
 ]
 

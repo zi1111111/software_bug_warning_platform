@@ -4042,3 +4042,48 @@ github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "doc
 2026-04-07 00:06:00,059 - apscheduler.scheduler - INFO - Scheduler has been shut down
 2026-04-07 00:06:00,078 - server.service.maintenance_service - INFO - 调度器已关闭
 2026-04-07 00:06:00,078 - app - INFO - 定时任务调度器已关闭
+2026-04-07 08:44:58,104 - app - INFO - 应用启动中...
+2026-04-07 08:44:58,105 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 08:44:58,106 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 08:44:58,172 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 08:44:58,172 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 08:45:01,755 - server.service.data_collector - INFO - 仓库 linux内核 新增 1 个提交
+2026-04-07 08:45:01,755 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 08:45:03,935 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 08:45:03,936 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 08:45:06,102 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 08:45:06,474 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 08:45:06,481 - server.service.analysis_service - INFO - 发现 1 个未分析的 commits
+2026-04-07 08:45:06,481 - server.service.analysis_service - INFO - Commit bfe62a4 预过滤跳过（无安全关键词）
+2026-04-07 08:45:06,484 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 08:45:06,484 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 08:45:06,484 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 08:45:06,484 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 08:45:06,484 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 08:45:06,485 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 11:18:15,519 - app - INFO - 应用关闭中...
+2026-04-07 11:18:15,557 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 11:18:15,562 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 11:18:15,562 - app - INFO - 定时任务调度器已关闭
+2026-04-07 11:18:21,511 - app - INFO - 应用启动中...
+2026-04-07 11:18:21,511 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 11:18:21,512 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 11:18:21,543 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 11:18:21,543 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 11:18:23,769 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 11:18:23,769 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 11:18:25,967 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 11:18:25,967 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 11:18:28,134 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 11:18:28,564 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 11:18:28,567 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 11:18:28,568 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 11:18:28,568 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 11:18:28,568 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 11:18:28,568 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 11:18:28,568 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 11:18:28,569 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 11:25:28,379 - app - INFO - 应用关闭中...
+2026-04-07 11:25:28,381 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 11:25:28,382 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 11:25:28,382 - app - INFO - 定时任务调度器已关闭

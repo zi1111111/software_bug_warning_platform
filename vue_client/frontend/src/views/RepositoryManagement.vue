@@ -6,7 +6,8 @@ import {useRepoStore} from "../stores/repository";
 import {Repository} from "../response/response";
 import {storeToRefs} from "pinia";
 import {http} from "../request/request";
-import { useRouter } from 'vue-router'   // 新增
+import { useRouter } from 'vue-router'
+import SidebarLayout from "../components/SidebarLayout.vue";   // 新增
 
 const router = useRouter()
 const dialogVisible = ref(false)
@@ -161,8 +162,7 @@ const manualScan = async(repo) => {
 
 // 查看漏洞详情
 const viewVulns = (repo) => {
-  // 跳转到漏洞预警页面，并传入仓库ID
-  // router.push(`/warnings?repo=${repo.id}`)
+  router.push('/')
 }
 
 // 返回首页
@@ -172,6 +172,10 @@ const goToHome = () => {
 </script>
 
 <template>
+  <SidebarLayout :disableRepoSelection="true"  >
+    <template #title>
+      仓库管理
+    </template>
   <div class="repo-management">
     <!-- 页面标题和操作区 -->
     <div class="page-header">
@@ -377,6 +381,7 @@ const goToHome = () => {
       </template>
     </el-dialog>
   </div>
+  </SidebarLayout>
 </template>
 
 <style scoped>

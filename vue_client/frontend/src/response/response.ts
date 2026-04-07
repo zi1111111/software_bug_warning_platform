@@ -1,3 +1,5 @@
+import {ref} from "vue";
+
 export interface Repository {
     id:number;
     name: string;
@@ -40,3 +42,25 @@ export interface LLMAnalyse{
     analysis_cost: number;
     analyzed_at: string;
 }
+
+// 定义统计数据类型
+export  interface Stats {
+    totalVulns: number
+    critical: number
+    high: number
+    medium: number
+    low: number
+}
+
+// 定义漏洞条目类型（根据实际字段补充）
+export  interface VulnItem {
+    cve_id?: string
+    summary?: string
+    title?: string
+    severity?: string
+    vulnerability_type?: string
+    analyzed_at?: string
+    affected_subsystem?: string
+    model_name?: string
+}
+

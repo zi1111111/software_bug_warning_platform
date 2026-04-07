@@ -1,23 +1,31 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import {
   ArrowDown,
+  Calendar,
   Collection,
   Expand,
   Fold, Link,
   Management,
   Monitor,
-  Odometer, Plus, Setting,
+  Odometer, Setting,
   TrendCharts,
-  Warning
 } from "@element-plus/icons-vue";
 import { useRepoStore } from "../stores/repository";
 import { storeToRefs } from "pinia";
 
+const props = defineProps({
+  disableRepoSelection: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const emit = defineEmits(['select-repo'])
 
 const router = useRouter()
+const route = useRoute()// 获取当前路由对象
 const isCollapse = ref(false)
 const showRepoDrawer = ref(false)
 const searchQuery = ref('')   // 新增：抽屉搜索关键词
@@ -70,26 +78,48 @@ const currentRepoName = computed(() => {
 })
 
 // 导航菜单选中
+// 根据当前路由路径获取对应的菜单索引
+const getActiveMenuFromPath = (path: string) => {
+  if (path === '/') return 'dashboard'
+  if (path.startsWith('/settings')) return 'settings'
+  if (path.startsWith('/repositories')) return 'repos'
+  if (path.startsWith('/analysis/trend')) return 'analysis-trend'
+  if (path.startsWith('/analysis/risk')) return 'analysis-risk'
+  if (path.startsWith('/daily-update')) return 'daily-update'
+  return 'dashboard'
+}
+
+// 当前激活菜单
 const activeMenu = ref('dashboard')
+
+// 监听路由变化，更新高亮菜单
+watch(() => route.path, (newPath) => {
+  activeMenu.value = getActiveMenuFromPath(newPath)
+}, { immediate: true })
+
+// 导航菜单点击处理
 const handleMenuSelect = (index: string) => {
   activeMenu.value = index
   switch (index) {
     case 'dashboard':
       router.push('/')
       break
-    case 'warnings':
-      router.push('/warnings')
+    case 'analysis-trend':
+      router.push('/analysis/trend')
+      break
+    case 'analysis-risk':
+      router.push('/analysis/risk')
+      break
+    case 'daily-update':
+      router.push('/daily-update')
       break
     case 'settings':
       router.push('/settings')
       break
+    case 'repos':
+      router.push('/repositories')
+      break
   }
-}
-
-// 打开仓库管理页面
-const openRepoManager = () => {
-  showRepoDrawer.value = false
-  router.push('/repositories')
 }
 
 const toggleCollapse = () => {
@@ -103,6 +133,11 @@ const filteredRepos = computed(() => {
   return repositories.value.filter(repo => repo.name.toLowerCase().includes(query))
 })
 
+const openDrawer = () => {
+  if (!props.disableRepoSelection) {
+    showRepoDrawer.value = true
+  }
+}
 </script>
 
 <template>
@@ -131,6 +166,7 @@ const filteredRepos = computed(() => {
       </div>
 
       <!-- 当前仓库选择区 -->
+      <template v-if="!disableRepoSelection">
       <div v-show="!isCollapse" class="repo-section">
         <el-card class="repo-card" shadow="hover" @click="showRepoDrawer = true">
           <div class="repo-info">
@@ -151,7 +187,7 @@ const filteredRepos = computed(() => {
           </el-button>
         </el-tooltip>
       </div>
-
+      </template>
       <!-- 导航菜单（可滚动区域） -->
       <el-menu
           :default-active="activeMenu"
@@ -165,10 +201,6 @@ const filteredRepos = computed(() => {
           <template #title>仪表盘</template>
         </el-menu-item>
 
-        <el-menu-item index="warnings">
-          <el-icon><Warning /></el-icon>
-          <template #title>漏洞预警</template>
-        </el-menu-item>
 
         <el-sub-menu index="analysis">
           <template #title>
@@ -179,28 +211,25 @@ const filteredRepos = computed(() => {
           <el-menu-item index="analysis-risk">风险评估</el-menu-item>
         </el-sub-menu>
 
+        <el-menu-item index="daily-update">
+          <el-icon><Calendar /></el-icon>
+          <template #title>每日漏洞更新</template>
+        </el-menu-item>
+
         <el-menu-item index="settings">
           <el-icon><Setting /></el-icon>
           <template #title>系统设置</template>
         </el-menu-item>
-      </el-menu>
 
-      <!-- 底部操作区（展开状态） -->
-      <div v-show="!isCollapse" class="sidebar-footer">
-        <el-button type="primary" class="manage-repo-btn" @click="openRepoManager">
+        <el-menu-item index="repos">
           <el-icon><Management /></el-icon>
-          <span>仓库管理</span>
-        </el-button>
-      </div>
+          <template #title>仓库管理</template>
+        </el-menu-item>
+      </el-menu>
 
       <!-- 底部操作区-->
       <div v-show="isCollapse" class="sidebar-footer-collapsed">
         <div class="collapse-footer-buttons">
-          <el-tooltip effect="dark" content="仓库管理" placement="right">
-            <el-button type="primary" circle @click="openRepoManager">
-              <el-icon><Management /></el-icon>
-            </el-button>
-          </el-tooltip>
           <el-tooltip effect="dark" content="展开侧边栏" placement="right">
             <el-button type="default" circle @click="toggleCollapse">
               <el-icon><Expand /></el-icon>
@@ -227,6 +256,7 @@ const filteredRepos = computed(() => {
 
     <!-- 仓库选择抽屉 -->
     <el-drawer
+        v-if="!disableRepoSelection"
         v-model="showRepoDrawer"
         title="选择仓库"
         size="400px"
@@ -254,10 +284,10 @@ const filteredRepos = computed(() => {
               <div class="repo-item-header">
                 <el-icon :size="18" class="repo-item-icon"><Collection /></el-icon>
                 <span class="repo-item-name">{{ repo.name }}</span>
-                <el-tag v-if="repo.active" type="success" size="small">当前</el-tag>
+                <el-tag v-if="repo.id == selectedRepo.id" type="success" size="small">当前</el-tag>
               </div>
               <p class="repo-item-desc">上次扫描时间:{{ repo.last_fetched_at }}</p>
-              <a :href="repo.url" target="_blank" class="repo-item-url" @click.stop>
+              <a :href="repo.repo_url" target="_blank" class="repo-item-url" @click.stop>
                 <el-icon><Link /></el-icon>
                 {{ repo.repo_url }}
               </a>
@@ -266,11 +296,6 @@ const filteredRepos = computed(() => {
         </div>
 
         <el-divider />
-
-        <el-button type="primary" class="add-repo-btn" @click="openRepoManager">
-          <el-icon><Plus /></el-icon>
-          管理仓库
-        </el-button>
       </div>
     </el-drawer>
   </div>
