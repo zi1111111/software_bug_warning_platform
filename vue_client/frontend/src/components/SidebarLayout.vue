@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   ArrowDown,
@@ -12,27 +12,66 @@ import {
   TrendCharts,
   Warning
 } from "@element-plus/icons-vue";
-import {useRepoStore} from "../stores/repository";
-import {storeToRefs} from "pinia";
-defineProps({
-  currentRepo: {
-    type: Object,
-    default: null
-  }
-});
+import { useRepoStore } from "../stores/repository";
+import { storeToRefs } from "pinia";
+
 const emit = defineEmits(['select-repo'])
 
 const router = useRouter()
 const isCollapse = ref(false)
 const showRepoDrawer = ref(false)
-//repoTS调用
-const repoTS = useRepoStore()
+const searchQuery = ref('')   // 新增：抽屉搜索关键词
 
+const repoTS = useRepoStore()
 const { repositories } = storeToRefs(repoTS)
 
-const activeMenu = ref('dashboard')
+// 当前选中的仓库（内部状态）
+const selectedRepo = ref<any>(null)
 
-const handleMenuSelect = (index) => {
+// 获取默认仓库：优先取 is_active 为 true 的第一个，否则取 repositories 第一个
+const getDefaultRepo = () => {
+  const repos = repositories.value
+  if (!repos.length) return null
+  const activeRepo = repos.find(r => r.is_active === true)
+  return activeRepo || repos[0]
+}
+
+// 初始化默认仓库
+const initDefaultRepo = () => {
+  if (!selectedRepo.value && repositories.value.length) {
+    const defaultRepo = getDefaultRepo()
+    if (defaultRepo) {
+      selectedRepo.value = defaultRepo
+      emit('select-repo', defaultRepo)
+    }
+  }
+}
+
+// 监听 repositories 变化，自动设置默认仓库
+watch(repositories, () => {
+  initDefaultRepo()
+}, { immediate: true })
+
+// 组件挂载时初始化
+onMounted(() => {
+  initDefaultRepo()
+})
+
+// 选择仓库（从抽屉中点击）
+const selectRepo = (repo: any) => {
+  selectedRepo.value = repo
+  emit('select-repo', repo)
+  showRepoDrawer.value = false
+}
+
+// 当前仓库名称（用于显示）
+const currentRepoName = computed(() => {
+  return selectedRepo.value?.name || '未选择仓库'
+})
+
+// 导航菜单选中
+const activeMenu = ref('dashboard')
+const handleMenuSelect = (index: string) => {
   activeMenu.value = index
   switch (index) {
     case 'dashboard':
@@ -47,13 +86,7 @@ const handleMenuSelect = (index) => {
   }
 }
 
-const selectRepo = (repo) => {
-  repositories.value.forEach(r => r.active = false)
-  repo.active = true
-  emit('select-repo', repo)
-  showRepoDrawer.value = false
-}
-
+// 打开仓库管理页面
 const openRepoManager = () => {
   showRepoDrawer.value = false
   router.push('/repositories')
@@ -63,11 +96,13 @@ const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
 }
 
-const currentRepoName = computed(() => {
-  const active = repositories.value.find(r => r.active)
-  console.log('active', active)
-  return active ? active.name : '未选择仓库'
+// 过滤仓库（用于抽屉搜索）
+const filteredRepos = computed(() => {
+  if (!searchQuery.value) return repositories.value
+  const query = searchQuery.value.toLowerCase()
+  return repositories.value.filter(repo => repo.name.toLowerCase().includes(query))
 })
+
 </script>
 
 <template>
@@ -208,7 +243,7 @@ const currentRepoName = computed(() => {
 
         <div class="repo-list">
           <el-card
-              v-for="repo in repositories"
+              v-for="repo in filteredRepos"
               :key="repo.id"
               class="repo-item"
               :class="{ 'repo-item-active': repo.is_active }"

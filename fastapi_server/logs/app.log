@@ -3160,3 +3160,885 @@ github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "doc
 2026-04-06 20:50:26,528 - apscheduler.scheduler - INFO - Scheduler has been shut down
 2026-04-06 20:50:26,530 - server.service.maintenance_service - INFO - 调度器已关闭
 2026-04-06 20:50:26,530 - app - INFO - 定时任务调度器已关闭
+2026-04-06 20:52:52,442 - app - INFO - 应用启动中...
+2026-04-06 20:52:52,443 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 20:52:52,444 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 20:52:52,469 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 20:52:52,469 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 20:52:54,794 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 20:52:54,795 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 20:52:55,354 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 20:52:55,354 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 20:52:55,762 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 20:52:55,766 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 20:52:55,767 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 20:52:55,767 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 20:52:55,767 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 20:52:55,767 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 20:52:55,767 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 20:52:55,768 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 21:45:55,936 - app - INFO - 应用关闭中...
+2026-04-06 21:45:55,948 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 21:45:55,949 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 21:45:55,949 - app - INFO - 定时任务调度器已关闭
+2026-04-06 21:46:01,528 - app - INFO - 应用启动中...
+2026-04-06 21:46:01,529 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 21:46:01,529 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 21:46:01,563 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 21:46:01,563 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 21:46:03,949 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 21:46:03,950 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 21:46:04,518 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 21:46:04,518 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 21:46:04,948 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 21:46:04,952 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 21:46:04,953 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 21:46:04,953 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 21:46:04,953 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 21:46:04,953 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 21:46:04,953 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 21:46:04,954 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 21:46:14,233 - app - ERROR - 未处理的异常: 'list' object has no attribute 'severity'
+2026-04-06 21:46:58,780 - app - INFO - 应用关闭中...
+2026-04-06 21:46:58,781 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 21:46:58,781 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 21:46:58,781 - app - INFO - 定时任务调度器已关闭
+2026-04-06 21:47:09,731 - app - INFO - 应用启动中...
+2026-04-06 21:47:09,732 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 21:47:09,733 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 21:47:09,765 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 21:47:09,765 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 21:47:12,112 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 21:47:12,112 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 21:47:12,688 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 21:47:12,689 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 21:47:13,089 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 21:47:13,091 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 21:47:13,092 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 21:47:13,092 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 21:47:13,092 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 21:47:13,092 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 21:47:13,092 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 21:47:13,093 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 21:47:17,173 - app - ERROR - 未处理的异常: 'list' object has no attribute 'severity'
+2026-04-06 21:47:28,956 - app - INFO - 应用关闭中...
+2026-04-06 21:47:28,957 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 21:47:28,958 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 21:47:28,958 - app - INFO - 定时任务调度器已关闭
+2026-04-06 21:47:46,386 - app - INFO - 应用启动中...
+2026-04-06 21:47:46,386 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 21:47:46,387 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 21:47:46,400 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 21:47:46,400 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 21:47:48,907 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 21:47:48,908 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 21:47:49,622 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 21:47:49,622 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 21:47:50,022 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 21:47:50,025 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 21:47:50,025 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 21:47:50,025 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 21:47:50,026 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 21:47:50,026 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 21:47:50,026 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 21:47:50,026 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 21:52:43,205 - app - INFO - 应用关闭中...
+2026-04-06 21:52:43,209 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 21:52:43,210 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 21:52:43,210 - app - INFO - 定时任务调度器已关闭
+2026-04-06 22:11:02,632 - app - INFO - 应用启动中...
+2026-04-06 22:11:02,632 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 22:11:02,633 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 22:11:02,649 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 22:11:02,649 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 22:11:05,535 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 22:11:05,535 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 22:11:06,112 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:11:06,112 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:11:06,566 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 22:11:06,569 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 22:11:06,570 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:11:06,570 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:11:06,570 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 22:11:06,570 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 22:11:06,570 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 22:11:06,571 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 22:11:44,101 - app - INFO - 应用关闭中...
+2026-04-06 22:11:44,102 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 22:11:44,102 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 22:11:44,102 - app - INFO - 定时任务调度器已关闭
+2026-04-06 22:11:50,337 - app - INFO - 应用启动中...
+2026-04-06 22:11:50,337 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 22:11:50,338 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 22:11:50,369 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 22:11:50,369 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 22:11:53,684 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 22:11:53,684 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 22:11:54,268 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:11:54,268 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:11:54,787 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 22:11:54,792 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 22:11:54,792 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:11:54,792 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:11:54,792 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 22:11:54,792 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 22:11:54,792 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 22:11:54,792 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 22:12:52,027 - app - INFO - 应用关闭中...
+2026-04-06 22:12:52,030 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 22:12:52,031 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 22:12:52,031 - app - INFO - 定时任务调度器已关闭
+2026-04-06 22:13:14,175 - app - INFO - 应用启动中...
+2026-04-06 22:13:14,175 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 22:13:14,187 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 22:13:14,252 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 22:13:14,252 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 22:13:16,614 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 22:13:16,614 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 22:13:17,201 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:13:17,201 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:13:18,240 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 22:13:18,260 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 22:13:18,260 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:13:18,260 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:13:18,260 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 22:13:18,260 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 22:13:18,260 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 22:13:18,260 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 22:13:37,719 - app - INFO - 应用关闭中...
+2026-04-06 22:13:37,719 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 22:13:37,719 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 22:13:37,719 - app - INFO - 定时任务调度器已关闭
+2026-04-06 22:16:00,919 - app - INFO - 应用启动中...
+2026-04-06 22:16:00,920 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 22:16:00,921 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 22:16:00,931 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 22:16:00,931 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 22:16:04,159 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 22:16:04,160 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 22:16:04,730 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:16:04,730 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:16:05,123 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 22:16:05,125 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 22:16:05,125 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:16:05,126 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:16:05,126 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 22:16:05,126 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 22:16:05,126 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 22:16:05,126 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 22:16:39,114 - app - ERROR - 未处理的异常: 1 validation error for LLMAnalyseOut
+cve_id
+  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2026-04-06 22:18:45,256 - app - INFO - 应用关闭中...
+2026-04-06 22:18:45,261 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 22:18:45,262 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 22:18:45,262 - app - INFO - 定时任务调度器已关闭
+2026-04-06 22:18:53,170 - app - INFO - 应用启动中...
+2026-04-06 22:18:53,171 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 22:18:53,172 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 22:18:53,185 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 22:18:53,185 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 22:18:55,532 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 22:18:55,532 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 22:18:56,098 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:18:56,098 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:18:56,487 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 22:18:56,489 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 22:18:56,490 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:18:56,490 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:18:56,490 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 22:18:56,490 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 22:18:56,491 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 22:18:56,491 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 22:22:03,156 - app - INFO - 应用关闭中...
+2026-04-06 22:22:03,161 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 22:22:03,161 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 22:22:03,162 - app - INFO - 定时任务调度器已关闭
+2026-04-06 22:22:08,559 - app - INFO - 应用启动中...
+2026-04-06 22:22:08,560 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 22:22:08,561 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 22:22:08,573 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 22:22:08,574 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 22:22:10,955 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 22:22:10,956 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 22:22:11,974 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:22:11,974 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 22:22:12,380 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 22:22:12,382 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 22:22:12,383 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:22:12,383 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 22:22:12,383 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 22:22:12,383 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 22:22:12,383 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 22:22:12,384 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 22:55:06,526 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 22:55:06,528 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 22:55:06,533 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 22:55:08,965 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 23:03:59,732 - app - INFO - 应用关闭中...
+2026-04-06 23:03:59,739 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 23:03:59,744 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 23:03:59,744 - app - INFO - 定时任务调度器已关闭
+2026-04-06 23:08:39,030 - app - INFO - 应用启动中...
+2026-04-06 23:08:39,031 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 23:08:39,032 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 23:08:39,066 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 23:08:39,066 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 23:08:41,378 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 23:08:41,379 - server.service.data_collector - INFO - 开始同步仓库：aaa
+2026-04-06 23:08:41,944 - server.service.data_collector - ERROR - 同步仓库 aaa 时发生错误: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 23:08:41,944 - server.service.data_collector - INFO - 同步仓库aaa失败：404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+Traceback (most recent call last):
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 102, in sync_all_repositories
+    self.sync_repository(repo)
+  File "C:\Users\17810\Desktop\graduate_design\fastapi_server\server\service\data_collector.py", line 38, in sync_repository
+    github_repo = self.g.get_repo(repo_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\MainClass.py", line 479, in get_repo
+    headers, data = self.__requester.requestJsonAndCheck("GET", url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 623, in requestJsonAndCheck
+    return self.__check(
+           ^^^^^^^^^^^^^
+  File "C:\Users\17810\PycharmProjects\pythonProject\.venv\Lib\site-packages\github\Requester.py", line 853, in __check
+    raise self.createException(status, responseHeaders, data)
+github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest", "status": "404"}
+2026-04-06 23:08:42,367 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 23:08:42,369 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 23:08:42,370 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 23:08:42,370 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 23:08:42,370 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 23:08:42,370 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 23:08:42,370 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 23:08:42,371 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 23:08:55,895 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 23:08:55,898 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-06 23:10:05,984 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 23:10:05,985 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 23:10:05,986 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-06 23:12:56,925 - server.service.data_collector - INFO - 仓库 vue 新增 200 个提交
+2026-04-06 23:13:14,949 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 23:13:14,953 - server.service.analysis_service - INFO - 发现 200 个未分析的 commits
+2026-04-06 23:13:14,953 - server.service.analysis_service - INFO - Commit 9e88707 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,959 - server.service.analysis_service - INFO - Commit 73486cb 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,963 - server.service.analysis_service - INFO - Commit e428d89 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,966 - server.service.analysis_service - INFO - 分析 Commit bed04a7 ...
+2026-04-06 23:13:14,966 - server.service.analysis_service - ERROR - 分析 commit bed04a7 失败: LLMAnalyzer.analyze_commit() takes 3 positional arguments but 4 were given
+2026-04-06 23:13:14,967 - server.service.analysis_service - INFO - 分析 Commit 0191d50 ...
+2026-04-06 23:13:14,967 - server.service.analysis_service - ERROR - 分析 commit 0191d50 失败: LLMAnalyzer.analyze_commit() takes 3 positional arguments but 4 were given
+2026-04-06 23:13:14,968 - server.service.analysis_service - INFO - Commit cdcc4f0 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,971 - server.service.analysis_service - INFO - Commit 13f4e7d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,974 - server.service.analysis_service - INFO - Commit 56ce7f8 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,977 - server.service.analysis_service - INFO - Commit 305e4ae 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,979 - server.service.analysis_service - INFO - Commit 3e1037e 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,982 - server.service.analysis_service - INFO - Commit db9c566 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,985 - server.service.analysis_service - INFO - Commit 895669f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,987 - server.service.analysis_service - INFO - Commit 73bdf14 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,990 - server.service.analysis_service - INFO - Commit e0747f4 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,993 - server.service.analysis_service - INFO - Commit 2632249 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,995 - server.service.analysis_service - INFO - Commit 3650c12 预过滤跳过（无安全关键词）
+2026-04-06 23:13:14,998 - server.service.analysis_service - INFO - Commit 83d9535 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,000 - server.service.analysis_service - INFO - Commit 24fcf69 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,004 - server.service.analysis_service - INFO - Commit 6d857f5 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,007 - server.service.analysis_service - INFO - Commit a174c29 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,009 - server.service.analysis_service - INFO - Commit f5ef882 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,012 - server.service.analysis_service - INFO - Commit d6468c4 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,015 - server.service.analysis_service - INFO - Commit 25f97a5 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,018 - server.service.analysis_service - INFO - Commit 10c2a87 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,020 - server.service.analysis_service - INFO - Commit ae3e4b1 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,023 - server.service.analysis_service - INFO - Commit de0b97b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,027 - server.service.analysis_service - INFO - Commit 45d6ad6 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,029 - server.service.analysis_service - INFO - Commit 0ad8e8d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,032 - server.service.analysis_service - INFO - Commit d30f6fd 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,035 - server.service.analysis_service - INFO - Commit 08382f0 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,038 - server.service.analysis_service - INFO - Commit 947993f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,040 - server.service.analysis_service - INFO - Commit 223a9e9 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,043 - server.service.analysis_service - INFO - Commit 81598ea 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,045 - server.service.analysis_service - INFO - Commit af9a10f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,048 - server.service.analysis_service - INFO - Commit c223634 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,050 - server.service.analysis_service - INFO - Commit 51fef2c 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,053 - server.service.analysis_service - INFO - Commit b8c8b3f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,056 - server.service.analysis_service - INFO - Commit d27c128 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,057 - server.service.analysis_service - INFO - Commit bb59751 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,060 - server.service.analysis_service - INFO - Commit 099401e 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,063 - server.service.analysis_service - INFO - Commit 67c1d26 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,065 - server.service.analysis_service - INFO - Commit 74ca5a1 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,067 - server.service.analysis_service - INFO - Commit 1399ee6 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,070 - server.service.analysis_service - INFO - Commit 78ef627 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,072 - server.service.analysis_service - INFO - Commit 6149048 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,075 - server.service.analysis_service - INFO - Commit 18cc547 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,078 - server.service.analysis_service - INFO - Commit 49b6bd4 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,081 - server.service.analysis_service - INFO - Commit a9ca2d8 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,083 - server.service.analysis_service - INFO - Commit d52fbff 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,085 - server.service.analysis_service - INFO - Commit 0e8511a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,088 - server.service.analysis_service - INFO - Commit 34c6192 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,090 - server.service.analysis_service - INFO - Commit 2e57061 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,094 - server.service.analysis_service - INFO - Commit ca11dc6 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,096 - server.service.analysis_service - INFO - Commit 9dd006b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,098 - server.service.analysis_service - INFO - Commit 29b5f58 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,101 - server.service.analysis_service - INFO - Commit d1899ca 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,104 - server.service.analysis_service - INFO - Commit 5e3d4e9 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,106 - server.service.analysis_service - INFO - Commit 5aed733 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,109 - server.service.analysis_service - INFO - Commit f7db7f3 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,112 - server.service.analysis_service - INFO - Commit 0b3cf7d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,114 - server.service.analysis_service - INFO - Commit a5afc4d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,117 - server.service.analysis_service - INFO - Commit 6d9aac8 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,119 - server.service.analysis_service - INFO - Commit a7a71ad 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,122 - server.service.analysis_service - INFO - Commit 259c706 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,124 - server.service.analysis_service - INFO - Commit df281b0 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,128 - server.service.analysis_service - INFO - Commit 800207c 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,130 - server.service.analysis_service - INFO - Commit 5960f05 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,133 - server.service.analysis_service - INFO - Commit 8e26261 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,135 - server.service.analysis_service - INFO - Commit 4cad410 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,138 - server.service.analysis_service - INFO - Commit e80cd09 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,141 - server.service.analysis_service - INFO - Commit c61395d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,144 - server.service.analysis_service - INFO - Commit 8880b55 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,146 - server.service.analysis_service - INFO - Commit 738f4b3 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,149 - server.service.analysis_service - INFO - Commit cc14d44 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,152 - server.service.analysis_service - INFO - Commit e1342df 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,156 - server.service.analysis_service - INFO - Commit 0d6d972 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,160 - server.service.analysis_service - INFO - Commit bc5b92a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,163 - server.service.analysis_service - INFO - Commit fb13930 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,166 - server.service.analysis_service - INFO - Commit 87f69aa 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,169 - server.service.analysis_service - INFO - Commit 5d26f81 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,173 - server.service.analysis_service - INFO - Commit 4a0d88e 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,175 - server.service.analysis_service - INFO - Commit 27eed82 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,178 - server.service.analysis_service - INFO - Commit 2f335b2 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,182 - server.service.analysis_service - INFO - Commit 60d268c 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,185 - server.service.analysis_service - INFO - Commit d189b4b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,189 - server.service.analysis_service - INFO - Commit ee57d9f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,191 - server.service.analysis_service - INFO - Commit e0b26c4 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,195 - server.service.analysis_service - INFO - Commit 46ca7bc 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,198 - server.service.analysis_service - INFO - Commit 810f6d1 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,201 - server.service.analysis_service - INFO - Commit 1561888 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,204 - server.service.analysis_service - INFO - Commit 8521f9d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,207 - server.service.analysis_service - INFO - Commit 7161176 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,210 - server.service.analysis_service - INFO - Commit 165a14a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,213 - server.service.analysis_service - INFO - Commit bba6b3d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,216 - server.service.analysis_service - INFO - Commit 9eb8ea5 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,218 - server.service.analysis_service - INFO - Commit 2263948 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,221 - server.service.analysis_service - INFO - Commit 5221d4d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,224 - server.service.analysis_service - INFO - Commit 89a6b5e 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,227 - server.service.analysis_service - INFO - Commit b4bf4c5 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,230 - server.service.analysis_service - INFO - Commit 80d1baf 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,233 - server.service.analysis_service - INFO - Commit f0057b1 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,237 - server.service.analysis_service - INFO - Commit bd89ce5 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,239 - server.service.analysis_service - INFO - Commit 4b37b56 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,242 - server.service.analysis_service - INFO - Commit 5c742eb 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,245 - server.service.analysis_service - INFO - Commit 00458cd 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,248 - server.service.analysis_service - INFO - Commit 1d8b892 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,251 - server.service.analysis_service - INFO - Commit 2af751b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,254 - server.service.analysis_service - INFO - Commit ba7dd2c 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,257 - server.service.analysis_service - INFO - Commit a695c5a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,260 - server.service.analysis_service - INFO - Commit fabc1cf 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,263 - server.service.analysis_service - INFO - Commit ce6fc14 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,266 - server.service.analysis_service - INFO - Commit adf3ac8 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,269 - server.service.analysis_service - INFO - Commit 135d074 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,271 - server.service.analysis_service - INFO - Commit fc16281 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,274 - server.service.analysis_service - INFO - Commit e8d3a7d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,276 - server.service.analysis_service - INFO - Commit 67760f8 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,279 - server.service.analysis_service - INFO - Commit ea5d0f3 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,282 - server.service.analysis_service - INFO - Commit 25ffdb6 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,284 - server.service.analysis_service - INFO - Commit 46ec648 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,287 - server.service.analysis_service - INFO - Commit 7d4a772 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,289 - server.service.analysis_service - INFO - Commit 9ed6847 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,293 - server.service.analysis_service - INFO - Commit fffbb9e 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,295 - server.service.analysis_service - INFO - Commit e0a9546 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,298 - server.service.analysis_service - INFO - Commit 52a5979 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,301 - server.service.analysis_service - INFO - Commit cdd2df6 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,304 - server.service.analysis_service - INFO - Commit 1a2c3c2 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,306 - server.service.analysis_service - INFO - Commit 005e52d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,309 - server.service.analysis_service - INFO - Commit 08fb4a2 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,312 - server.service.analysis_service - INFO - Commit 498dc1d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,315 - server.service.analysis_service - INFO - Commit 0198f9f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,317 - server.service.analysis_service - INFO - Commit a6e7498 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,320 - server.service.analysis_service - INFO - Commit 98fb01c 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,323 - server.service.analysis_service - INFO - Commit 0825d30 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,325 - server.service.analysis_service - INFO - Commit 04b4703 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,328 - server.service.analysis_service - INFO - Commit 018d29a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,331 - server.service.analysis_service - INFO - Commit f8de4ca 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,333 - server.service.analysis_service - INFO - Commit d3add06 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,336 - server.service.analysis_service - INFO - Commit 1d5a411 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,339 - server.service.analysis_service - INFO - Commit dc8a68e 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,341 - server.service.analysis_service - INFO - Commit 8904ca7 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,344 - server.service.analysis_service - INFO - Commit 012e10c 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,346 - server.service.analysis_service - INFO - Commit 559600f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,349 - server.service.analysis_service - INFO - Commit 9d12106 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,351 - server.service.analysis_service - INFO - Commit 26ff4bc 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,353 - server.service.analysis_service - INFO - Commit b70a258 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,356 - server.service.analysis_service - INFO - Commit ca7daef 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,359 - server.service.analysis_service - INFO - Commit 15e6f1d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,362 - server.service.analysis_service - INFO - Commit 6d1dbee 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,364 - server.service.analysis_service - INFO - Commit 360272b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,368 - server.service.analysis_service - INFO - Commit 94ccca2 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,371 - server.service.analysis_service - INFO - Commit e244687 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,374 - server.service.analysis_service - INFO - Commit 1294385 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,377 - server.service.analysis_service - INFO - Commit fb93c1b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,381 - server.service.analysis_service - INFO - Commit d45bbea 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,385 - server.service.analysis_service - INFO - Commit 427028a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,389 - server.service.analysis_service - INFO - Commit caceece 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,391 - server.service.analysis_service - INFO - Commit 6f0d2e6 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,394 - server.service.analysis_service - INFO - Commit ff2d52f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,397 - server.service.analysis_service - INFO - Commit 86fb6bd 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,400 - server.service.analysis_service - INFO - Commit e452e9d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,403 - server.service.analysis_service - INFO - Commit bcb62d1 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,406 - server.service.analysis_service - INFO - Commit ff5acb1 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,409 - server.service.analysis_service - INFO - Commit 15b9b9b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,412 - server.service.analysis_service - INFO - Commit 8cdd0ac 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,415 - server.service.analysis_service - INFO - Commit 89bd1c2 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,417 - server.service.analysis_service - INFO - Commit 1e3a0ce 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,420 - server.service.analysis_service - INFO - Commit 8dc1b31 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,423 - server.service.analysis_service - INFO - Commit 326d24a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,426 - server.service.analysis_service - INFO - Commit 0ea6c36 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,429 - server.service.analysis_service - INFO - Commit 008d78b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,432 - server.service.analysis_service - INFO - Commit bf64c4d 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,436 - server.service.analysis_service - INFO - Commit 5b94562 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,439 - server.service.analysis_service - INFO - Commit 11e4bfe 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,442 - server.service.analysis_service - INFO - Commit 20e7e7e 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,446 - server.service.analysis_service - INFO - Commit 089b27c 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,449 - server.service.analysis_service - INFO - Commit 44ab1cd 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,452 - server.service.analysis_service - INFO - Commit 530b56a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,455 - server.service.analysis_service - INFO - Commit 7a3aa3f 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,459 - server.service.analysis_service - INFO - Commit fb7f5f0 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,462 - server.service.analysis_service - INFO - Commit 65531f5 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,465 - server.service.analysis_service - INFO - Commit a122bd2 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,468 - server.service.analysis_service - INFO - Commit 9b9f2bf 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,471 - server.service.analysis_service - INFO - Commit de03f69 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,474 - server.service.analysis_service - INFO - Commit c9d0e3a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,476 - server.service.analysis_service - INFO - Commit 0f2cede 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,478 - server.service.analysis_service - INFO - Commit d3916b6 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,481 - server.service.analysis_service - INFO - Commit 8ab0074 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,484 - server.service.analysis_service - INFO - Commit 2d67641 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,487 - server.service.analysis_service - INFO - Commit 9d54f8b 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,490 - server.service.analysis_service - INFO - Commit 769c053 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,492 - server.service.analysis_service - INFO - Commit 52cf912 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,495 - server.service.analysis_service - INFO - Commit 2533a36 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,499 - server.service.analysis_service - INFO - Commit 0fabda7 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,502 - server.service.analysis_service - INFO - Commit 9b4e179 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,505 - server.service.analysis_service - INFO - Commit 328ebff 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,507 - server.service.analysis_service - INFO - Commit b2332fa 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,510 - server.service.analysis_service - INFO - Commit efa8a74 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,513 - server.service.analysis_service - INFO - Commit cdfc4c1 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,516 - server.service.analysis_service - INFO - Commit 8f5817a 预过滤跳过（无安全关键词）
+2026-04-06 23:13:15,520 - server.service.analysis_service - INFO - Commit 96cd1d0 预过滤跳过（无安全关键词）
+2026-04-06 23:15:19,406 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 23:15:19,415 - server.service.analysis_service - INFO - 发现 2 个未分析的 commits
+2026-04-06 23:15:19,416 - server.service.analysis_service - INFO - 分析 Commit bed04a7 ...
+2026-04-06 23:15:19,416 - server.service.analysis_service - ERROR - 分析 commit bed04a7 失败: LLMAnalyzer.analyze_commit() takes 3 positional arguments but 4 were given
+2026-04-06 23:15:19,418 - server.service.analysis_service - INFO - 分析 Commit 0191d50 ...
+2026-04-06 23:15:19,418 - server.service.analysis_service - ERROR - 分析 commit 0191d50 失败: LLMAnalyzer.analyze_commit() takes 3 positional arguments but 4 were given
+2026-04-06 23:15:29,218 - app - INFO - 应用关闭中...
+2026-04-06 23:15:29,220 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-06 23:15:29,221 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-06 23:15:29,221 - app - INFO - 定时任务调度器已关闭
+2026-04-06 23:15:34,091 - app - INFO - 应用启动中...
+2026-04-06 23:15:34,092 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 23:15:34,093 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 23:15:34,116 - server.service.data_collector - INFO - 开始同步2 个活跃仓库
+2026-04-06 23:15:34,116 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-06 23:15:36,478 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-06 23:15:36,479 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-06 23:15:38,805 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-06 23:15:39,186 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 23:15:39,188 - server.service.analysis_service - INFO - 发现 2 个未分析的 commits
+2026-04-06 23:15:39,188 - server.service.analysis_service - INFO - 分析 Commit bed04a7 ...
+2026-04-06 23:15:39,662 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:15:42,431 - server.service.analysis_service - INFO - Commit bed04a7 分析完成，安全相关: False
+2026-04-06 23:15:42,432 - server.service.analysis_service - INFO - 分析 Commit 0191d50 ...
+2026-04-06 23:15:42,548 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:15:45,398 - server.service.analysis_service - INFO - Commit 0191d50 分析完成，安全相关: False
+2026-04-06 23:15:45,398 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 23:15:45,399 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-06 23:15:45,399 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-06 23:15:45,399 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-06 23:15:45,399 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-06 23:15:45,399 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-06 23:18:26,342 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-06 23:18:26,344 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-06 23:18:26,345 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-06 23:21:26,502 - server.service.data_collector - INFO - 仓库 openssl 新增 200 个提交
+2026-04-06 23:21:51,745 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-06 23:21:51,750 - server.service.analysis_service - INFO - 发现 200 个未分析的 commits
+2026-04-06 23:21:51,751 - server.service.analysis_service - INFO - Commit 8782e9a 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,756 - server.service.analysis_service - INFO - Commit c7b2832 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,759 - server.service.analysis_service - INFO - Commit 3586899 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,762 - server.service.analysis_service - INFO - Commit d711845 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,765 - server.service.analysis_service - INFO - Commit 1d2d303 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,768 - server.service.analysis_service - INFO - Commit aab7adf 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,771 - server.service.analysis_service - INFO - Commit f32ae93 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,774 - server.service.analysis_service - INFO - Commit c2948db 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,777 - server.service.analysis_service - INFO - Commit f007284 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,780 - server.service.analysis_service - INFO - Commit 9648c51 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,783 - server.service.analysis_service - INFO - Commit 794fe02 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,785 - server.service.analysis_service - INFO - Commit 127245b 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,788 - server.service.analysis_service - INFO - Commit 2753b08 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,791 - server.service.analysis_service - INFO - Commit b19b0e2 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,793 - server.service.analysis_service - INFO - Commit b2b97b5 预过滤跳过（无安全关键词）
+2026-04-06 23:21:51,796 - server.service.analysis_service - INFO - 分析 Commit 78e2e71 ...
+2026-04-06 23:21:52,016 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:21:55,363 - server.service.analysis_service - INFO - Commit 78e2e71 分析完成，安全相关: True
+2026-04-06 23:21:55,364 - server.service.analysis_service - INFO - Commit 6830f62 预过滤跳过（无安全关键词）
+2026-04-06 23:21:55,369 - server.service.analysis_service - INFO - Commit 1b97a9a 预过滤跳过（无安全关键词）
+2026-04-06 23:21:55,375 - server.service.analysis_service - INFO - Commit 9ac50d2 预过滤跳过（无安全关键词）
+2026-04-06 23:21:55,381 - server.service.analysis_service - INFO - 分析 Commit 6c92def ...
+2026-04-06 23:21:55,582 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:21:58,628 - server.service.analysis_service - INFO - Commit 6c92def 分析完成，安全相关: True
+2026-04-06 23:21:58,628 - server.service.analysis_service - INFO - 分析 Commit 6f5b5ac ...
+2026-04-06 23:21:58,935 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:01,740 - server.service.analysis_service - INFO - Commit 6f5b5ac 分析完成，安全相关: False
+2026-04-06 23:22:01,741 - server.service.analysis_service - INFO - Commit 3f907b6 预过滤跳过（无安全关键词）
+2026-04-06 23:22:01,744 - server.service.analysis_service - INFO - Commit 33cb180 预过滤跳过（无安全关键词）
+2026-04-06 23:22:01,746 - server.service.analysis_service - INFO - 分析 Commit f3dbf6a ...
+2026-04-06 23:22:01,973 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:05,210 - server.service.analysis_service - INFO - Commit f3dbf6a 分析完成，安全相关: True
+2026-04-06 23:22:05,211 - server.service.analysis_service - INFO - Commit c3d24d9 预过滤跳过（无安全关键词）
+2026-04-06 23:22:05,214 - server.service.analysis_service - INFO - Commit eef0729 预过滤跳过（无安全关键词）
+2026-04-06 23:22:05,217 - server.service.analysis_service - INFO - Commit 3741076 预过滤跳过（无安全关键词）
+2026-04-06 23:22:05,220 - server.service.analysis_service - INFO - Commit 681b19b 预过滤跳过（无安全关键词）
+2026-04-06 23:22:05,223 - server.service.analysis_service - INFO - Commit 636dc88 预过滤跳过（无安全关键词）
+2026-04-06 23:22:05,226 - server.service.analysis_service - INFO - 分析 Commit 370954f ...
+2026-04-06 23:22:05,330 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:08,583 - server.service.analysis_service - INFO - Commit 370954f 分析完成，安全相关: True
+2026-04-06 23:22:08,584 - server.service.analysis_service - INFO - 分析 Commit c85884a ...
+2026-04-06 23:22:08,710 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:11,811 - server.service.analysis_service - INFO - Commit c85884a 分析完成，安全相关: True
+2026-04-06 23:22:11,812 - server.service.analysis_service - INFO - Commit e181adb 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,816 - server.service.analysis_service - INFO - Commit 18097ee 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,820 - server.service.analysis_service - INFO - Commit 2172e0c 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,822 - server.service.analysis_service - INFO - Commit 2088e90 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,825 - server.service.analysis_service - INFO - Commit 8ca772d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,828 - server.service.analysis_service - INFO - Commit d02f02e 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,831 - server.service.analysis_service - INFO - Commit febac4f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,834 - server.service.analysis_service - INFO - Commit 22a3bf6 预过滤跳过（无安全关键词）
+2026-04-06 23:22:11,837 - server.service.analysis_service - INFO - 分析 Commit d29c165 ...
+2026-04-06 23:22:11,932 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:15,144 - server.service.analysis_service - INFO - Commit d29c165 分析完成，安全相关: True
+2026-04-06 23:22:15,145 - server.service.analysis_service - INFO - Commit ba21ee3 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,148 - server.service.analysis_service - INFO - Commit b238d36 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,150 - server.service.analysis_service - INFO - Commit b0380fa 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,154 - server.service.analysis_service - INFO - Commit 44e453d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,157 - server.service.analysis_service - INFO - Commit dfe7d50 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,160 - server.service.analysis_service - INFO - Commit 0d5553f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,162 - server.service.analysis_service - INFO - Commit 46f75c7 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,164 - server.service.analysis_service - INFO - Commit b9cd3ae 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,167 - server.service.analysis_service - INFO - Commit 1e1ea71 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,170 - server.service.analysis_service - INFO - Commit 35b4cf2 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,172 - server.service.analysis_service - INFO - Commit b904ea5 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,174 - server.service.analysis_service - INFO - Commit 8979944 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,177 - server.service.analysis_service - INFO - Commit 9eed284 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,179 - server.service.analysis_service - INFO - Commit bc44134 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,182 - server.service.analysis_service - INFO - Commit b8df87a 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,184 - server.service.analysis_service - INFO - Commit 41f81d3 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,187 - server.service.analysis_service - INFO - Commit e6e01f0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,189 - server.service.analysis_service - INFO - Commit d5ad0b8 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,191 - server.service.analysis_service - INFO - Commit 2036e99 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,194 - server.service.analysis_service - INFO - Commit 0d8454e 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,196 - server.service.analysis_service - INFO - Commit 2e976c3 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,199 - server.service.analysis_service - INFO - Commit 189cf6f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,202 - server.service.analysis_service - INFO - Commit c194e75 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,205 - server.service.analysis_service - INFO - Commit 80b7e49 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,207 - server.service.analysis_service - INFO - Commit b31d15b 预过滤跳过（无安全关键词）
+2026-04-06 23:22:15,210 - server.service.analysis_service - INFO - 分析 Commit 3e90383 ...
+2026-04-06 23:22:15,352 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:18,686 - server.service.analysis_service - INFO - Commit 3e90383 分析完成，安全相关: True
+2026-04-06 23:22:18,687 - server.service.analysis_service - INFO - Commit e858e11 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,690 - server.service.analysis_service - INFO - Commit 5f44701 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,693 - server.service.analysis_service - INFO - Commit 72e7e90 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,696 - server.service.analysis_service - INFO - Commit 0a5316e 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,698 - server.service.analysis_service - INFO - Commit 3bc23e1 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,701 - server.service.analysis_service - INFO - Commit 1ca2924 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,703 - server.service.analysis_service - INFO - Commit 5f084f8 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,706 - server.service.analysis_service - INFO - Commit 94c3685 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,708 - server.service.analysis_service - INFO - Commit 525a4f1 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,711 - server.service.analysis_service - INFO - Commit 8d9c8b3 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,713 - server.service.analysis_service - INFO - Commit 713beaf 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,716 - server.service.analysis_service - INFO - Commit 3c15377 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,718 - server.service.analysis_service - INFO - Commit 7d92616 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,721 - server.service.analysis_service - INFO - Commit 3f8940a 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,724 - server.service.analysis_service - INFO - Commit d21db26 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,726 - server.service.analysis_service - INFO - Commit fae6806 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,729 - server.service.analysis_service - INFO - Commit 4a4578a 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,731 - server.service.analysis_service - INFO - Commit fff9955 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,734 - server.service.analysis_service - INFO - Commit cd20f1a 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,736 - server.service.analysis_service - INFO - Commit 97e9561 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,739 - server.service.analysis_service - INFO - Commit 6f01df4 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,741 - server.service.analysis_service - INFO - Commit b721a59 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,743 - server.service.analysis_service - INFO - Commit 232279d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,746 - server.service.analysis_service - INFO - Commit 6a5fea7 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,748 - server.service.analysis_service - INFO - Commit 0dd1c50 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,751 - server.service.analysis_service - INFO - Commit 7703de2 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,754 - server.service.analysis_service - INFO - Commit fcd0c3f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,757 - server.service.analysis_service - INFO - Commit 92b45f0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,769 - server.service.analysis_service - INFO - Commit 01027c9 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,773 - server.service.analysis_service - INFO - Commit 15755c0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,777 - server.service.analysis_service - INFO - Commit c1630bf 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,781 - server.service.analysis_service - INFO - Commit 3c6c533 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,785 - server.service.analysis_service - INFO - Commit 95ac190 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,789 - server.service.analysis_service - INFO - Commit 37eb769 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,793 - server.service.analysis_service - INFO - Commit 0601930 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,796 - server.service.analysis_service - INFO - Commit 5efde2a 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,799 - server.service.analysis_service - INFO - Commit d395153 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,803 - server.service.analysis_service - INFO - Commit efbcbc3 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,807 - server.service.analysis_service - INFO - Commit 8fce20d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:18,810 - server.service.analysis_service - INFO - 分析 Commit a24fbf4 ...
+2026-04-06 23:22:18,983 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:21,842 - server.service.analysis_service - INFO - Commit a24fbf4 分析完成，安全相关: True
+2026-04-06 23:22:21,843 - server.service.analysis_service - INFO - Commit b73a574 预过滤跳过（无安全关键词）
+2026-04-06 23:22:21,846 - server.service.analysis_service - INFO - Commit bbeade5 预过滤跳过（无安全关键词）
+2026-04-06 23:22:21,848 - server.service.analysis_service - INFO - Commit 84347b9 预过滤跳过（无安全关键词）
+2026-04-06 23:22:21,851 - server.service.analysis_service - INFO - Commit 355ea2b 预过滤跳过（无安全关键词）
+2026-04-06 23:22:21,854 - server.service.analysis_service - INFO - Commit 8a63091 预过滤跳过（无安全关键词）
+2026-04-06 23:22:21,857 - server.service.analysis_service - INFO - Commit c762084 预过滤跳过（无安全关键词）
+2026-04-06 23:22:21,859 - server.service.analysis_service - INFO - 分析 Commit 6cdcfd7 ...
+2026-04-06 23:22:22,194 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:25,136 - server.service.analysis_service - INFO - Commit 6cdcfd7 分析完成，安全相关: True
+2026-04-06 23:22:25,137 - server.service.analysis_service - INFO - Commit d8ea426 预过滤跳过（无安全关键词）
+2026-04-06 23:22:25,140 - server.service.analysis_service - INFO - Commit 232f17f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:25,143 - server.service.analysis_service - INFO - Commit fe26a8f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:25,146 - server.service.analysis_service - INFO - Commit 10b0340 预过滤跳过（无安全关键词）
+2026-04-06 23:22:25,148 - server.service.analysis_service - INFO - 分析 Commit b2aa6a1 ...
+2026-04-06 23:22:25,256 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:28,070 - server.service.analysis_service - INFO - Commit b2aa6a1 分析完成，安全相关: True
+2026-04-06 23:22:28,071 - server.service.analysis_service - INFO - Commit 6732586 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,074 - server.service.analysis_service - INFO - Commit dc44956 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,077 - server.service.analysis_service - INFO - Commit 5ea5f42 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,080 - server.service.analysis_service - INFO - Commit e0658b5 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,083 - server.service.analysis_service - INFO - Commit 303c3e0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,086 - server.service.analysis_service - INFO - Commit 962d4b6 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,088 - server.service.analysis_service - INFO - Commit 84e522d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,091 - server.service.analysis_service - INFO - Commit f65bcab 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,094 - server.service.analysis_service - INFO - Commit 8911fed 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,097 - server.service.analysis_service - INFO - Commit 05ac679 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,099 - server.service.analysis_service - INFO - Commit 5ba9029 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,102 - server.service.analysis_service - INFO - Commit f56a9fa 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,105 - server.service.analysis_service - INFO - Commit 40f0769 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,107 - server.service.analysis_service - INFO - Commit 4b89687 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,110 - server.service.analysis_service - INFO - Commit 70837aa 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,113 - server.service.analysis_service - INFO - Commit b43e441 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,115 - server.service.analysis_service - INFO - Commit e63856e 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,118 - server.service.analysis_service - INFO - Commit 2590497 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,120 - server.service.analysis_service - INFO - Commit 919fd9d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,122 - server.service.analysis_service - INFO - Commit 5041f15 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,125 - server.service.analysis_service - INFO - Commit deba49f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,128 - server.service.analysis_service - INFO - Commit a1420a6 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,131 - server.service.analysis_service - INFO - Commit 25c2f88 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,133 - server.service.analysis_service - INFO - Commit 35dc6c3 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,136 - server.service.analysis_service - INFO - Commit 0083444 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,138 - server.service.analysis_service - INFO - Commit b63e740 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,141 - server.service.analysis_service - INFO - Commit 3b1c7fc 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,144 - server.service.analysis_service - INFO - Commit 6cf0113 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,146 - server.service.analysis_service - INFO - Commit e443447 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,149 - server.service.analysis_service - INFO - Commit e1eb881 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,151 - server.service.analysis_service - INFO - Commit 6cc30a0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,154 - server.service.analysis_service - INFO - Commit 25c2ada 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,156 - server.service.analysis_service - INFO - Commit 00dcd45 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,159 - server.service.analysis_service - INFO - Commit e730ce9 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,161 - server.service.analysis_service - INFO - Commit b4a964f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,165 - server.service.analysis_service - INFO - Commit ab9f1b2 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,167 - server.service.analysis_service - INFO - Commit 0152e4f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,169 - server.service.analysis_service - INFO - Commit b327b94 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,173 - server.service.analysis_service - INFO - Commit 43b03f2 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,176 - server.service.analysis_service - INFO - Commit 297dcb9 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,178 - server.service.analysis_service - INFO - Commit e6c4b93 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,181 - server.service.analysis_service - INFO - Commit cefa8bb 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,183 - server.service.analysis_service - INFO - Commit 5f8fad0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,186 - server.service.analysis_service - INFO - Commit 4a366f6 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,189 - server.service.analysis_service - INFO - Commit ed002f9 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,191 - server.service.analysis_service - INFO - Commit fdee5cf 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,194 - server.service.analysis_service - INFO - Commit 8c547ec 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,196 - server.service.analysis_service - INFO - Commit e9e6f72 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,199 - server.service.analysis_service - INFO - Commit b608697 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,202 - server.service.analysis_service - INFO - Commit 6c1fead 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,204 - server.service.analysis_service - INFO - Commit 8c141a2 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,207 - server.service.analysis_service - INFO - Commit b7b38d8 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,210 - server.service.analysis_service - INFO - Commit d286240 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,212 - server.service.analysis_service - INFO - Commit bd3c723 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,215 - server.service.analysis_service - INFO - Commit 69d0f3f 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,217 - server.service.analysis_service - INFO - Commit a57ac5d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,221 - server.service.analysis_service - INFO - Commit 0d2874b 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,223 - server.service.analysis_service - INFO - Commit ee9e0f6 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,226 - server.service.analysis_service - INFO - Commit f0de2eb 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,228 - server.service.analysis_service - INFO - Commit 3d2b2f0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,231 - server.service.analysis_service - INFO - Commit 3c0dae1 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,234 - server.service.analysis_service - INFO - Commit af006a0 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,236 - server.service.analysis_service - INFO - Commit 4b5b586 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,239 - server.service.analysis_service - INFO - Commit c5eb906 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,241 - server.service.analysis_service - INFO - Commit 3b8e522 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,244 - server.service.analysis_service - INFO - Commit 435b651 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,246 - server.service.analysis_service - INFO - Commit 6d621e6 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,250 - server.service.analysis_service - INFO - Commit e6aabdf 预过滤跳过（无安全关键词）
+2026-04-06 23:22:28,252 - server.service.analysis_service - INFO - 分析 Commit 440ac34 ...
+2026-04-06 23:22:28,353 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:30,995 - server.service.analysis_service - INFO - Commit 440ac34 分析完成，安全相关: False
+2026-04-06 23:22:30,996 - server.service.analysis_service - INFO - 分析 Commit 0a72e6a ...
+2026-04-06 23:22:31,091 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:34,111 - server.service.analysis_service - INFO - Commit 0a72e6a 分析完成，安全相关: True
+2026-04-06 23:22:34,112 - server.service.analysis_service - INFO - Commit 4adb403 预过滤跳过（无安全关键词）
+2026-04-06 23:22:34,116 - server.service.analysis_service - INFO - Commit 134342e 预过滤跳过（无安全关键词）
+2026-04-06 23:22:34,119 - server.service.analysis_service - INFO - 分析 Commit 22be3f1 ...
+2026-04-06 23:22:34,238 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-06 23:22:37,260 - server.service.analysis_service - INFO - Commit 22be3f1 分析完成，安全相关: True
+2026-04-06 23:22:37,261 - server.service.analysis_service - INFO - Commit a65de3d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,265 - server.service.analysis_service - INFO - Commit b1295c9 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,268 - server.service.analysis_service - INFO - Commit a191c2d 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,269 - server.service.analysis_service - INFO - Commit 85bb26e 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,274 - server.service.analysis_service - INFO - Commit 2bbc53c 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,277 - server.service.analysis_service - INFO - Commit a5057a1 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,279 - server.service.analysis_service - INFO - Commit 3930acb 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,282 - server.service.analysis_service - INFO - Commit 99bd787 预过滤跳过（无安全关键词）
+2026-04-06 23:22:37,285 - server.service.analysis_service - INFO - Commit 64fa118 预过滤跳过（无安全关键词）
+2026-04-07 00:06:00,046 - app - INFO - 应用关闭中...
+2026-04-07 00:06:00,059 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 00:06:00,078 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 00:06:00,078 - app - INFO - 定时任务调度器已关闭

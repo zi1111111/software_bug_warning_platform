@@ -119,10 +119,9 @@ class LLMAnalyzer:
                 "model_name": self.model_name
             }
 
-    def analyze_commit(self,commit_hash,message:str,diff:str):
+    def analyze_commit(self,message:str,diff:str):
         """
         调用LLM分析commit，返回结构化json
-        :param commit_hash:
         :param message:
         :param diff:
         :return:

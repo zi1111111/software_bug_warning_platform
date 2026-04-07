@@ -1,14 +1,16 @@
-
+from django.db.models.expressions import result
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from twisted.conch.ssh.connection import messages
 
 from server.db.database import get_db
+from server.service.analysis_service import AnalysisService
 from server.service.data_collector import GitHubCollector
 from server.service.models import Repository, LLMAnalyse, GithubCommit
 from server.service.schemas import RepositoryAdd, RepositoryAddResponse, RepositoryDelete, RepositoryDeleteResponse, \
     RepositoryGetAllResponse, RepositoryOut, RepositoryChangeResponse, RepositoryChange, SearchCommitResponse, \
-    SearchCommit
+    SearchCommit, GetVulnStats, GetVulnStatsResponse, GetVulnerabilities, GetVulnerabilitiesResponse, LLMAnalyseOut, \
+    AnalyzeRepo, AnalyzeRepoResponse
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -116,6 +118,105 @@ async def search_commit(
     return SearchCommitResponse(
         code=200
     )
+
+@router.post("/getVulnStats",response_model=GetVulnStatsResponse)
+async def get_vuln_stats(
+        request:GetVulnStats,
+        db:Session=Depends(get_db)
+):
+    gcs = db.query(GithubCommit).filter(GithubCommit.repo_id == request.id).all()
+    llms = []
+
+    for gc in gcs:
+        llm = db.query(LLMAnalyse).filter(LLMAnalyse.commit_id==gc.id,LLMAnalyse.is_security_related==True).all()
+        llms.extend(llm)
+
+    result = {
+        'totalVulns': 0,
+        'critical': 0,
+        'high': 0,
+        'medium': 0,
+        'low': 0,
+    }
+    for l in llms:
+        result['totalVulns']+=1
+        if l.severity:
+            if l.severity == "Critical":
+                result['critical']+=1
+            elif l.severity == "High":
+                result['high']+=1
+            elif l.severity =="Medium":
+                result['medium']+=1
+            elif l.severity =="Low":
+                result['low'] +=1
+        else:
+            continue
+    return GetVulnStatsResponse(
+        code=200,
+        stats=result
+    )
+
+
+@router.post("/getVulnerabilities", response_model=GetVulnerabilitiesResponse)
+async def get_vulnerabilities(
+        request: GetVulnerabilities,
+        db: Session = Depends(get_db)
+):
+    query = db.query(LLMAnalyse).join(
+        GithubCommit, LLMAnalyse.commit_id == GithubCommit.id
+    ).filter(
+        GithubCommit.repo_id == request.id,
+        LLMAnalyse.is_security_related == True
+    )
+
+    # 严重程度过滤（如果提供了 severity 且非空）
+    if request.severity:
+        query = query.filter(LLMAnalyse.severity == request.severity)
+
+    # 获取总记录数
+    total = query.count()
+
+    # 分页 + 按 commit 日期倒序排序（最新的在前）
+    query = query.order_by(desc(GithubCommit.created_at)).offset(
+        (request.page - 1) * request.page_size
+    ).limit(request.page_size)
+
+    llms = query.all()
+
+    # 转换为响应模型列表
+    vuln_list = []
+    for llm in llms:
+        vuln_list.append(LLMAnalyseOut(
+            id=llm.id,
+            vulnerability_type=llm.vulnerability_type,
+            affected_subsystem=llm.affected_subsystem,
+            severity=llm.severity,
+            cve_id=llm.cve_id,
+            summary=llm.summary,
+            model_name=llm.model_name,
+            analyzed_at=llm.analyzed_at.isoformat() if hasattr(llm.analyzed_at, 'isoformat') else str(llm.analyzed_at)
+        ))
+
+    return GetVulnerabilitiesResponse(
+        code=200,
+        vulnList=vuln_list,
+        total = total
+    )
+
+@router.post("/analyzeRepo", response_model=AnalyzeRepoResponse)
+async def analyze_repo(
+        request:AnalyzeRepo,
+):
+    analysis_service =  AnalysisService()
+    analysis_service.analyze_unanalyzed_repo_commits(request.id)
+
+    return AnalyzeRepoResponse(
+        code=200
+    )
+
+
+
+
 
 
 

@@ -4,25 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="前端创建">
-      <change afterPath="$PROJECT_DIR$/vue_client/frontend/src/request/request.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vue_client/frontend/src/response/response.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vue_client/frontend/src/stores/repository.ts" afterDir="false" />
+    <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="更新">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/logs/app.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/data_collector.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/data_collector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue_client/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue_client/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/stores/repository.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/任务列表.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +61,7 @@
     "Python.base_service.executor": "Debug",
     "Python.data_collector.executor": "Run",
     "Python.models.executor": "Run",
+    "Python.schemas.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
@@ -134,7 +126,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775319134578</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="更新">
+      <option name="closed" value="true" />
+      <created>1775479875391</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1775479875391</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -142,6 +142,7 @@
     <MESSAGE value="数据收集层" />
     <MESSAGE value="LLM分析层" />
     <MESSAGE value="前端创建" />
-    <option name="LAST_COMMIT_MESSAGE" value="前端创建" />
+    <MESSAGE value="更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新" />
   </component>
 </project>

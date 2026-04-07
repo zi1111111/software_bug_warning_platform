@@ -5,8 +5,10 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from server.service.models import Repository
+from server.service.models import Repository, LLMAnalyse
 
+
+# request
 class RepositoryOut(BaseModel):
     id: int
     name: str
@@ -19,8 +21,23 @@ class RepositoryOut(BaseModel):
     class Config:
         from_attributes = True
 
-    #request
+class LLMAnalyseOut(BaseModel):
+    id: int
+    vulnerability_type: Optional[str] = None
+    affected_subsystem: Optional[str] = None
+    severity: Optional[str] = None
+    cve_id: Optional[str] = None
+    summary: str
+    model_name: Optional[str] = None
+    analyzed_at: str
 
+
+class AnalyzeRepo(BaseModel):
+    id:int
+
+
+class GetVulnStats(BaseModel):
+    id:int
 
 class RepositoryAdd(BaseModel):
     name : str
@@ -39,6 +56,13 @@ class RepositoryChange(BaseModel):
 class SearchCommit(BaseModel):
     id:int
 
+class GetVulnerabilities(BaseModel):
+    id:int
+    page:int
+    page_size:int
+    severity: Optional[str] = None
+
+ #response
 class RepositoryDeleteResponse(BaseModel):
     code : int
     message : str
@@ -53,6 +77,20 @@ class RepositoryChangeResponse(BaseModel):
 
 class SearchCommitResponse(BaseModel):
     code:int
-class RepositoryAddResponse:
+
+class RepositoryAddResponse(BaseModel):
     code: int
     message: str
+
+class GetVulnStatsResponse(BaseModel):
+    code:int
+    stats:dict
+
+
+class GetVulnerabilitiesResponse(BaseModel):
+    code:int
+    vulnList: List[LLMAnalyseOut]
+    total:int
+
+class AnalyzeRepoResponse(BaseModel):
+    code:int

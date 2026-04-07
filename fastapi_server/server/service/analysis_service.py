@@ -26,7 +26,7 @@ class AnalysisService:
             return False
 
         logger.info(f"分析 Commit {commit_hash[:7]} ...")
-        result = self.analyzer.analyze_commit(commit_hash, message, diff)
+        result = self.analyzer.analyze_commit(message, diff)
 
         # 存储分析结果
         analyse = LLMAnalyse(
@@ -66,3 +66,23 @@ class AnalysisService:
                     continue
         finally:
             db.close()
+
+    def analyze_unanalyzed_repo_commits(self,repo_id:int):
+        """批量分析未分析过的 commits"""
+        db = SessionLocal()
+        try:
+            # 查询未分析过的 commit（没有关联的 LLMAnalyse 记录）
+            unanalyzed = db.query(GithubCommit).filter(GithubCommit.is_analysed == False,
+                                                       GithubCommit.repo_id==repo_id).all()
+
+            logger.info(f"发现 {len(unanalyzed)} 个未分析的 commits")
+            for commit in unanalyzed:
+                try:
+                    self.analyze_commit_sync(commit.id, commit.commit_hash, commit.message, commit.diff or "", db)
+                except Exception as e:
+                    logger.error(f"分析 commit {commit.commit_hash[:7]} 失败: {e}")
+                    db.rollback()
+                    continue
+        finally:
+            db.close()
+
