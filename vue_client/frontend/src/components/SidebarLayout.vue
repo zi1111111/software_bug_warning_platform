@@ -113,9 +113,6 @@ const handleMenuSelect = (index: string) => {
     case 'daily-update':
       router.push('/daily-update')
       break
-    case 'settings':
-      router.push('/settings')
-      break
     case 'repos':
       router.push('/repositories')
       break
@@ -214,11 +211,6 @@ const openDrawer = () => {
         <el-menu-item index="daily-update">
           <el-icon><Calendar /></el-icon>
           <template #title>每日漏洞更新</template>
-        </el-menu-item>
-
-        <el-menu-item index="settings">
-          <el-icon><Setting /></el-icon>
-          <template #title>系统设置</template>
         </el-menu-item>
 
         <el-menu-item index="repos">

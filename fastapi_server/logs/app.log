@@ -5640,3 +5640,477 @@ github.GithubException.UnknownObjectException: 404 {"message": "Not Found", "doc
 2026-04-07 11:48:10,798 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
 2026-04-07 11:48:10,798 - apscheduler.scheduler - INFO - Scheduler started
 2026-04-07 11:48:10,799 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 12:45:58,832 - app - INFO - 应用关闭中...
+2026-04-07 12:45:58,832 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 12:45:58,833 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 12:45:58,833 - app - INFO - 定时任务调度器已关闭
+2026-04-07 12:46:01,842 - app - INFO - 应用启动中...
+2026-04-07 12:46:01,842 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 12:46:01,843 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 12:46:01,871 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 12:46:01,871 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 12:46:04,216 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 12:46:04,216 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 13:18:17,999 - app - INFO - 应用启动中...
+2026-04-07 13:18:17,999 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 13:18:18,001 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 13:18:18,028 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 13:18:18,028 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 13:18:20,252 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 13:18:20,252 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 13:18:22,919 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 13:18:22,920 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 13:18:25,012 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 13:18:25,454 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 13:18:25,459 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 13:18:25,459 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 13:18:25,459 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 13:18:25,459 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 13:18:25,459 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 13:18:25,459 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 13:18:25,460 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 13:38:15,393 - app - INFO - 应用关闭中...
+2026-04-07 13:38:15,395 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 13:38:15,395 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 13:38:15,395 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:02:08,920 - app - INFO - 应用启动中...
+2026-04-07 22:02:08,921 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:02:08,922 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:02:08,991 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:02:08,991 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:02:11,915 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:02:11,915 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:02:14,305 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:02:14,306 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:02:16,539 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:02:16,974 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:02:16,983 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:02:16,984 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:02:16,984 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:02:16,984 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:02:16,984 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:02:16,984 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:02:16,985 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:08:13,477 - app - ERROR - 未处理的异常: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with GithubCommit.created_at has an attribute 'day'
+2026-04-07 22:08:13,500 - app - ERROR - 未处理的异常: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with GithubCommit.created_at has an attribute 'day'
+2026-04-07 22:12:04,654 - app - INFO - 应用关闭中...
+2026-04-07 22:12:04,655 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:12:04,655 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:12:04,655 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:12:06,623 - app - INFO - 应用启动中...
+2026-04-07 22:12:06,623 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:12:06,624 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:12:06,639 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:12:06,639 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:17:11,906 - app - INFO - 应用启动中...
+2026-04-07 22:17:11,907 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:17:11,908 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:17:11,938 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:17:11,938 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:17:14,291 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:17:14,291 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:17:16,668 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:17:16,668 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:17:19,423 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:17:19,821 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:17:19,825 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:17:19,825 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:17:19,826 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:17:19,826 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:17:19,826 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:17:19,826 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:17:19,828 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:19:47,830 - app - ERROR - 未处理的异常: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with LLMAnalyse.analyzed_at has an attribute 'day'
+2026-04-07 22:20:37,790 - app - INFO - 应用关闭中...
+2026-04-07 22:20:37,791 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:20:37,791 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:20:37,791 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:20:42,949 - app - INFO - 应用启动中...
+2026-04-07 22:20:42,949 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:20:42,950 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:20:42,980 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:20:42,980 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:20:45,337 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:20:45,337 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:20:47,618 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:20:47,618 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:20:50,314 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:20:50,700 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:20:50,704 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:20:50,704 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:20:50,704 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:20:50,705 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:20:50,705 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:20:50,705 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:20:50,705 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:20:59,188 - app - ERROR - 未处理的异常: list.count() takes exactly one argument (0 given)
+2026-04-07 22:23:25,801 - app - INFO - 应用关闭中...
+2026-04-07 22:23:25,801 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:23:25,801 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:23:25,801 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:23:32,049 - app - INFO - 应用启动中...
+2026-04-07 22:23:32,049 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:23:32,050 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:23:32,073 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:23:32,073 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:23:34,874 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:23:34,874 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:23:37,180 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:23:37,180 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:23:39,415 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:23:39,805 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:23:39,810 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:23:39,810 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:23:39,810 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:23:39,810 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:23:39,810 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:23:39,810 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:23:39,811 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:24:01,738 - app - INFO - 应用关闭中...
+2026-04-07 22:24:01,738 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:24:01,739 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:24:01,739 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:24:03,717 - app - INFO - 应用启动中...
+2026-04-07 22:24:03,718 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:24:03,721 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:24:03,791 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:24:03,791 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:24:06,263 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:24:06,264 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:24:09,085 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:24:09,085 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:24:11,358 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:24:11,780 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:24:11,783 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:24:11,784 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:24:11,784 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:24:11,784 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:24:11,784 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:24:11,784 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:24:11,785 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:24:11,802 - app - ERROR - 未处理的异常: list.count() takes exactly one argument (0 given)
+2026-04-07 22:24:17,656 - app - ERROR - 未处理的异常: list.count() takes exactly one argument (0 given)
+2026-04-07 22:24:17,769 - app - INFO - 应用关闭中...
+2026-04-07 22:24:17,770 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:24:17,770 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:24:17,770 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:24:19,685 - app - INFO - 应用启动中...
+2026-04-07 22:24:19,685 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:24:19,688 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:24:19,711 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:24:19,711 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:24:22,065 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:24:22,066 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:24:24,440 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:24:24,440 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:24:26,675 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:24:27,068 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:24:27,071 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:24:27,071 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:24:27,071 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:24:27,071 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:24:27,071 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:24:27,071 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:24:27,072 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:24:42,898 - app - ERROR - 未处理的异常: list.count() takes exactly one argument (0 given)
+2026-04-07 22:25:22,912 - app - INFO - 应用关闭中...
+2026-04-07 22:25:22,912 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:25:22,913 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:25:22,913 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:25:27,959 - app - INFO - 应用启动中...
+2026-04-07 22:25:27,959 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:25:27,960 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:25:27,972 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:25:27,972 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:25:30,835 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:25:30,835 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:25:33,579 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:25:33,579 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:25:35,958 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:25:36,347 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:25:36,349 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:25:36,350 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:25:36,350 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:25:36,350 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:25:36,350 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:25:36,350 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:25:36,351 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:25:40,009 - app - ERROR - 未处理的异常: list.count() takes exactly one argument (0 given)
+2026-04-07 22:26:11,440 - app - INFO - 应用关闭中...
+2026-04-07 22:26:11,441 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:26:11,441 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:26:11,441 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:26:18,388 - app - INFO - 应用启动中...
+2026-04-07 22:26:18,389 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:26:18,390 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:26:18,415 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:26:18,415 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:26:21,745 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:26:21,745 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:26:25,057 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:26:25,058 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:26:27,326 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:26:27,708 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:26:27,710 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:26:27,711 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:26:27,711 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:26:27,711 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:26:27,711 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:26:27,712 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:26:27,712 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:26:30,458 - app - ERROR - 未处理的异常: list.count() takes exactly one argument (0 given)
+2026-04-07 22:27:20,571 - app - INFO - 应用关闭中...
+2026-04-07 22:27:20,572 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:27:20,572 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:27:20,572 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:27:22,608 - app - INFO - 应用启动中...
+2026-04-07 22:27:22,608 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:27:22,609 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:27:22,621 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:27:22,621 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:27:27,492 - app - INFO - 应用启动中...
+2026-04-07 22:27:27,492 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:27:27,493 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:27:27,513 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:27:27,513 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:27:30,340 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:27:30,340 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:27:33,207 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:27:33,207 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:27:35,531 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:27:35,916 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:27:35,918 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:27:35,919 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:27:35,919 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:27:35,919 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:27:35,919 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:27:35,920 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:27:35,920 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:41:22,734 - app - INFO - 应用关闭中...
+2026-04-07 22:41:22,735 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:41:22,735 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:41:22,735 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:41:28,928 - app - INFO - 应用启动中...
+2026-04-07 22:41:28,928 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:41:28,929 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:41:28,953 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:41:28,953 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:41:31,411 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:41:31,411 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:41:33,915 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:41:33,915 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:41:36,277 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:41:36,677 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:41:36,680 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:41:36,680 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:41:36,680 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:41:36,681 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:41:36,681 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:41:36,681 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:41:36,681 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:41:47,521 - app - ERROR - 未处理的异常: 'GetVulnDaily' object has no attribute 'vuln_type'
+2026-04-07 22:41:47,530 - app - ERROR - 未处理的异常: 'GetVulnDaily' object has no attribute 'vuln_type'
+2026-04-07 22:43:10,919 - app - INFO - 应用关闭中...
+2026-04-07 22:43:10,920 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:43:10,920 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:43:10,920 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:43:17,364 - app - INFO - 应用启动中...
+2026-04-07 22:43:17,364 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:43:17,366 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:43:17,393 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:43:17,393 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:43:19,809 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:43:19,809 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:43:22,143 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:43:22,144 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:43:24,407 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:43:24,784 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:43:24,787 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:43:24,788 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:43:24,788 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:43:24,788 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:43:24,788 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:43:24,788 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:43:24,789 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:43:36,475 - app - INFO - 应用关闭中...
+2026-04-07 22:43:36,476 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:43:36,476 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:43:36,476 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:43:54,471 - app - INFO - 应用启动中...
+2026-04-07 22:43:54,472 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:43:54,473 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:43:54,495 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:43:54,495 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:43:56,879 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:43:56,880 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:43:59,458 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:43:59,458 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:44:02,426 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:44:02,847 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:44:02,850 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:44:02,850 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:44:02,850 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:44:02,852 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:44:02,852 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:44:02,852 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:44:02,852 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:44:07,696 - app - ERROR - 未处理的异常: 'GetVulnDaily' object has no attribute 'vuln_type'
+2026-04-07 22:44:07,708 - app - ERROR - 未处理的异常: 'GetVulnDaily' object has no attribute 'vuln_type'
+2026-04-07 22:44:48,359 - app - INFO - 应用启动中...
+2026-04-07 22:44:48,359 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:44:48,360 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:44:48,371 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:44:48,371 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:44:51,306 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:44:51,306 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:44:54,334 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:44:54,334 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:44:56,685 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:44:57,064 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:44:57,068 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:44:57,068 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:44:57,068 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:44:57,068 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:44:57,068 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:44:57,068 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:44:57,069 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:45:04,051 - app - ERROR - 未处理的异常: 'Subquery' object is not iterable
+2026-04-07 22:45:04,059 - app - ERROR - 未处理的异常: 'Subquery' object is not iterable
+2026-04-07 22:46:53,483 - app - ERROR - 未处理的异常: 'Subquery' object is not iterable
+2026-04-07 22:46:53,486 - app - ERROR - 未处理的异常: 'Subquery' object is not iterable
+2026-04-07 22:48:02,330 - app - INFO - 应用关闭中...
+2026-04-07 22:48:02,331 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:48:02,331 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:48:02,331 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:48:08,789 - app - INFO - 应用启动中...
+2026-04-07 22:48:08,789 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:48:08,790 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:48:08,800 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:48:08,800 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:48:11,747 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:48:11,748 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:48:14,657 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:48:14,657 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:48:16,948 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:48:17,325 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:48:17,327 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:48:17,328 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:48:17,328 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:48:17,328 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:48:17,328 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:48:17,328 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:48:17,329 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 22:48:28,271 - app - INFO - 应用关闭中...
+2026-04-07 22:48:28,272 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 22:48:28,272 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 22:48:28,272 - app - INFO - 定时任务调度器已关闭
+2026-04-07 22:48:30,154 - app - INFO - 应用启动中...
+2026-04-07 22:48:30,155 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 22:48:30,156 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 22:48:30,167 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 22:48:30,167 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 22:48:32,537 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 22:48:32,538 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 22:48:34,841 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 22:48:34,841 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 22:48:37,061 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 22:48:37,479 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 22:48:37,482 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 22:48:37,483 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:48:37,483 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 22:48:37,483 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 22:48:37,483 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 22:48:37,483 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 22:48:37,484 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 23:06:34,304 - app - INFO - 应用关闭中...
+2026-04-07 23:06:34,308 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 23:06:34,308 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 23:06:34,309 - app - INFO - 定时任务调度器已关闭
+2026-04-07 23:06:37,216 - app - INFO - 应用启动中...
+2026-04-07 23:06:37,217 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 23:06:37,218 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 23:06:37,251 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 23:06:37,251 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 23:06:39,679 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 23:06:39,679 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 23:06:42,439 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 23:06:42,439 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 23:06:44,651 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 23:06:45,090 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 23:06:45,093 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 23:06:45,094 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:06:45,094 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:06:45,095 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 23:06:45,095 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 23:06:45,095 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 23:06:45,095 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 23:11:34,823 - app - INFO - 应用关闭中...
+2026-04-07 23:11:34,824 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 23:11:34,824 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 23:11:34,824 - app - INFO - 定时任务调度器已关闭
+2026-04-07 23:11:36,874 - app - INFO - 应用启动中...
+2026-04-07 23:11:36,874 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 23:11:36,875 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 23:11:36,891 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 23:11:36,891 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 23:11:39,256 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 23:11:39,256 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 23:11:41,519 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 23:11:41,519 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 23:11:44,290 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 23:11:44,713 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 23:11:44,716 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 23:11:44,717 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:11:44,717 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:11:44,717 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 23:11:44,717 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 23:11:44,718 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 23:11:44,718 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 23:23:17,322 - app - INFO - 应用关闭中...
+2026-04-07 23:23:17,322 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 23:23:17,322 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 23:23:17,323 - app - INFO - 定时任务调度器已关闭
+2026-04-07 23:23:19,864 - app - INFO - 应用启动中...
+2026-04-07 23:23:19,865 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 23:23:19,866 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 23:23:19,892 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 23:23:19,892 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 23:23:22,252 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 23:23:22,252 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 23:23:24,553 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 23:23:24,553 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 23:23:27,232 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 23:23:27,646 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 23:23:27,650 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 23:23:27,651 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:23:27,651 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:23:27,651 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 23:23:27,651 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 23:23:27,651 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 23:23:27,651 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 23:26:12,135 - app - INFO - 应用关闭中...
+2026-04-07 23:26:12,135 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 23:26:12,135 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 23:26:12,135 - app - INFO - 定时任务调度器已关闭
+2026-04-07 23:26:14,079 - app - INFO - 应用启动中...
+2026-04-07 23:26:14,079 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-07 23:26:14,080 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-07 23:26:14,106 - server.service.data_collector - INFO - 开始同步3 个活跃仓库
+2026-04-07 23:26:14,106 - server.service.data_collector - INFO - 开始同步仓库：linux内核
+2026-04-07 23:26:16,580 - server.service.data_collector - INFO - 仓库 linux内核 没有新的提交
+2026-04-07 23:26:16,580 - server.service.data_collector - INFO - 开始同步仓库：vue
+2026-04-07 23:26:18,847 - server.service.data_collector - INFO - 仓库 vue 没有新的提交
+2026-04-07 23:26:18,847 - server.service.data_collector - INFO - 开始同步仓库：openssl
+2026-04-07 23:26:21,657 - server.service.data_collector - INFO - 仓库 openssl 没有新的提交
+2026-04-07 23:26:22,064 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-07 23:26:22,067 - server.service.analysis_service - INFO - 发现 0 个未分析的 commits
+2026-04-07 23:26:22,067 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:26:22,067 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-07 23:26:22,068 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-07 23:26:22,068 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-07 23:26:22,068 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-07 23:26:22,068 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨两点进行仓库爬取任务和模型分析任务
+2026-04-07 23:36:01,066 - app - INFO - 应用关闭中...
+2026-04-07 23:36:01,067 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-07 23:36:01,067 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-07 23:36:01,067 - app - INFO - 定时任务调度器已关闭

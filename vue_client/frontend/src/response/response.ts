@@ -54,6 +54,7 @@ export  interface Stats {
 
 // 定义漏洞条目类型（根据实际字段补充）
 export  interface VulnItem {
+    id:number
     cve_id?: string
     summary?: string
     title?: string
@@ -64,3 +65,105 @@ export  interface VulnItem {
     model_name?: string
 }
 
+//复杂类型相应，请求定义
+
+export interface GetVulnDailyResponse{
+    stats: Stats
+    code:number
+    vulnList:VulnItem[]
+    total:number
+    vuln_type:string[]
+    total_vulns_daily:number
+    new_vulns:number
+}
+
+// 趋势分析相关类型
+export interface TrendDataPoint {
+    date: string
+    new_vulns: number
+}
+
+export interface SeverityDistributionItem {
+    value: number
+    name: string
+}
+
+export interface ComponentRankingItem {
+    name: string
+    vuln_count: number
+    severity: string
+}
+
+export interface VulnTypeDistributionItem {
+    value: number
+    name: string
+}
+
+export interface GetTrendAnalysisResponse {
+    code: number
+    trend_data: TrendDataPoint[]
+    severity_distribution: SeverityDistributionItem[]
+    component_ranking: ComponentRankingItem[]
+    vuln_type_distribution: VulnTypeDistributionItem[]
+}
+
+// 风险评估相关类型
+export interface RiskBreakdown {
+    critical: number
+    high: number
+    medium: number
+    low: number
+}
+
+export interface RiskScoreData {
+    overall: number
+    breakdown: RiskBreakdown
+}
+
+export interface RiskDistributionItem {
+    level: string
+    count: number
+    percentage: number
+    color: string
+}
+
+export interface ComponentRiskItem {
+    name: string
+    version: string
+    risk_score: number
+    vuln_count: number
+    max_severity: string
+    exposure: string
+    recommendation: string
+}
+
+export interface AttackSurfaceData {
+    entry_points: number
+    exposed_apis: number
+    third_party_deps: number
+    vulnerable_deps: number
+}
+
+export interface PriorityRecommendationItem {
+    priority: number
+    title: string
+    severity: string
+    impact: string
+    effort: string
+    timeframe: string
+}
+
+export interface RiskTrendPoint {
+    date: string
+    score: number
+}
+
+export interface GetRiskAssessmentResponse {
+    code: number
+    risk_score: RiskScoreData
+    risk_distribution: RiskDistributionItem[]
+    component_risks: ComponentRiskItem[]
+    attack_surface: AttackSurfaceData
+    priority_recommendations: PriorityRecommendationItem[]
+    risk_trend: RiskTrendPoint[]
+}

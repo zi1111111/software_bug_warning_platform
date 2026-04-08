@@ -1,49 +1,33 @@
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
 import SidebarLayout from '../components/SidebarLayout.vue'
+import {
+  ArrowRight, Box, CirclePlus, Document, Download, Timer, Warning, WarningFilled
+} from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
+import { storeToRefs } from "pinia";
+import { useRepoStore } from "../stores/repository.js";
+import { GetVulnDailyResponse, Repository, VulnItem } from "../response/response";
+import { http } from "../request/request";
 
-// 当前选中的仓库
-const currentRepo = ref({
-  id: 1,
-  name: 'vuejs/vue',
-  description: 'Vue.js 框架'
-})
+// 仓库相关
+const repoTS = useRepoStore()
+const currentRepo = ref<Repository | null>(null)
+const { repositories } = storeToRefs(repoTS)
 
-// 处理仓库切换
-const handleRepoChange = (repo) => {
-  currentRepo.value = repo
-}
+// 分页
+const currentPage = ref(1)
+const pageSize = ref(5)
+const total = ref(0)
 
 // 日期选择
 const selectedDate = ref(new Date().toISOString().split('T')[0])
-const dateShortcuts = [
-  {
-    text: '今天',
-    value: new Date()
-  },
-  {
-    text: '昨天',
-    value: () => {
-      const date = new Date()
-      date.setTime(date.getTime() - 3600 * 1000 * 24)
-      return date
-    }
-  },
-  {
-    text: '一周前',
-    value: () => {
-      const date = new Date()
-      date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-      return date
-    }
-  }
-]
 
-// 搜索关键词
+// 搜索关键词（仅前端过滤）
 const searchKeyword = ref('')
 
-// 严重程度筛选
-const severityFilter = ref([])
+// 严重程度筛选（后端筛选）
+const severityFilter = ref<string[]>([])
 const severityOptions = [
   { label: '严重', value: 'critical', color: '#f56c6c' },
   { label: '高危', value: 'high', color: '#e6a23c' },
@@ -51,209 +35,149 @@ const severityOptions = [
   { label: '低危', value: 'low', color: '#67c23a' }
 ]
 
-// 漏洞类型筛选
-const typeFilter = ref([])
-const typeOptions = [
-  { label: 'XSS攻击', value: 'xss' },
-  { label: 'SQL注入', value: 'sqli' },
-  { label: '路径遍历', value: 'path-traversal' },
-  { label: '权限绕过', value: 'auth-bypass' },
-  { label: '信息泄露', value: 'info-disclosure' },
-  { label: '其他', value: 'other' }
-]
+// 漏洞类型筛选（后端筛选）
+const typeFilter = ref<string[]>([])
+const typeOptions = ref<string[]>([])
 
-// 模拟每日漏洞数据
-const dailyVulns = ref([
-  {
-    id: 'CVE-2024-1234',
-    title: 'Vue Router 路径遍历漏洞',
-    description: '在特定配置下，攻击者可以通过构造恶意URL访问受限资源',
-    severity: 'high',
-    type: 'path-traversal',
-    package: 'vue-router',
-    version: '< 4.2.0',
-    fixedVersion: '4.2.5',
-    publishedAt: '2024-01-15',
-    updatedAt: '2024-01-15 08:30:00',
-    references: ['https://example.com/cve-2024-1234'],
-    isNew: true,
-    cvssScore: 7.5
-  },
-  {
-    id: 'CVE-2024-5678',
-    title: 'Pinia 状态管理器 XSS 漏洞',
-    description: '存储的数据未经过滤可能导致XSS攻击',
-    severity: 'medium',
-    type: 'xss',
-    package: 'pinia',
-    version: '< 2.1.0',
-    fixedVersion: '2.1.7',
-    publishedAt: '2024-01-15',
-    updatedAt: '2024-01-15 09:15:00',
-    references: ['https://example.com/cve-2024-5678'],
-    isNew: true,
-    cvssScore: 6.1
-  },
-  {
-    id: 'CVE-2024-9012',
-    title: 'Axios 请求拦截器认证绕过',
-    description: '特定条件下可绕过请求拦截器的认证检查',
-    severity: 'critical',
-    type: 'auth-bypass',
-    package: 'axios',
-    version: '< 1.6.0',
-    fixedVersion: '1.6.2',
-    publishedAt: '2024-01-15',
-    updatedAt: '2024-01-15 10:45:00',
-    references: ['https://example.com/cve-2024-9012'],
-    isNew: true,
-    cvssScore: 9.1
-  },
-  {
-    id: 'CVE-2024-3456',
-    title: 'Webpack 配置信息泄露',
-    description: '生产环境可能泄露敏感配置信息',
-    severity: 'low',
-    type: 'info-disclosure',
-    package: 'webpack',
-    version: '< 5.88.0',
-    fixedVersion: '5.89.0',
-    publishedAt: '2024-01-15',
-    updatedAt: '2024-01-15 11:20:00',
-    references: ['https://example.com/cve-2024-3456'],
-    isNew: false,
-    cvssScore: 3.7
-  },
-  {
-    id: 'CVE-2024-7890',
-    title: 'Lodash 原型污染漏洞',
-    description: 'merge 函数存在原型污染风险',
-    severity: 'high',
-    type: 'other',
-    package: 'lodash',
-    version: '< 4.17.21',
-    fixedVersion: '4.17.21',
-    publishedAt: '2024-01-15',
-    updatedAt: '2024-01-15 14:00:00',
-    references: ['https://example.com/cve-2024-7890'],
-    isNew: true,
-    cvssScore: 8.2
+// 数据
+const dailyVulns = ref<VulnItem[]>([])
+const newVulns = ref<number>(0)
+const stats = ref({
+  totalVulns: 0,
+  critical: 0,
+  high: 0,
+  medium: 0,
+  low: 0
+})
+
+const loading = ref(false)
+
+// 获取默认仓库
+const getDefaultRepo = () => {
+  const repos = repositories.value
+  if (!repos.length) return null
+  const activeRepo = repos.find(r => r.is_active === true)
+  return activeRepo || repos[0]
+}
+
+// 加载数据
+const loadData = async () => {
+  if (!currentRepo.value) return
+  loading.value = true
+  try {
+    const requestBody = {
+      id: currentRepo.value.id,
+      page: currentPage.value,
+      date: selectedDate.value,
+      page_size: pageSize.value,
+      severity: severityFilter.value,
+      vuln_type: typeFilter.value   // 新增：类型筛选传给后端
+    }
+    const res = await http.post<GetVulnDailyResponse>('/api/getVulnDaily', requestBody)
+    if (res.code === 200 && res.data) {
+      console.log(res.data)
+      typeOptions.value = res.data.vuln_type || []
+      dailyVulns.value = res.data.vulnList || []
+      newVulns.value = res.data.new_vulns || 0
+      total.value = res.data.total || 0
+      stats.value = res.data.stats || {
+        totalVulns: 0, critical: 0, high: 0, medium: 0, low: 0
+      }
+    } else {
+      ElMessage.error(res.message || "后端出错啦！请稍后重试")
+      dailyVulns.value = []
+      total.value = 0
+    }
+  } catch (error) {
+    ElMessage.error("网络请求失败")
+  } finally {
+    loading.value = false
   }
-])
+}
 
-// 过滤后的漏洞列表
+// 前端搜索过滤（仅对已加载的数据进行标题搜索）
 const filteredVulns = computed(() => {
-  return dailyVulns.value.filter(vuln => {
-    // 搜索关键词过滤
-    if (searchKeyword.value) {
-      const keyword = searchKeyword.value.toLowerCase()
-      const matchTitle = vuln.title.toLowerCase().includes(keyword)
-      const matchId = vuln.id.toLowerCase().includes(keyword)
-      const matchPackage = vuln.package.toLowerCase().includes(keyword)
-      if (!matchTitle && !matchId && !matchPackage) return false
-    }
-    
-    // 严重程度过滤
-    if (severityFilter.value.length > 0 && !severityFilter.value.includes(vuln.severity)) {
-      return false
-    }
-    
-    // 类型过滤
-    if (typeFilter.value.length > 0 && !typeFilter.value.includes(vuln.type)) {
-      return false
-    }
-    
-    return true
-  })
+  if (!searchKeyword.value) return dailyVulns.value
+  const keyword = searchKeyword.value.toLowerCase()
+  return dailyVulns.value.filter(vuln =>
+      vuln.title.toLowerCase().includes(keyword)
+  )
 })
 
-// 统计数据
-const dailyStats = computed(() => {
-  const newVulns = filteredVulns.value.filter(v => v.isNew)
-  return {
-    total: filteredVulns.value.length,
-    new: newVulns.length,
-    critical: filteredVulns.value.filter(v => v.severity === 'critical').length,
-    high: filteredVulns.value.filter(v => v.severity === 'high').length
-  }
-})
+// 统计卡片数据（直接使用后端返回的 stats，不再前端计算）
+const dailyStats = computed(() => ({
+  total: stats.value.totalVulns,
+  new: newVulns.value,
+  critical: stats.value.critical,
+  high: stats.value.high
+}))
 
-// 获取严重等级样式
-const getSeverityType = (severity) => {
-  const map = {
-    critical: 'danger',
-    high: 'warning',
-    medium: 'primary',
-    low: 'info'
+// 辅助函数
+const getSeverityType = (severity: string) => {
+  const map: Record<string, string> = {
+    critical: 'danger', high: 'warning', medium: 'primary', low: 'info'
   }
   return map[severity] || 'info'
 }
 
-const getSeverityLabel = (severity) => {
-  const map = {
-    critical: '严重',
-    high: '高危',
-    medium: '中危',
-    low: '低危'
+const getSeverityLabel = (severity: string) => {
+  const map: Record<string, string> = {
+    critical: '严重', high: '高危', medium: '中危', low: '低危'
   }
   return map[severity] || severity
 }
 
-// 获取漏洞类型标签
-const getTypeLabel = (type) => {
-  const option = typeOptions.find(o => o.value === type)
-  return option ? option.label : type
+const getTypeLabel = (type: string) => type
+
+
+
+// 切换仓库
+const handleRepoChange = (repo: Repository) => {
+  currentRepo.value = repo
+  currentPage.value = 1          // 重置分页
+  loadData()
 }
 
-// 查看详情
-const viewDetail = (vuln) => {
-  // 实现查看详情逻辑
-  console.log('查看详情:', vuln)
-}
+// 监听筛选条件变化（重新加载，重置页码）
+watch([selectedDate, severityFilter, typeFilter], () => {
+  currentPage.value = 1
+  loadData()
+})
 
-// 导出日报
-const exportReport = () => {
-  // 实现导出逻辑
-  ElMessage.success('日报导出成功')
-}
+// 监听分页变化
+watch(currentPage, () => {
+  loadData()
+})
 
-// 订阅日报
-const subscribeDaily = () => {
-  ElMessage.success('已订阅每日漏洞更新提醒')
-}
+// 初始化
+onMounted(() => {
+  if (repositories.value.length) {
+    currentRepo.value = getDefaultRepo()
+    if (currentRepo.value) loadData()
+  }
+})
 </script>
 
 <template>
-  <SidebarLayout :current-repo="currentRepo" @select-repo="handleRepoChange">
+  <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
       {{ currentRepo.name }} - 每日漏洞更新
     </template>
 
-    <div class="daily-vuln-update">
+    <div class="daily-vuln-update" v-loading="loading">
       <!-- 日期选择和操作区 -->
       <el-card class="filter-card" shadow="never">
         <div class="filter-content">
           <div class="date-selector">
-            <span class="filter-label">选择日期:</span>
+            <span class="filter-label">选择日期：</span>
             <el-date-picker
-              v-model="selectedDate"
-              type="date"
-              placeholder="选择日期"
-              :shortcuts="dateShortcuts"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"
-              size="large"
+                v-model="selectedDate"
+                type="date"
+                placeholder="选择日期"
+                format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD"
+                size="large"
             />
-          </div>
-          <div class="filter-actions">
-            <el-button type="primary" @click="exportReport">
-              <el-icon><Download /></el-icon>
-              导出日报
-            </el-button>
-            <el-button @click="subscribeDaily">
-              <el-icon><Bell /></el-icon>
-              订阅更新
-            </el-button>
           </div>
         </div>
       </el-card>
@@ -310,43 +234,41 @@ const subscribeDaily = () => {
       <el-card class="filter-detail-card" shadow="never">
         <div class="filter-row">
           <div class="filter-item">
-            <span class="filter-label">搜索:</span>
+            <span class="filter-label">搜索：</span>
             <el-input
-              v-model="searchKeyword"
-              placeholder="搜索CVE ID、漏洞标题或组件名称"
-              clearable
-              prefix-icon="Search"
-              style="width: 300px"
+                v-model="searchKeyword"
+                placeholder="搜索CVE ID、漏洞标题或组件名称"
+                clearable
+                prefix-icon="Search"
+                style="width: 300px"
             />
           </div>
           <div class="filter-item">
-            <span class="filter-label">严重程度:</span>
+            <span class="filter-label">严重程度：</span>
             <el-checkbox-group v-model="severityFilter">
-              <el-checkbox-button 
-                v-for="opt in severityOptions" 
-                :key="opt.value" 
-                :label="opt.value"
+              <el-checkbox-button
+                  v-for="opt in severityOptions"
+                  :key="opt.value"
+                  :label="opt.value"
               >
                 <span :style="{ color: opt.color }">{{ opt.label }}</span>
               </el-checkbox-button>
             </el-checkbox-group>
           </div>
-        </div>
-        <div class="filter-row">
           <div class="filter-item">
-            <span class="filter-label">漏洞类型:</span>
+            <span class="filter-label">漏洞类型：</span>
             <el-select
-              v-model="typeFilter"
-              multiple
-              collapse-tags
-              placeholder="选择漏洞类型"
-              style="width: 300px"
+                v-model="typeFilter"
+                multiple
+                collapse-tags
+                placeholder="选择漏洞类型"
+                style="width: 300px"
             >
               <el-option
-                v-for="opt in typeOptions"
-                :key="opt.value"
-                :label="opt.label"
-                :value="opt.value"
+                  v-for="opt in typeOptions"
+                  :key="opt"
+                  :label="opt"
+                  :value="opt"
               />
             </el-select>
           </div>
@@ -360,7 +282,7 @@ const subscribeDaily = () => {
             <span class="list-title">
               {{ selectedDate }} 漏洞更新列表
               <el-tag type="primary" size="small" style="margin-left: 8px;">
-                共 {{ filteredVulns.length }} 条
+                共 {{ total }} 条
               </el-tag>
             </span>
           </div>
@@ -371,63 +293,32 @@ const subscribeDaily = () => {
         </div>
 
         <div v-else class="vuln-list">
-          <div
-            v-for="vuln in filteredVulns"
-            :key="vuln.id"
-            class="vuln-item"
-            :class="{ 'is-new': vuln.isNew }"
-          >
+          <div v-for="vuln in filteredVulns" :key="vuln.id" class="vuln-item">
             <div class="vuln-header">
               <div class="vuln-id-section">
                 <el-link type="primary" :underline="false" class="vuln-id">
                   {{ vuln.id }}
                 </el-link>
-                <el-tag v-if="vuln.isNew" type="danger" size="small" effect="dark">
-                  NEW
-                </el-tag>
                 <el-tag :type="getSeverityType(vuln.severity)" effect="dark">
                   {{ getSeverityLabel(vuln.severity) }}
                 </el-tag>
               </div>
-              <div class="vuln-score">
-                <span class="score-label">CVSS</span>
-                <span class="score-value" :class="getSeverityType(vuln.severity)">
-                  {{ vuln.cvssScore }}
-                </span>
-              </div>
             </div>
-
             <h3 class="vuln-title">{{ vuln.title }}</h3>
-            <p class="vuln-desc">{{ vuln.description }}</p>
-
+            <p class="vuln-desc">{{ vuln.summary }}</p>
             <div class="vuln-meta">
               <div class="meta-item">
                 <el-icon><Box /></el-icon>
-                <span>影响组件: <el-tag size="small">{{ vuln.package }}</el-tag></span>
-              </div>
-              <div class="meta-item">
-                <el-icon><Warning /></el-icon>
-                <span>影响版本: <code>{{ vuln.version }}</code></span>
-              </div>
-              <div class="meta-item">
-                <el-icon><CircleCheck /></el-icon>
-                <span>修复版本: <code class="fixed-version">{{ vuln.fixedVersion }}</code></span>
+                <span>影响组件：<el-tag size="small">{{ vuln.affected_subsystem }}</el-tag></span>
               </div>
               <div class="meta-item">
                 <el-icon><Timer /></el-icon>
-                <span>更新时间: {{ vuln.updatedAt }}</span>
+                <span>更新时间：{{ vuln.analyzed_at }}</span>
               </div>
             </div>
-
             <div class="vuln-footer">
               <div class="vuln-tags">
-                <el-tag size="small" type="info">{{ getTypeLabel(vuln.type) }}</el-tag>
-              </div>
-              <div class="vuln-actions">
-                <el-button type="primary" link @click="viewDetail(vuln)">
-                  查看详情
-                  <el-icon class="el-icon--right"><ArrowRight /></el-icon>
-                </el-button>
+                <el-tag size="small" type="info">{{ getTypeLabel(vuln.vulnerability_type) }}</el-tag>
               </div>
             </div>
           </div>
@@ -436,17 +327,20 @@ const subscribeDaily = () => {
         <!-- 分页 -->
         <div class="pagination-wrapper">
           <el-pagination
-            background
-            layout="prev, pager, next, jumper, ->, total"
-            :total="filteredVulns.length"
-            :page-size="10"
-            class="pagination"
+              background
+              layout="prev, pager, next, jumper, ->, total"
+              :total="total"
+              :page-size="pageSize"
+              :current-page="currentPage"
+              @current-change="(val) => currentPage = val"
+              class="pagination"
           />
         </div>
       </el-card>
     </div>
   </SidebarLayout>
 </template>
+
 
 <style scoped>
 .daily-vuln-update {
@@ -559,7 +453,7 @@ const subscribeDaily = () => {
 .filter-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 30px;
 }
 
 .vuln-list-card {

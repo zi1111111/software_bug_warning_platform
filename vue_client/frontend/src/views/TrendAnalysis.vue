@@ -1,17 +1,41 @@
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import SidebarLayout from '../components/SidebarLayout.vue'
+import { storeToRefs } from "pinia"
+import { useRepoStore } from "../stores/repository"
+import { http } from "../request/request"
+import type { 
+  GetTrendAnalysisResponse, 
+  TrendDataPoint,
+  SeverityDistributionItem,
+  ComponentRankingItem,
+  VulnTypeDistributionItem,
+  Repository 
+} from "../response/response"
+
+// 仓库相关
+const repoTS = useRepoStore()
+const { repositories } = storeToRefs(repoTS)
 
 // 当前选中的仓库
-const currentRepo = ref({
-  id: 1,
-  name: 'vuejs/vue',
-  description: 'Vue.js 框架'
-})
+const currentRepo = ref<Repository | null>(null)
+
+// 加载状态
+const loading = ref(false)
+
+// 获取默认仓库
+const getDefaultRepo = () => {
+  const repos = repositories.value
+  if (!repos.length) return null
+  const activeRepo = repos.find(r => r.is_active === true)
+  return activeRepo || repos[0]
+}
 
 // 处理仓库切换
-const handleRepoChange = (repo) => {
+const handleRepoChange = (repo: Repository) => {
   currentRepo.value = repo
+  loadTrendData()
 }
 
 // 时间范围选择
@@ -23,70 +47,53 @@ const timeRangeOptions = [
   { label: '今年', value: 'year' }
 ]
 
-// 模拟趋势数据
-const trendData = ref({
-  '7d': {
-    dates: ['01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'],
-    newVulns: [3, 5, 2, 7, 4, 6, 3],
-    fixedVulns: [1, 2, 3, 1, 4, 2, 5],
-    totalVulns: [12, 15, 14, 20, 20, 24, 22]
-  },
-  '30d': {
-    dates: ['第1周', '第2周', '第3周', '第4周'],
-    newVulns: [15, 22, 18, 25],
-    fixedVulns: [8, 12, 15, 18],
-    totalVulns: [45, 55, 58, 65]
-  },
-  '90d': {
-    dates: ['1月', '2月', '3月'],
-    newVulns: [80, 65, 90],
-    fixedVulns: [45, 55, 70],
-    totalVulns: [150, 160, 180]
-  },
-  'year': {
-    dates: ['Q1', 'Q2', 'Q3', 'Q4'],
-    newVulns: [235, 180, 220, 195],
-    fixedVulns: [170, 160, 190, 210],
-    totalVulns: [450, 470, 500, 485]
+// 数据状态
+const trendData = ref<TrendDataPoint[]>([])
+const severityDistribution = ref<SeverityDistributionItem[]>([])
+const componentRanking = ref<ComponentRankingItem[]>([])
+const vulnTypeDistribution = ref<VulnTypeDistributionItem[]>([])
+
+// 加载趋势分析数据
+const loadTrendData = async () => {
+  if (!currentRepo.value) return
+  
+  loading.value = true
+  try {
+    const res = await http.post<GetTrendAnalysisResponse>('/api/getTrendAnalysis', {
+      id: currentRepo.value.id,
+      time_range: timeRange.value
+    })
+    
+    if (res.code === 200 && res.data) {
+      trendData.value = res.data.trend_data || []
+      severityDistribution.value = res.data.severity_distribution || []
+      componentRanking.value = res.data.component_ranking || []
+      vulnTypeDistribution.value = res.data.vuln_type_distribution || []
+    } else {
+      ElMessage.error(res.message || '加载趋势数据失败')
+    }
+  } catch (error) {
+    ElMessage.error('网络请求失败，请稍后重试')
+    console.error('Load trend data error:', error)
+  } finally {
+    loading.value = false
   }
-})
-
-// 严重等级分布数据
-const severityDistribution = ref([
-  { value: 15, name: '严重' },
-  { value: 35, name: '高危' },
-  { value: 50, name: '中危' },
-  { value: 30, name: '低危' }
-])
-
-// 组件漏洞排行
-const componentRanking = ref([
-  { name: 'lodash', vulnCount: 12, severity: 'high' },
-  { name: 'axios', vulnCount: 8, severity: 'critical' },
-  { name: 'express', vulnCount: 6, severity: 'medium' },
-  { name: 'webpack', vulnCount: 5, severity: 'low' },
-  { name: 'babel-core', vulnCount: 4, severity: 'medium' }
-])
-
-// 漏洞类型分布
-const vulnTypeDistribution = ref([
-  { value: 45, name: 'XSS攻击' },
-  { value: 32, name: 'SQL注入' },
-  { value: 28, name: '路径遍历' },
-  { value: 20, name: '权限绕过' },
-  { value: 15, name: '信息泄露' },
-  { value: 10, name: '其他' }
-])
+}
 
 // 计算当前数据
-const currentData = computed(() => trendData.value[timeRange.value])
+const currentData = computed(() => {
+  return {
+    dates: trendData.value.map(d => d.date),
+    newVulns: trendData.value.map(d => d.new_vulns)
+  }
+})
 
 // 获取图表颜色
 const chartColors = ['#f56c6c', '#e6a23c', '#409eff', '#67c23a']
 
 // 严重等级颜色映射
-const getSeverityColor = (severity) => {
-  const map = {
+const getSeverityColor = (severity: string) => {
+  const map: Record<string, string> = {
     critical: '#f56c6c',
     high: '#e6a23c',
     medium: '#409eff',
@@ -95,8 +102,8 @@ const getSeverityColor = (severity) => {
   return map[severity] || '#909399'
 }
 
-const getSeverityLabel = (severity) => {
-  const map = {
+const getSeverityLabel = (severity: string) => {
+  const map: Record<string, string> = {
     critical: '严重',
     high: '高危',
     medium: '中危',
@@ -104,15 +111,40 @@ const getSeverityLabel = (severity) => {
   }
   return map[severity] || severity
 }
+
+// 监听时间范围变化
+watch(timeRange, () => {
+  loadTrendData()
+})
+
+// 初始化
+onMounted(() => {
+  if (repositories.value.length) {
+    currentRepo.value = getDefaultRepo()
+    if (currentRepo.value) {
+      loadTrendData()
+    }
+  }
+})
+
+// 监听仓库列表变化
+watch(repositories, (newRepos) => {
+  if (newRepos.length && !currentRepo.value) {
+    currentRepo.value = getDefaultRepo()
+    if (currentRepo.value) {
+      loadTrendData()
+    }
+  }
+}, { immediate: true })
 </script>
 
 <template>
-  <SidebarLayout :current-repo="currentRepo" @select-repo="handleRepoChange">
+  <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
       {{ currentRepo.name }} - 趋势分析
     </template>
 
-    <div class="trend-analysis">
+    <div class="trend-analysis" v-loading="loading">
       <!-- 时间范围选择 -->
       <el-card class="filter-card" shadow="never">
         <div class="filter-content">
@@ -131,44 +163,24 @@ const getSeverityLabel = (severity) => {
 
       <!-- 统计概览 -->
       <el-row :gutter="20" class="stats-row">
-        <el-col :span="6">
+        <el-col :span="12">
           <el-card class="stat-card" shadow="hover">
             <div class="stat-header">
               <el-icon class="stat-icon red"><TrendCharts /></el-icon>
               <span class="stat-trend up">+15%</span>
             </div>
-            <div class="stat-value">{{ currentData.newVulns.reduce((a, b) => a + b, 0) }}</div>
+            <div class="stat-value">{{ currentData.newVulns.reduce((a: number, b: number) => a + b, 0) }}</div>
             <div class="stat-label">新增漏洞</div>
           </el-card>
         </el-col>
-        <el-col :span="6">
-          <el-card class="stat-card" shadow="hover">
-            <div class="stat-header">
-              <el-icon class="stat-icon green"><CircleCheck /></el-icon>
-              <span class="stat-trend up">+22%</span>
-            </div>
-            <div class="stat-value">{{ currentData.fixedVulns.reduce((a, b) => a + b, 0) }}</div>
-            <div class="stat-label">已修复漏洞</div>
-          </el-card>
-        </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-card class="stat-card" shadow="hover">
             <div class="stat-header">
               <el-icon class="stat-icon blue"><Warning /></el-icon>
-              <span class="stat-trend down">-5%</span>
-            </div>
-            <div class="stat-value">{{ currentData.totalVulns[currentData.totalVulns.length - 1] }}</div>
-            <div class="stat-label">现存漏洞</div>
-          </el-card>
-        </el-col>
-        <el-col :span="6">
-          <el-card class="stat-card" shadow="hover">
-            <div class="stat-header">
-              <el-icon class="stat-icon orange"><Timer /></el-icon>
               <span class="stat-trend">--</span>
             </div>
-            <div class="stat-value">{{ Math.round(currentData.fixedVulns.reduce((a, b) => a + b, 0) / currentData.newVulns.reduce((a, b) => a + b, 0) * 100) }}%</div>
-            <div class="stat-label">修复率</div>
+            <div class="stat-value">{{ severityDistribution.reduce((a: number, b) => a + b.value, 0) }}</div>
+            <div class="stat-label">漏洞总数</div>
           </el-card>
         </el-col>
       </el-row>
@@ -183,23 +195,15 @@ const getSeverityLabel = (severity) => {
                 <span class="legend-dot" style="background: #f56c6c;"></span>
                 新增漏洞
               </span>
-              <span class="legend-item">
-                <span class="legend-dot" style="background: #67c23a;"></span>
-                已修复
-              </span>
-              <span class="legend-item">
-                <span class="legend-dot" style="background: #409eff;"></span>
-                现存总数
-              </span>
             </div>
           </div>
         </template>
         
         <!-- 简单的柱状图展示 -->
-        <div class="trend-chart">
+        <div class="trend-chart" v-if="currentData.dates.length > 0">
           <div class="chart-y-axis">
             <div v-for="i in 5" :key="i" class="y-axis-label">
-              {{ Math.max(...currentData.totalVulns) - (i - 1) * Math.ceil(Math.max(...currentData.totalVulns) / 4) }}
+              {{(i - 1) * Math.ceil(Math.max(...currentData.newVulns, 1) / 4)  }}
             </div>
           </div>
           <div class="chart-content">
@@ -212,30 +216,10 @@ const getSeverityLabel = (severity) => {
                 <div 
                   class="bar new-vuln"
                   :style="{ 
-                    height: (currentData.newVulns[index] / Math.max(...currentData.totalVulns) * 200) + 'px' 
+                    height: (currentData.newVulns[index] / Math.max(...currentData.newVulns, 1) * 200) + 'px' 
                   }"
                 >
                   <el-tooltip :content="`新增: ${currentData.newVulns[index]}`" placement="top">
-                    <div class="bar-inner"></div>
-                  </el-tooltip>
-                </div>
-                <div 
-                  class="bar fixed"
-                  :style="{ 
-                    height: (currentData.fixedVulns[index] / Math.max(...currentData.totalVulns) * 200) + 'px' 
-                  }"
-                >
-                  <el-tooltip :content="`修复: ${currentData.fixedVulns[index]}`" placement="top">
-                    <div class="bar-inner"></div>
-                  </el-tooltip>
-                </div>
-                <div 
-                  class="bar total"
-                  :style="{ 
-                    height: (currentData.totalVulns[index] / Math.max(...currentData.totalVulns) * 200) + 'px' 
-                  }"
-                >
-                  <el-tooltip :content="`总数: ${currentData.totalVulns[index]}`" placement="top">
                     <div class="bar-inner"></div>
                   </el-tooltip>
                 </div>
@@ -244,6 +228,7 @@ const getSeverityLabel = (severity) => {
             </div>
           </div>
         </div>
+        <el-empty v-else description="暂无趋势数据" />
       </el-card>
 
       <el-row :gutter="20" class="bottom-row">
@@ -253,7 +238,7 @@ const getSeverityLabel = (severity) => {
             <template #header>
               <span class="card-title">严重等级分布</span>
             </template>
-            <div class="distribution-chart">
+            <div class="distribution-chart" v-if="severityDistribution.length > 0">
               <div 
                 v-for="(item, index) in severityDistribution" 
                 :key="item.name"
@@ -266,7 +251,7 @@ const getSeverityLabel = (severity) => {
                       class="distribution-bar"
                       :style="{ 
                         width: (item.value / severityDistribution.reduce((a, b) => a + b.value, 0) * 100) + '%',
-                        background: chartColors[index]
+                        background: chartColors[index % chartColors.length]
                       }"
                     ></div>
                   </div>
@@ -274,6 +259,7 @@ const getSeverityLabel = (severity) => {
                 </div>
               </div>
             </div>
+            <el-empty v-else description="暂无分布数据" />
           </el-card>
         </el-col>
 
@@ -283,7 +269,7 @@ const getSeverityLabel = (severity) => {
             <template #header>
               <span class="card-title">组件漏洞排行</span>
             </template>
-            <div class="ranking-list">
+            <div class="ranking-list" v-if="componentRanking.length > 0">
               <div 
                 v-for="(item, index) in componentRanking" 
                 :key="item.name"
@@ -299,9 +285,10 @@ const getSeverityLabel = (severity) => {
                     {{ getSeverityLabel(item.severity) }}
                   </el-tag>
                 </div>
-                <div class="ranking-count">{{ item.vulnCount }}</div>
+                <div class="ranking-count">{{ item.vuln_count }}</div>
               </div>
             </div>
+            <el-empty v-else description="暂无排行数据" />
           </el-card>
         </el-col>
 
@@ -311,7 +298,7 @@ const getSeverityLabel = (severity) => {
             <template #header>
               <span class="card-title">漏洞类型分布</span>
             </template>
-            <div class="type-distribution">
+            <div class="type-distribution" v-if="vulnTypeDistribution.length > 0">
               <div 
                 v-for="(item, index) in vulnTypeDistribution" 
                 :key="item.name"
@@ -333,11 +320,13 @@ const getSeverityLabel = (severity) => {
                 </div>
               </div>
             </div>
+            <el-empty v-else description="暂无类型数据" />
           </el-card>
         </el-col>
       </el-row>
     </div>
   </SidebarLayout>
+  <div v-else class="loading-container">加载中...</div>
 </template>
 
 <style scoped>
@@ -359,6 +348,15 @@ const getSeverityLabel = (severity) => {
 .filter-label {
   font-weight: 500;
   color: #606266;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 16px;
+  color: #909399;
 }
 
 .stats-row {
@@ -525,14 +523,6 @@ const getSeverityLabel = (severity) => {
 
 .bar.new-vuln .bar-inner {
   background: #f56c6c;
-}
-
-.bar.fixed .bar-inner {
-  background: #67c23a;
-}
-
-.bar.total .bar-inner {
-  background: #409eff;
 }
 
 .bar-inner {

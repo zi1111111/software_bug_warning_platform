@@ -183,8 +183,6 @@ onMounted(() => {
   if (repositories.value.length && !currentRepo.value) {
     currentRepo.value = getDefaultRepo()
   } else if (currentRepo.value) {
-    loadStats()
-    loadVulnList()
   }
 })
 

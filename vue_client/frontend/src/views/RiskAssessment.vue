@@ -1,17 +1,44 @@
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import SidebarLayout from '../components/SidebarLayout.vue'
+import { storeToRefs } from "pinia"
+import { useRepoStore } from "../stores/repository"
+import { http } from "../request/request"
+import type { 
+  GetRiskAssessmentResponse, 
+  RiskScoreData,
+  RiskDistributionItem,
+  ComponentRiskItem,
+  AttackSurfaceData,
+  PriorityRecommendationItem,
+  RiskTrendPoint,
+  Repository 
+} from "../response/response"
+import {Calendar, Timer, Warning} from "@element-plus/icons-vue";
+
+// 仓库相关
+const repoTS = useRepoStore()
+const { repositories } = storeToRefs(repoTS)
 
 // 当前选中的仓库
-const currentRepo = ref({
-  id: 1,
-  name: 'vuejs/vue',
-  description: 'Vue.js 框架'
-})
+const currentRepo = ref<Repository | null>(null)
+
+// 加载状态
+const loading = ref(false)
+
+// 获取默认仓库
+const getDefaultRepo = () => {
+  const repos = repositories.value
+  if (!repos.length) return null
+  const activeRepo = repos.find(r => r.is_active === true)
+  return activeRepo || repos[0]
+}
 
 // 处理仓库切换
-const handleRepoChange = (repo) => {
+const handleRepoChange = (repo: Repository) => {
   currentRepo.value = repo
+  loadRiskData()
 }
 
 // 时间范围选择
@@ -22,115 +49,55 @@ const timeRangeOptions = [
   { label: '最近90天', value: '90d' }
 ]
 
-// 风险评分数据
-const riskScore = ref({
-  overall: 75,
-  breakdown: {
-    critical: 25,
-    high: 35,
-    medium: 20,
-    low: 10
-  }
+// 数据状态
+const riskScore = ref<RiskScoreData>({
+  overall: 0,
+  breakdown: { critical: 0, high: 0, medium: 0, low: 0 }
 })
 
-// 风险等级分布
-const riskDistribution = ref([
-  { level: '严重', count: 3, percentage: 15, color: '#f56c6c' },
-  { level: '高危', count: 8, percentage: 40, color: '#e6a23c' },
-  { level: '中危', count: 6, percentage: 30, color: '#409eff' },
-  { level: '低危', count: 3, percentage: 15, color: '#67c23a' }
-])
-
-// 组件风险评估
-const componentRisks = ref([
-  {
-    name: 'axios',
-    version: '1.5.0',
-    riskScore: 85,
-    vulnCount: 5,
-    maxSeverity: 'critical',
-    exposure: 'high',
-    recommendation: '立即升级至 1.6.2 版本'
-  },
-  {
-    name: 'lodash',
-    version: '4.17.20',
-    riskScore: 72,
-    vulnCount: 3,
-    maxSeverity: 'high',
-    exposure: 'high',
-    recommendation: '建议升级至 4.17.21 版本'
-  },
-  {
-    name: 'express',
-    version: '4.18.0',
-    riskScore: 45,
-    vulnCount: 2,
-    maxSeverity: 'medium',
-    exposure: 'medium',
-    recommendation: '关注官方安全公告'
-  },
-  {
-    name: 'webpack',
-    version: '5.88.0',
-    riskScore: 28,
-    vulnCount: 1,
-    maxSeverity: 'low',
-    exposure: 'low',
-    recommendation: '风险较低，可正常更新'
-  }
-])
-
-// 攻击面分析
-const attackSurface = ref({
-  entryPoints: 12,
-  exposedApis: 8,
-  thirdPartyDeps: 45,
-  vulnerableDeps: 6
+const riskDistribution = ref<RiskDistributionItem[]>([])
+const componentRisks = ref<ComponentRiskItem[]>([])
+const attackSurface = ref<AttackSurfaceData>({
+  entry_points: 0,
+  exposed_apis: 0,
+  third_party_deps: 0,
+  vulnerable_deps: 0
 })
-
-// 修复优先级建议
-const priorityRecommendations = ref([
-  {
-    priority: 1,
-    title: '修复 Axios 认证绕过漏洞',
-    severity: 'critical',
-    impact: '可能导致未授权访问',
-    effort: '低',
-    timeframe: '24小时内'
-  },
-  {
-    priority: 2,
-    title: '升级 Lodash 至最新版本',
-    severity: 'high',
-    impact: '原型污染风险',
-    effort: '低',
-    timeframe: '3天内'
-  },
-  {
-    priority: 3,
-    title: '配置 Webpack 安全选项',
-    severity: 'medium',
-    impact: '信息泄露风险',
-    effort: '中',
-    timeframe: '1周内'
-  }
-])
-
-// 历史风险趋势
-const riskTrendData = ref([
-  { date: '01-01', score: 82 },
-  { date: '01-05', score: 85 },
-  { date: '01-10', score: 78 },
-  { date: '01-15', score: 75 },
-  { date: '01-20', score: 73 },
-  { date: '01-25', score: 71 },
-  { date: '01-30', score: 75 }
-])
+const priorityRecommendations = ref<PriorityRecommendationItem[]>([])
+const riskTrendData = ref<RiskTrendPoint[]>([])
 
 // 风险详情对话框
 const detailDialogVisible = ref(false)
-const selectedComponent = ref(null)
+const selectedComponent = ref<ComponentRiskItem | null>(null)
+
+// 加载风险评估数据
+const loadRiskData = async () => {
+  if (!currentRepo.value) return
+  
+  loading.value = true
+  try {
+    const res = await http.post<GetRiskAssessmentResponse>('/api/getRiskAssessment', {
+      id: currentRepo.value.id,
+      time_range: timeRange.value
+    })
+    
+    if (res.code === 200 && res.data) {
+      riskScore.value = res.data.risk_score || { overall: 0, breakdown: { critical: 0, high: 0, medium: 0, low: 0 } }
+      riskDistribution.value = res.data.risk_distribution || []
+      componentRisks.value = res.data.component_risks || []
+      attackSurface.value = res.data.attack_surface || { entry_points: 0, exposed_apis: 0, third_party_deps: 0, vulnerable_deps: 0 }
+      priorityRecommendations.value = res.data.priority_recommendations || []
+      riskTrendData.value = res.data.risk_trend || []
+    } else {
+      ElMessage.error(res.message || '加载风险评估数据失败')
+    }
+  } catch (error) {
+    ElMessage.error('网络请求失败，请稍后重试')
+    console.error('Load risk data error:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 // 计算属性：总体风险等级
 const overallRiskLevel = computed(() => {
@@ -141,7 +108,7 @@ const overallRiskLevel = computed(() => {
 })
 
 // 获取风险分数颜色
-const getRiskScoreColor = (score) => {
+const getRiskScoreColor = (score: number) => {
   if (score >= 80) return '#f56c6c'
   if (score >= 60) return '#e6a23c'
   if (score >= 40) return '#409eff'
@@ -149,8 +116,8 @@ const getRiskScoreColor = (score) => {
 }
 
 // 获取严重等级样式
-const getSeverityType = (severity) => {
-  const map = {
+const getSeverityType = (severity: string) => {
+  const map: Record<string, string> = {
     critical: 'danger',
     high: 'warning',
     medium: 'primary',
@@ -159,8 +126,8 @@ const getSeverityType = (severity) => {
   return map[severity] || 'info'
 }
 
-const getSeverityLabel = (severity) => {
-  const map = {
+const getSeverityLabel = (severity: string) => {
+  const map: Record<string, string> = {
     critical: '严重',
     high: '高危',
     medium: '中危',
@@ -170,24 +137,72 @@ const getSeverityLabel = (severity) => {
 }
 
 // 查看组件详情
-const viewComponentDetail = (component) => {
+const viewComponentDetail = (component: ComponentRiskItem) => {
   selectedComponent.value = component
   detailDialogVisible.value = true
 }
 
 // 导出风险评估报告
 const exportReport = () => {
+  // 生成CSV报告
+  const headers = ['组件名称', '版本', '风险评分', '漏洞数量', '最高严重等级', '暴露程度', '修复建议']
+  const rows = componentRisks.value.map(c => [
+    c.name,
+    c.version,
+    c.risk_score,
+    c.vuln_count,
+    getSeverityLabel(c.max_severity),
+    c.exposure === 'high' ? '高' : c.exposure === 'medium' ? '中' : '低',
+    c.recommendation
+  ])
+  
+  const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n')
+  const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  const url = URL.createObjectURL(blob)
+  link.href = url
+  link.setAttribute('download', `${currentRepo.value?.name || '仓库'}_风险评估报告.csv`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+  
   ElMessage.success('风险评估报告导出成功')
 }
+
+// 监听时间范围变化
+watch(timeRange, () => {
+  loadRiskData()
+})
+
+// 初始化
+onMounted(() => {
+  if (repositories.value.length) {
+    currentRepo.value = getDefaultRepo()
+    if (currentRepo.value) {
+      loadRiskData()
+    }
+  }
+})
+
+// 监听仓库列表变化
+watch(repositories, (newRepos) => {
+  if (newRepos.length && !currentRepo.value) {
+    currentRepo.value = getDefaultRepo()
+    if (currentRepo.value) {
+      loadRiskData()
+    }
+  }
+}, { immediate: true })
 </script>
 
 <template>
-  <SidebarLayout :current-repo="currentRepo" @select-repo="handleRepoChange">
+  <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
       {{ currentRepo.name }} - 风险评估
     </template>
 
-    <div class="risk-assessment">
+    <div class="risk-assessment" v-loading="loading">
       <!-- 顶部操作区 -->
       <el-card class="filter-card" shadow="never">
         <div class="filter-content">
@@ -295,7 +310,7 @@ const exportReport = () => {
                   <el-icon><Connection /></el-icon>
                 </div>
                 <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.entryPoints }}</div>
+                  <div class="attack-value">{{ attackSurface.entry_points }}</div>
                   <div class="attack-label">入口点数量</div>
                 </div>
               </div>
@@ -304,7 +319,7 @@ const exportReport = () => {
                   <el-icon><Link /></el-icon>
                 </div>
                 <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.exposedApis }}</div>
+                  <div class="attack-value">{{ attackSurface.exposed_apis }}</div>
                   <div class="attack-label">暴露API数</div>
                 </div>
               </div>
@@ -313,7 +328,7 @@ const exportReport = () => {
                   <el-icon><Box /></el-icon>
                 </div>
                 <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.thirdPartyDeps }}</div>
+                  <div class="attack-value">{{ attackSurface.third_party_deps }}</div>
                   <div class="attack-label">第三方依赖</div>
                 </div>
               </div>
@@ -322,7 +337,7 @@ const exportReport = () => {
                   <el-icon><Warning /></el-icon>
                 </div>
                 <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.vulnerableDeps }}</div>
+                  <div class="attack-value">{{ attackSurface.vulnerable_deps }}</div>
                   <div class="attack-label">存在漏洞依赖</div>
                 </div>
               </div>
@@ -336,10 +351,6 @@ const exportReport = () => {
         <template #header>
           <div class="card-header">
             <span class="card-title">组件风险评估</span>
-            <el-button type="primary" text>
-              查看全部
-              <el-icon class="el-icon--right"><ArrowRight /></el-icon>
-            </el-button>
           </div>
         </template>
         
@@ -360,25 +371,25 @@ const exportReport = () => {
             <template #default="{ row }">
               <div 
                 class="risk-score-badge"
-                :style="{ background: getRiskScoreColor(row.riskScore) }"
+                :style="{ background: getRiskScoreColor(row.risk_score) }"
               >
-                {{ row.riskScore }}
+                {{ row.risk_score }}
               </div>
             </template>
           </el-table-column>
 
           <el-table-column label="漏洞数量" width="100">
             <template #default="{ row }">
-              <el-tag :type="row.vulnCount > 3 ? 'danger' : row.vulnCount > 1 ? 'warning' : 'info'">
-                {{ row.vulnCount }}个
+              <el-tag :type="row.vuln_count > 3 ? 'danger' : row.vuln_count > 1 ? 'warning' : 'info'">
+                {{ row.vuln_count }}个
               </el-tag>
             </template>
           </el-table-column>
 
           <el-table-column label="最高严重等级" width="120">
             <template #default="{ row }">
-              <el-tag :type="getSeverityType(row.maxSeverity)" effect="dark">
-                {{ getSeverityLabel(row.maxSeverity) }}
+              <el-tag :type="getSeverityType(row.max_severity)" effect="dark">
+                {{ getSeverityLabel(row.max_severity) }}
               </el-tag>
             </template>
           </el-table-column>
@@ -451,49 +462,6 @@ const exportReport = () => {
         </div>
       </el-card>
 
-      <!-- 历史风险趋势 -->
-      <el-card class="trend-card" shadow="hover">
-        <template #header>
-          <span class="card-title">风险趋势变化</span>
-        </template>
-        <div class="trend-chart">
-          <div class="chart-y-axis">
-            <div v-for="i in 5" :key="i" class="y-axis-label">
-              {{ 100 - (i - 1) * 20 }}
-            </div>
-          </div>
-          <div class="chart-content">
-            <div class="trend-line">
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                <polyline
-                  fill="none"
-                  stroke="#f56c6c"
-                  stroke-width="2"
-                  :points="riskTrendData.map((d, i) => `${(i / (riskTrendData.length - 1)) * 100},${100 - d.score}`).join(' ')"
-                />
-                <circle
-                  v-for="(d, i) in riskTrendData"
-                  :key="i"
-                  :cx="(i / (riskTrendData.length - 1)) * 100"
-                  :cy="100 - d.score"
-                  r="3"
-                  fill="#f56c6c"
-                />
-              </svg>
-            </div>
-            <div class="x-axis">
-              <span 
-                v-for="(d, i) in riskTrendData" 
-                :key="i"
-                class="x-axis-label"
-              >
-                {{ d.date }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </el-card>
-
       <!-- 组件详情对话框 -->
       <el-dialog
         v-model="detailDialogVisible"
@@ -505,9 +473,9 @@ const exportReport = () => {
             <h3>{{ selectedComponent.name }} @ {{ selectedComponent.version }}</h3>
             <div 
               class="detail-score"
-              :style="{ color: getRiskScoreColor(selectedComponent.riskScore) }"
+              :style="{ color: getRiskScoreColor(selectedComponent.risk_score) }"
             >
-              风险评分: {{ selectedComponent.riskScore }}
+              风险评分: {{ selectedComponent.risk_score }}
             </div>
           </div>
           
@@ -516,8 +484,8 @@ const exportReport = () => {
           <div class="detail-section">
             <h4>风险因素</h4>
             <ul>
-              <li>存在 {{ selectedComponent.vulnCount }} 个已知漏洞</li>
-              <li>最高严重等级: {{ getSeverityLabel(selectedComponent.maxSeverity) }}</li>
+              <li>存在 {{ selectedComponent.vuln_count }} 个已知漏洞</li>
+              <li>最高严重等级: {{ getSeverityLabel(selectedComponent.max_severity) }}</li>
               <li>暴露程度: {{ selectedComponent.exposure === 'high' ? '高' : selectedComponent.exposure === 'medium' ? '中' : '低' }}</li>
             </ul>
           </div>
@@ -530,9 +498,19 @@ const exportReport = () => {
       </el-dialog>
     </div>
   </SidebarLayout>
+  <div v-else class="loading-container">加载中...</div>
 </template>
 
 <style scoped>
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 16px;
+  color: #909399;
+}
+
 .risk-assessment {
   padding: 0;
 }
