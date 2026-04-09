@@ -2,14 +2,17 @@
 import { ref, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import SidebarLayout from '../components/SidebarLayout.vue'
-import { Clock, Download, Refresh, Setting, Timer, Collection, Plus } from "@element-plus/icons-vue"
+import { Clock, Download, Refresh, Setting, Timer, Collection, Plus, Cpu } from "@element-plus/icons-vue"
 import { storeToRefs } from "pinia"
 import { useRepoStore } from "../stores/repository"
 import {BaseResponse, http} from "../request/request"
-import {Stats, VulnItem} from "../response/response";
+import {Stats, VulnItem} from "../response/response"
+import { useRoute, useRouter } from 'vue-router'
 
 const repoTS = useRepoStore()
 const { repositories } = storeToRefs(repoTS)
+const route = useRoute()
+const router = useRouter()
 
 // 当前选中的仓库
 const currentRepo = ref<any>(null)
@@ -180,9 +183,18 @@ watch([currentPage, pageSize, severityFilter], () => {
 
 // 初始化
 onMounted(() => {
+  // 检查URL query参数中是否有指定的repoId
+  const repoIdFromQuery = route.query.repoId
+  if (repoIdFromQuery && repositories.value.length) {
+    const targetRepo = repositories.value.find(r => r.id === Number(repoIdFromQuery))
+    if (targetRepo) {
+      currentRepo.value = targetRepo
+      return
+    }
+  }
+  
   if (repositories.value.length && !currentRepo.value) {
     currentRepo.value = getDefaultRepo()
-  } else if (currentRepo.value) {
   }
 })
 
@@ -196,6 +208,11 @@ watch(repositories, (newRepos) => {
 // 处理仓库切换（来自 SidebarLayout）
 const handleRepoChange = (repo: any) => {
   currentRepo.value = repo
+}
+
+// 跳转到仓库管理页面
+const goToRepoManagement = () => {
+  router.push('/repositories')
 }
 
 // 严重等级标签样式
@@ -221,12 +238,22 @@ const getSeverityLabel = (severity: string) => {
 </script>
 
 <template>
-  <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
+  <SidebarLayout :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
-      {{ currentRepo.name }} - 仪表盘
+      {{ currentRepo ? currentRepo.name + ' - 仪表盘' : '仪表盘' }}
     </template>
 
-    <div class="dashboard">
+    <!-- 无仓库时的空状态 -->
+    <div v-if="!currentRepo" class="empty-state">
+      <el-empty description="暂无仓库数据">
+        <template #image>
+          <el-icon :size="80" color="#c0c4cc"><Collection /></el-icon>
+        </template>
+        <el-button type="primary" @click="goToRepoManagement">前往添加仓库</el-button>
+      </el-empty>
+    </div>
+
+    <div v-else class="dashboard">
       <!-- 统计卡片 -->
       <el-row :gutter="20" class="stats-row">
         <el-col :span="4">
@@ -376,7 +403,7 @@ const getSeverityLabel = (severity: string) => {
     </div>
 
     <!-- 漏洞详情弹窗 -->
-    <el-dialog v-model="detailVisible" title="漏洞详情" width="700px">
+    <el-dialog v-model="detailVisible" title="漏洞详情" width="800px">
       <div v-if="currentVuln">
         <el-descriptions :column="1" border>
           <el-descriptions-item label="CVE ID">{{ currentVuln.cve_id || '无' }}</el-descriptions-item>
@@ -389,20 +416,29 @@ const getSeverityLabel = (severity: string) => {
           <el-descriptions-item label="分析模型">{{ currentVuln.model_name || '--' }}</el-descriptions-item>
           <el-descriptions-item label="分析时间">{{ currentVuln.analyzed_at ? new Date(currentVuln.analyzed_at).toLocaleString() : '--' }}</el-descriptions-item>
         </el-descriptions>
+        
+        <!-- 模型思考过程 -->
+        <div v-if="currentVuln.thinking" class="thinking-section">
+          <el-divider />
+          <h4 class="thinking-title">
+            <el-icon><Cpu /></el-icon>
+            模型思考过程
+          </h4>
+          <el-card class="thinking-card" shadow="never">
+            <div class="thinking-content">{{ currentVuln.thinking }}</div>
+          </el-card>
+        </div>
       </div>
     </el-dialog>
   </SidebarLayout>
-  <div v-else class="loading-container">加载中...</div>
 </template>
 
 <style scoped>
-.loading-container {
+.empty-state {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  font-size: 16px;
-  color: #909399;
+  height: calc(100vh - 200px);
 }
 body {
   display: flex;
@@ -527,5 +563,37 @@ body {
 .commit-info p {
   margin: 8px 0;
   font-size: 14px;
+}
+
+/* 模型思考过程样式 */
+.thinking-section {
+  margin-top: 20px;
+}
+
+.thinking-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a237e;
+}
+
+.thinking-card {
+  background: #f8f9fa;
+  border-left: 4px solid #1a237e;
+}
+
+.thinking-card :deep(.el-card__body) {
+  padding: 16px;
+}
+
+.thinking-content {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #606266;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 </style>

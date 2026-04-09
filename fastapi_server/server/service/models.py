@@ -66,6 +66,7 @@ class LLMAnalyse(Base):
     )
     cve_id = Column(String(50), nullable=True, index=True, comment="关联的 CVE 编号")
     summary = Column(Text, nullable=True, comment="一句话摘要")
+    thinking = Column(Text, nullable=True, comment="模型的思考过程")
 
     # 元数据
     model_name = Column(String(50), nullable=True, comment="使用的大模型名称，如 deepseek-chat")
@@ -84,6 +85,21 @@ class LLMAnalyse(Base):
         Index("ix_commit_severity", "commit_id", "severity"),
         Index("ix_is_security_date", "is_security_related", "analyzed_at"),
     )
+
+class User(Base):
+    """用户模型"""
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(100), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(100), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    is_active = Column(Boolean, default=True)
+
+    def __repr__(self):
+        return f"<User(email={self.email})>"
+
 
 # 首次运行创建数据库表
 if __name__ == "__main__":

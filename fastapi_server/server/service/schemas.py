@@ -28,6 +28,7 @@ class LLMAnalyseOut(BaseModel):
     severity: Optional[str] = None
     cve_id: Optional[str] = None
     summary: str
+    thinking: Optional[str] = None
     model_name: Optional[str] = None
     analyzed_at: str
 
@@ -200,3 +201,55 @@ class GetVulnDailyResponse(BaseModel):
     vuln_type:List[str]
     total_vulns_daily :int
     new_vulns:int
+
+
+# ============== 用户相关Schema ==============
+
+class EmailVerificationRequest(BaseModel):
+    email: str
+
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+
+class UserLoginValidCode(BaseModel):
+    email: str
+    verification_code: str
+
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+
+
+class UserCreateWithVerification(BaseModel):
+    email: str
+    password: str
+    verification_code: str
+
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    user: Optional[UserResponse] = None
+
+
+class MessageResponse(BaseModel):
+    code: int
+    message: str
+
+
+class GetCurrentUserResponse(BaseModel):
+    code: int
+    user: Optional[UserResponse] = None

@@ -8,12 +8,18 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/logs/app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/analysis_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/base_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/data_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/data_response.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/schemas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/response/response.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/response/response.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/DailyVulnUpdate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/DailyVulnUpdate.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/RiskAssessment.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/RiskAssessment.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/TrendAnalysis.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/TrendAnalysis.vue" afterDir="false" />
     </list>
@@ -168,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775536671966</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="更新">
+      <option name="closed" value="true" />
+      <created>1775612224737</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1775612224737</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

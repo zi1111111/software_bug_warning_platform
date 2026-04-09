@@ -10,6 +10,7 @@ from starlette.responses import JSONResponse
 from server.service.maintenance_service import start_scheduler, shutdown_scheduler
 from server.service.base_service import router as base_router
 from server.service.data_response import router as data_router
+from server.service.user_service import router as user_router
 logger = logging.getLogger(__name__)
 
 
@@ -53,7 +54,8 @@ app = FastAPI(
 
 # 挂载所有路由
 app.include_router(base_router, prefix="/api")
-app.include_router(data_router,prefix="/api")
+app.include_router(data_router, prefix="/api")
+app.include_router(user_router, prefix="/api")
 
 # 配置 CORS 中间件
 app.add_middleware(

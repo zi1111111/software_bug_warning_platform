@@ -1,5 +1,8 @@
+import logging
+import threading
+
 from django.db.models.expressions import result
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy import func, desc
 from twisted.conch.ssh.connection import messages
 
@@ -107,17 +110,30 @@ async def change_repository(
         message ="修改成功"
     )
 
-@router.post("/searchCommit",response_model=SearchCommitResponse)
+
+@router.post("/searchCommit")
 async def search_commit(
-        request:SearchCommit,
-        db:Session=Depends(get_db)
+        request: SearchCommit,
+        background_tasks: BackgroundTasks,
+        db: Session = Depends(get_db)
 ):
-    collector = GitHubCollector()
+
+
     repo = db.query(Repository).filter(Repository.id == request.id).first()
-    collector.sync_repository(repo)
-    return SearchCommitResponse(
-        code=200
-    )
+    if not repo:
+        raise HTTPException(404, "仓库不存在")
+
+    def run_sync(repo_id: int):
+        collector = GitHubCollector()
+        repo1 = db.query(Repository).filter(Repository.id == repo_id).first()
+        collector.sync_repository(repo1)
+        db.commit()
+
+    # 将仓库ID传给后台任务（不要传递 ORM 对象，因为会话会关闭）
+    background_tasks.add_task(run_sync, request.id)
+    return SearchCommitResponse(code=200)
+
+
 
 @router.post("/getVulnStats",response_model=GetVulnStatsResponse)
 async def get_vuln_stats(
@@ -193,6 +209,7 @@ async def get_vulnerabilities(
             severity=llm.severity,
             cve_id=llm.cve_id,
             summary=llm.summary,
+            thinking=llm.thinking,
             model_name=llm.model_name,
             analyzed_at=llm.analyzed_at.isoformat() if hasattr(llm.analyzed_at, 'isoformat') else str(llm.analyzed_at)
         ))
@@ -206,10 +223,13 @@ async def get_vulnerabilities(
 @router.post("/analyzeRepo", response_model=AnalyzeRepoResponse)
 async def analyze_repo(
         request:AnalyzeRepo,
+        background_tasks: BackgroundTasks
 ):
-    analysis_service =  AnalysisService()
-    analysis_service.analyze_unanalyzed_repo_commits(request.id)
+    def analyze():
+        analysis_service = AnalysisService()
+        analysis_service.analyze_unanalyzed_repo_commits(request.id)
 
+    background_tasks.add_task(analyze)
     return AnalyzeRepoResponse(
         code=200
     )

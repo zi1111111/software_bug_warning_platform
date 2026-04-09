@@ -73,18 +73,19 @@ class LLMAnalyzer:
         :param diff:
         :return:
         """
-        return (f"""请分析以下GIT commit是否与内核安全更新有关，若果有请提取相关信息。"
-                "Commit Message:{message}"
-                "代码变更(diff):{diff if diff else "无代码变更"}"
-                "请严格按照如下JSON格式输出，不要输出任何其他内容:"
-                "{{
+        return (f"""请分析以下GIT commit是否与内核安全更新有关，如果有请提取相关信息。
+                Commit Message:{message}
+                代码变更(diff):{diff if diff else "无代码变更"}
+                请严格按照如下JSON格式输出，不要输出任何其他内容:
+                {{
                 "is_security_related": true/false,
                 "vulnerability_type": "漏洞类型，如 use-after-free / buffer overflow / race condition / 其他，若不相关则为 null",
                 "affected_subsystem": "影响的子系统，如 netfilter / bpf / ext4 / kernel core / 其他，若不相关则为 null",
                 "severity": "Critical / High / Medium / Low，若不相关则为 null",
                 "cve_id": "关联的 CVE 编号，如 CVE-2024-1234，若无则为 null",
-                "summary": "一句话总结此 commit 的安全影响或修复内容（中文，不超过 50 字）"
-                 }}"""
+                "summary": "一句话总结此 commit 的安全影响或修复内容（中文，不超过 50 字）",
+                "thinking": "请用中文详细描述你的分析思考过程，包括：1) 为什么认为这个commit与安全相关/不相关；2) 如何判断漏洞类型和严重程度；3) 对代码变更的关键分析点"
+                }}"""
                 )
 
     def _parse_response(self, raw: str) -> Dict:
@@ -104,6 +105,7 @@ class LLMAnalyzer:
                 "severity": data.get("severity"),
                 "cve_id": data.get("cve_id"),
                 "summary": data.get("summary", "分析完成"),
+                "thinking": data.get("thinking", ""),
                 "raw_response": raw,
                 "analysis_cost": 0,
                 "model_name": self.model_name
@@ -117,6 +119,7 @@ class LLMAnalyzer:
                 "severity": None,
                 "cve_id": None,
                 "summary": "解析失败",
+                "thinking": "",
                 "raw_response": raw,
                 "analysis_cost": 0,
                 "model_name": self.model_name
@@ -159,6 +162,7 @@ class LLMAnalyzer:
                 "severity": None,
                 "cve_id": None,
                 "summary": f"分析失败: {str(e)[:100]}",
+                "thinking": "",
                 "raw_response": "",
                 "analysis_cost": 0,
                 "model_name": self.model_name

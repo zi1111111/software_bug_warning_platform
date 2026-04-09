@@ -156,13 +156,13 @@ const manualScan = async(repo) => {
     const res = await http.post("/api/searchCommit",{id:repo.id})
     if(res.code === 200) {
       repo.last_fetched_at = new Date().toLocaleString()
-      ElMessage.success('扫描完成')
+      ElMessage.success('扫描任务已启动，请稍后刷新')
     }
 }
 
 // 查看漏洞详情
-const viewVulns = (repo) => {
-  router.push('/')
+const viewVulns = (repo: Repository) => {
+  router.push({ path: '/', query: { repoId: repo.id } })
 }
 
 // 返回首页

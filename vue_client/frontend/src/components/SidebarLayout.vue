@@ -13,7 +13,9 @@ import {
   TrendCharts,
 } from "@element-plus/icons-vue";
 import { useRepoStore } from "../stores/repository";
+import { useUserStore } from "../stores/user";
 import { storeToRefs } from "pinia";
+import { UserFilled, SwitchButton } from "@element-plus/icons-vue";
 
 const props = defineProps({
   disableRepoSelection: {
@@ -32,6 +34,14 @@ const searchQuery = ref('')   // 新增：抽屉搜索关键词
 
 const repoTS = useRepoStore()
 const { repositories } = storeToRefs(repoTS)
+
+const userStore = useUserStore()
+
+// 处理退出登录
+const handleLogout = async () => {
+  await userStore.logout()
+  router.push('/login')
+}
 
 // 当前选中的仓库（内部状态）
 const selectedRepo = ref<any>(null)
@@ -137,6 +147,7 @@ const openDrawer = () => {
 }
 </script>
 
+
 <template>
   <div class="layout-container">
     <!-- 侧边栏 -->
@@ -238,6 +249,24 @@ const openDrawer = () => {
           <h2 class="page-title">
             <slot name="title">漏洞预警系统</slot>
           </h2>
+          <!-- 用户信息 -->
+          <div class="user-section">
+            <el-dropdown trigger="click" @command="handleLogout">
+              <div class="user-info">
+                <el-avatar :size="32" :icon="UserFilled" class="user-avatar" />
+                <span class="user-email">{{ userStore.userEmail }}</span>
+                <el-icon class="dropdown-icon"><ArrowDown /></el-icon>
+              </div>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="logout">
+                    <el-icon><SwitchButton /></el-icon>
+                    退出登录
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </div>
       </el-header>
 
@@ -501,6 +530,45 @@ const openDrawer = () => {
   font-size: 20px;
   font-weight: 600;
   color: #1a237e;
+}
+
+/* 用户信息样式 */
+.user-section {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.user-info:hover {
+  background: rgba(26, 35, 126, 0.05);
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+  color: white;
+}
+
+.user-email {
+  font-size: 14px;
+  color: #606266;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-icon {
+  color: #909399;
+  font-size: 12px;
 }
 
 .main-content {

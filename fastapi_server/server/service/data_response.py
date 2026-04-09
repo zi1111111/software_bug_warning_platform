@@ -49,7 +49,14 @@ async def get_vuln_daily(
         base_query = base_query.filter(LLMAnalyse.vulnerability_type.in_(vuln_type_list))
 
     # ================= 2. 统计当天所有漏洞（不受分页影响） =================
-    total_vulns_daily = base_query.count()
+    total_query = db.query(LLMAnalyse).join(
+        GithubCommit, LLMAnalyse.commit_id == GithubCommit.id
+    ).filter(
+        LLMAnalyse.is_security_related == True,
+        func.date(GithubCommit.commit_date) == date
+    )
+    total_vulns_daily = total_query.count()
+    new_vulns = base_query.count()
 
     # 按严重程度统计
     subquery = base_query.subquery()
@@ -85,6 +92,7 @@ async def get_vuln_daily(
             severity=llm.severity,
             cve_id=llm.cve_id,
             summary=llm.summary,
+            thinking=llm.thinking,
             model_name=llm.model_name,
             analyzed_at=llm.analyzed_at.isoformat() if hasattr(llm.analyzed_at, 'isoformat') else str(llm.analyzed_at)
         ))
@@ -99,7 +107,7 @@ async def get_vuln_daily(
         stats=stats,  # 当天所有漏洞的统计
         vuln_type=vuln_type,
         total_vulns_daily=total_vulns_daily,
-        new_vulns=total_vulns_daily  # 此处 new_vulns 可根据业务调整，现简单设为当天总数
+        new_vulns=new_vulns
     )
 
 

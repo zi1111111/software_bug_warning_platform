@@ -5,6 +5,7 @@ import SidebarLayout from '../components/SidebarLayout.vue'
 import { storeToRefs } from "pinia"
 import { useRepoStore } from "../stores/repository"
 import { http } from "../request/request"
+import { useRouter } from 'vue-router'
 import type { 
   GetTrendAnalysisResponse, 
   TrendDataPoint,
@@ -17,6 +18,7 @@ import type {
 // 仓库相关
 const repoTS = useRepoStore()
 const { repositories } = storeToRefs(repoTS)
+const router = useRouter()
 
 // 当前选中的仓库
 const currentRepo = ref<Repository | null>(null)
@@ -136,15 +138,30 @@ watch(repositories, (newRepos) => {
     }
   }
 }, { immediate: true })
+
+// 跳转到仓库管理页面
+const goToRepoManagement = () => {
+  router.push('/repositories')
+}
 </script>
 
 <template>
-  <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
+  <SidebarLayout :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
-      {{ currentRepo.name }} - 趋势分析
+      {{ currentRepo ? currentRepo.name + ' - 趋势分析' : '趋势分析' }}
     </template>
 
-    <div class="trend-analysis" v-loading="loading">
+    <!-- 无仓库时的空状态 -->
+    <div v-if="!currentRepo" class="empty-state">
+      <el-empty description="暂无仓库数据">
+        <template #image>
+          <el-icon :size="80" color="#c0c4cc"><Collection /></el-icon>
+        </template>
+        <el-button type="primary" @click="goToRepoManagement">前往添加仓库</el-button>
+      </el-empty>
+    </div>
+
+    <div v-else class="trend-analysis" v-loading="loading">
       <!-- 时间范围选择 -->
       <el-card class="filter-card" shadow="never">
         <div class="filter-content">
@@ -326,7 +343,6 @@ watch(repositories, (newRepos) => {
       </el-row>
     </div>
   </SidebarLayout>
-  <div v-else class="loading-container">加载中...</div>
 </template>
 
 <style scoped>

@@ -9,11 +9,13 @@ import { storeToRefs } from "pinia";
 import { useRepoStore } from "../stores/repository.js";
 import { GetVulnDailyResponse, Repository, VulnItem } from "../response/response";
 import { http } from "../request/request";
+import { useRouter } from 'vue-router'
 
 // 仓库相关
 const repoTS = useRepoStore()
 const currentRepo = ref<Repository | null>(null)
 const { repositories } = storeToRefs(repoTS)
+const router = useRouter()
 
 // 分页
 const currentPage = ref(1)
@@ -149,6 +151,11 @@ watch(currentPage, () => {
   loadData()
 })
 
+// 跳转到仓库管理页面
+const goToRepoManagement = () => {
+  router.push('/repositories')
+}
+
 // 初始化
 onMounted(() => {
   if (repositories.value.length) {
@@ -159,12 +166,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <SidebarLayout v-if="currentRepo" :current-repo="currentRepo" @select-repo="handleRepoChange">
+  <SidebarLayout :current-repo="currentRepo" @select-repo="handleRepoChange">
     <template #title>
-      {{ currentRepo.name }} - 每日漏洞更新
+      {{ currentRepo ? currentRepo.name + ' - 每日漏洞更新' : '每日漏洞更新' }}
     </template>
 
-    <div class="daily-vuln-update" v-loading="loading">
+    <!-- 无仓库时的空状态 -->
+    <div v-if="!currentRepo" class="empty-state">
+      <el-empty description="暂无仓库数据">
+        <template #image>
+          <el-icon :size="80" color="#c0c4cc"><Calendar /></el-icon>
+        </template>
+        <el-button type="primary" @click="goToRepoManagement">前往添加仓库</el-button>
+      </el-empty>
+    </div>
+
+    <div v-else class="daily-vuln-update" v-loading="loading">
       <!-- 日期选择和操作区 -->
       <el-card class="filter-card" shadow="never">
         <div class="filter-content">
@@ -201,7 +218,7 @@ onMounted(() => {
               <el-icon class="stat-icon success"><CirclePlus /></el-icon>
               <div class="stat-info">
                 <div class="stat-value">{{ dailyStats.new }}</div>
-                <div class="stat-label">新增漏洞</div>
+                <div class="stat-label">本仓库新增漏洞</div>
               </div>
             </div>
           </el-card>
@@ -340,6 +357,15 @@ onMounted(() => {
     </div>
   </SidebarLayout>
 </template>
+
+<style scoped>
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 200px);
+}
+</style>
 
 
 <style scoped>

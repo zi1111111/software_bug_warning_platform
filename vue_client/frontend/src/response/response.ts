@@ -38,6 +38,7 @@ export interface LLMAnalyse{
     severity: string;
     cve_id: string;
     summary: string;
+    thinking: string;
     model_name: string;
     analysis_cost: number;
     analyzed_at: string;
@@ -57,6 +58,7 @@ export  interface VulnItem {
     id:number
     cve_id?: string
     summary?: string
+    thinking?: string
     title?: string
     severity?: string
     vulnerability_type?: string

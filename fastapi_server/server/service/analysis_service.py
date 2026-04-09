@@ -37,6 +37,7 @@ class AnalysisService:
             severity=result.get("severity"),
             cve_id=result.get("cve_id"),
             summary=result.get("summary"),
+            thinking=result.get("thinking"),
             model_name=result.get("model_name"),
             analysis_cost=result.get("analysis_cost"),
             raw_response=result.get("raw_response")
