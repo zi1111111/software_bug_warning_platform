@@ -9,9 +9,7 @@ import { useRouter } from 'vue-router'
 import type { 
   GetTrendAnalysisResponse, 
   TrendDataPoint,
-  SeverityDistributionItem,
-  ComponentRankingItem,
-  VulnTypeDistributionItem,
+  AIInsightsData,
   Repository 
 } from "../response/response"
 
@@ -51,9 +49,7 @@ const timeRangeOptions = [
 
 // 数据状态
 const trendData = ref<TrendDataPoint[]>([])
-const severityDistribution = ref<SeverityDistributionItem[]>([])
-const componentRanking = ref<ComponentRankingItem[]>([])
-const vulnTypeDistribution = ref<VulnTypeDistributionItem[]>([])
+const aiInsights = ref<AIInsightsData | null>(null)
 
 // 加载趋势分析数据
 const loadTrendData = async () => {
@@ -68,9 +64,7 @@ const loadTrendData = async () => {
     
     if (res.code === 200 && res.data) {
       trendData.value = res.data.trend_data || []
-      severityDistribution.value = res.data.severity_distribution || []
-      componentRanking.value = res.data.component_ranking || []
-      vulnTypeDistribution.value = res.data.vuln_type_distribution || []
+      aiInsights.value = res.data.ai_insights || null
     } else {
       ElMessage.error(res.message || '加载趋势数据失败')
     }
@@ -94,16 +88,6 @@ const currentData = computed(() => {
 const chartColors = ['#f56c6c', '#e6a23c', '#409eff', '#67c23a']
 
 // 严重等级颜色映射
-const getSeverityColor = (severity: string) => {
-  const map: Record<string, string> = {
-    critical: '#f56c6c',
-    high: '#e6a23c',
-    medium: '#409eff',
-    low: '#67c23a'
-  }
-  return map[severity] || '#909399'
-}
-
 const getSeverityLabel = (severity: string) => {
   const map: Record<string, string> = {
     critical: '严重',
@@ -196,7 +180,7 @@ const goToRepoManagement = () => {
               <el-icon class="stat-icon blue"><Warning /></el-icon>
               <span class="stat-trend">--</span>
             </div>
-            <div class="stat-value">{{ severityDistribution.reduce((a: number, b) => a + b.value, 0) }}</div>
+            <div class="stat-value">{{ currentData.newVulns.reduce((a: number, b: number) => a + b, 0) }}</div>
             <div class="stat-label">漏洞总数</div>
           </el-card>
         </el-col>
@@ -248,96 +232,72 @@ const goToRepoManagement = () => {
         <el-empty v-else description="暂无趋势数据" />
       </el-card>
 
-      <el-row :gutter="20" class="bottom-row">
-        <!-- 严重等级分布 -->
-        <el-col :span="8">
-          <el-card class="chart-card" shadow="hover">
+      <!-- AI洞察分析 -->
+      <el-row :gutter="20" class="bottom-row" v-if="aiInsights && aiInsights.insights.length > 0">
+        <el-col :span="24">
+          <el-card class="ai-insights-card" shadow="hover">
             <template #header>
-              <span class="card-title">严重等级分布</span>
+              <div class="card-header">
+                <span class="card-title">
+                  <el-icon class="ai-icon"><Magic /></el-icon>
+                  AI 智能洞察
+                </span>
+                <el-tag v-if="aiInsights.llm_identified_count > 0" type="success" size="small">
+                  {{ aiInsights.llm_identified_count }} 个LLM识别漏洞
+                </el-tag>
+              </div>
             </template>
-            <div class="distribution-chart" v-if="severityDistribution.length > 0">
-              <div 
-                v-for="(item, index) in severityDistribution" 
-                :key="item.name"
-                class="distribution-item"
-              >
-                <div class="distribution-bar-container">
-                  <span class="distribution-label">{{ item.name }}</span>
-                  <div class="distribution-bar-wrapper">
-                    <div 
-                      class="distribution-bar"
-                      :style="{ 
-                        width: (item.value / severityDistribution.reduce((a, b) => a + b.value, 0) * 100) + '%',
-                        background: chartColors[index % chartColors.length]
-                      }"
-                    ></div>
+            
+            <div class="ai-content">
+              <!-- 总结 -->
+              <div class="ai-summary" v-if="aiInsights.summary">
+                <el-alert type="info" :closable="false">
+                  <template #title>
+                    <span class="summary-text">{{ aiInsights.summary }}</span>
+                  </template>
+                </el-alert>
+              </div>
+
+              <!-- 洞察列表 -->
+              <div class="insights-section" v-if="aiInsights.insights.length > 0">
+                <h4 class="section-title">关键发现</h4>
+                <div class="insights-list">
+                  <div 
+                    v-for="(insight, index) in aiInsights.insights" 
+                    :key="index"
+                    class="insight-item"
+                  >
+                    <el-icon class="insight-icon"><StarFilled /></el-icon>
+                    <span class="insight-text">{{ insight }}</span>
                   </div>
-                  <span class="distribution-value">{{ item.value }}</span>
                 </div>
               </div>
-            </div>
-            <el-empty v-else description="暂无分布数据" />
-          </el-card>
-        </el-col>
 
-        <!-- 组件漏洞排行 -->
-        <el-col :span="8">
-          <el-card class="chart-card" shadow="hover">
-            <template #header>
-              <span class="card-title">组件漏洞排行</span>
-            </template>
-            <div class="ranking-list" v-if="componentRanking.length > 0">
-              <div 
-                v-for="(item, index) in componentRanking" 
-                :key="item.name"
-                class="ranking-item"
-              >
-                <div class="ranking-number" :class="{ 'top3': index < 3 }">{{ index + 1 }}</div>
-                <div class="ranking-info">
-                  <div class="ranking-name">{{ item.name }}</div>
+              <!-- 常见漏洞类型 -->
+              <div class="vuln-types-section" v-if="aiInsights.common_vuln_types.length > 0">
+                <h4 class="section-title">常见漏洞类型</h4>
+                <div class="vuln-types-tags">
                   <el-tag 
-                    :type="item.severity === 'critical' ? 'danger' : item.severity === 'high' ? 'warning' : 'info'"
-                    size="small"
+                    v-for="(vtype, index) in aiInsights.common_vuln_types" 
+                    :key="index"
+                    :type="index === 0 ? 'danger' : index === 1 ? 'warning' : 'info'"
+                    class="vuln-type-tag"
+                    effect="light"
                   >
-                    {{ getSeverityLabel(item.severity) }}
+                    {{ vtype }}
                   </el-tag>
                 </div>
-                <div class="ranking-count">{{ item.vuln_count }}</div>
               </div>
-            </div>
-            <el-empty v-else description="暂无排行数据" />
-          </el-card>
-        </el-col>
 
-        <!-- 漏洞类型分布 -->
-        <el-col :span="8">
-          <el-card class="chart-card" shadow="hover">
-            <template #header>
-              <span class="card-title">漏洞类型分布</span>
-            </template>
-            <div class="type-distribution" v-if="vulnTypeDistribution.length > 0">
-              <div 
-                v-for="(item, index) in vulnTypeDistribution" 
-                :key="item.name"
-                class="type-item"
-              >
-                <div class="type-info">
-                  <span class="type-color" :style="{ background: chartColors[index % chartColors.length] }"></span>
-                  <span class="type-name">{{ item.name }}</span>
-                </div>
-                <div class="type-bar-container">
-                  <div 
-                    class="type-bar"
-                    :style="{ 
-                      width: (item.value / vulnTypeDistribution.reduce((a, b) => a + b.value, 0) * 100) + '%',
-                      background: chartColors[index % chartColors.length]
-                    }"
-                  ></div>
-                  <span class="type-value">{{ item.value }}</span>
+              <!-- 建议 -->
+              <div class="recommendation-section" v-if="aiInsights.recommendations">
+                <h4 class="section-title">改进建议</h4>
+                <div class="recommendation-text">
+                  <el-icon class="reco-icon"><InfoFilled /></el-icon>
+                  {{ aiInsights.recommendations }}
                 </div>
               </div>
             </div>
-            <el-empty v-else description="暂无类型数据" />
           </el-card>
         </el-col>
       </el-row>
@@ -694,5 +654,110 @@ const goToRepoManagement = () => {
   font-size: 12px;
   color: #909399;
   min-width: 24px;
+}
+
+/* AI洞察卡片样式 */
+.ai-insights-card {
+  border-radius: 8px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ed 100%);
+}
+
+.ai-icon {
+  margin-right: 8px;
+  color: #409eff;
+}
+
+.ai-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ai-summary {
+  margin-bottom: 10px;
+}
+
+.summary-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #303133;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #303133;
+  margin: 0 0 12px 0;
+}
+
+.insights-section {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.insight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f5f7fa;
+  border-radius: 6px;
+}
+
+.insight-icon {
+  color: #e6a23c;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.insight-text {
+  font-size: 13px;
+  color: #606266;
+  line-height: 1.5;
+}
+
+.vuln-types-section {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.vuln-types-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vuln-type-tag {
+  font-size: 12px;
+}
+
+.recommendation-section {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.recommendation-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #606266;
+  line-height: 1.6;
+}
+
+.reco-icon {
+  color: #67c23a;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 </style>

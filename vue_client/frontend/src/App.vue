@@ -1,4 +1,5 @@
-<script setup>
+<script setup lang="ts">
+
 </script>
 
 <template>
@@ -11,15 +12,14 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 html, body, #app {
   height: 100%;
   width: 100%;
-}
-body {
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
 </style>

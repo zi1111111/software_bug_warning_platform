@@ -162,7 +162,7 @@ const manualScan = async(repo) => {
 
 // 查看漏洞详情
 const viewVulns = (repo: Repository) => {
-  router.push({ path: '/', query: { repoId: repo.id } })
+  router.push({ path: '/dashboard', query: { repoId: repo.id } })
 }
 
 // 返回首页

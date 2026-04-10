@@ -11,12 +11,12 @@ import type {
   RiskScoreData,
   RiskDistributionItem,
   ComponentRiskItem,
-  AttackSurfaceData,
+  VulnTypeDistributionItem,
   PriorityRecommendationItem,
   RiskTrendPoint,
   Repository 
 } from "../response/response"
-import {Calendar, Timer, Warning} from "@element-plus/icons-vue";
+import {Box, Calendar, Connection, Link, Timer, Warning} from "@element-plus/icons-vue";
 
 // 仓库相关
 const repoTS = useRepoStore()
@@ -59,12 +59,7 @@ const riskScore = ref<RiskScoreData>({
 
 const riskDistribution = ref<RiskDistributionItem[]>([])
 const componentRisks = ref<ComponentRiskItem[]>([])
-const attackSurface = ref<AttackSurfaceData>({
-  entry_points: 0,
-  exposed_apis: 0,
-  third_party_deps: 0,
-  vulnerable_deps: 0
-})
+const vulnTypeDistribution = ref<VulnTypeDistributionItem[]>([])
 const priorityRecommendations = ref<PriorityRecommendationItem[]>([])
 const riskTrendData = ref<RiskTrendPoint[]>([])
 
@@ -87,8 +82,9 @@ const loadRiskData = async () => {
       riskScore.value = res.data.risk_score || { overall: 0, breakdown: { critical: 0, high: 0, medium: 0, low: 0 } }
       riskDistribution.value = res.data.risk_distribution || []
       componentRisks.value = res.data.component_risks || []
-      attackSurface.value = res.data.attack_surface || { entry_points: 0, exposed_apis: 0, third_party_deps: 0, vulnerable_deps: 0 }
+      vulnTypeDistribution.value = res.data.vuln_type_distribution || []
       priorityRecommendations.value = res.data.priority_recommendations || []
+      riskTrendData.value = res.data.risk_trend || []
     } else {
       ElMessage.error(res.message || '加载风险评估数据失败')
     }
@@ -316,48 +312,33 @@ const goToRepoManagement = () => {
         </el-col>
 
         <el-col :span="8">
-          <el-card class="attack-surface-card" shadow="hover">
+          <el-card class="vuln-type-card" shadow="hover">
             <template #header>
-              <span class="card-title">攻击面分析</span>
+              <span class="card-title">漏洞类型分布 (Top 5)</span>
             </template>
-            <div class="attack-stats">
-              <div class="attack-item">
-                <div class="attack-icon blue">
-                  <el-icon><Connection /></el-icon>
+            <div class="vuln-type-list" v-if="vulnTypeDistribution.length > 0">
+              <div 
+                v-for="(item, index) in vulnTypeDistribution.slice(0, 5)" 
+                :key="item.name"
+                class="vuln-type-item"
+              >
+                <div class="vuln-type-header">
+                  <div class="vuln-type-rank" :class="{ 'top3': index < 3 }">{{ index + 1 }}</div>
+                  <span class="vuln-type-name">{{ item.name }}</span>
+                  <span class="vuln-type-count">{{ item.value }}个</span>
                 </div>
-                <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.entry_points }}</div>
-                  <div class="attack-label">入口点数量</div>
-                </div>
-              </div>
-              <div class="attack-item">
-                <div class="attack-icon orange">
-                  <el-icon><Link /></el-icon>
-                </div>
-                <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.exposed_apis }}</div>
-                  <div class="attack-label">暴露API数</div>
-                </div>
-              </div>
-              <div class="attack-item">
-                <div class="attack-icon purple">
-                  <el-icon><Box /></el-icon>
-                </div>
-                <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.third_party_deps }}</div>
-                  <div class="attack-label">第三方依赖</div>
-                </div>
-              </div>
-              <div class="attack-item">
-                <div class="attack-icon red">
-                  <el-icon><Warning /></el-icon>
-                </div>
-                <div class="attack-info">
-                  <div class="attack-value">{{ attackSurface.vulnerable_deps }}</div>
-                  <div class="attack-label">存在漏洞依赖</div>
+                <div class="vuln-type-bar-wrapper">
+                  <div 
+                    class="vuln-type-bar"
+                    :style="{ 
+                      width: (item.value / vulnTypeDistribution[0].value * 100) + '%',
+                      background: ['#f56c6c', '#e6a23c', '#409eff', '#67c23a', '#909399'][index]
+                    }"
+                  ></div>
                 </div>
               </div>
             </div>
+            <el-empty v-else description="暂无类型数据" />
           </el-card>
         </el-col>
       </el-row>
@@ -664,70 +645,73 @@ const goToRepoManagement = () => {
   text-align: right;
 }
 
-/* 攻击面卡片 */
-.attack-surface-card {
+/* 漏洞类型分布卡片 */
+.vuln-type-card {
   border-radius: 8px;
   height: 100%;
 }
 
-.attack-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.vuln-type-list {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
+  padding: 10px 0;
 }
 
-.attack-item {
+.vuln-type-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vuln-type-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
-  background: #f5f7fa;
-  border-radius: 8px;
 }
 
-.attack-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+.vuln-type-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f5f7fa;
+  color: #909399;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-}
-
-.attack-icon.blue {
-  background: #ecf5ff;
-  color: #409eff;
-}
-
-.attack-icon.orange {
-  background: #fdf6ec;
-  color: #e6a23c;
-}
-
-.attack-icon.purple {
-  background: #f0f2ff;
-  color: #7b68ee;
-}
-
-.attack-icon.red {
-  background: #fef0f0;
-  color: #f56c6c;
-}
-
-.attack-info {
-  flex: 1;
-}
-
-.attack-value {
-  font-size: 20px;
-  font-weight: 700;
-  color: #303133;
-}
-
-.attack-label {
   font-size: 12px;
-  color: #909399;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.vuln-type-rank.top3 {
+  background: #1a237e;
+  color: white;
+}
+
+.vuln-type-name {
+  flex: 1;
+  font-size: 14px;
+  color: #303133;
+  font-weight: 500;
+}
+
+.vuln-type-count {
+  font-size: 13px;
+  color: #606266;
+}
+
+.vuln-type-bar-wrapper {
+  height: 8px;
+  background: #f5f7fa;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.vuln-type-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
 }
 
 /* 组件风险卡片 */

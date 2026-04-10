@@ -106,6 +106,35 @@ class User(Base):
         return f"<User(email={self.email})>"
 
 
+class AIInsightsCache(Base):
+    """存储AI洞察分析结果的缓存"""
+    __tablename__ = "ai_insights_cache"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    repo_id = Column(Integer, ForeignKey("repository.id", ondelete="CASCADE"), nullable=False, index=True)
+    time_range = Column(String(10), nullable=False, index=True, comment="时间范围: 7d/30d/90d/year")
+    
+    # 分析结果
+    insights = Column(Text, nullable=True, comment="洞察列表JSON数组")
+    common_vuln_types = Column(Text, nullable=True, comment="常见漏洞类型JSON数组")
+    recommendations = Column(Text, nullable=True, comment="改进建议")
+    llm_identified_count = Column(Integer, default=0, comment="LLM识别漏洞数量")
+    summary = Column(Text, nullable=True, comment="整体总结")
+    
+    # 元数据
+    analyzed_at = Column(DateTime, server_default=func.now(), comment="分析时间")
+    analysis_cost = Column(Integer, nullable=True, comment="消耗的token数")
+    commit_count = Column(Integer, default=0, comment="分析的commit数量")
+    
+    # 复合索引确保每个仓库每个时间范围只有一条缓存
+    __table_args__ = (
+        Index("ix_repo_time_range", "repo_id", "time_range", unique=True),
+    )
+    
+    def __repr__(self):
+        return f"<AIInsightsCache(repo_id={self.repo_id}, time_range={self.time_range}, analyzed_at={self.analyzed_at})>"
+
+
 # 首次运行创建数据库表
 if __name__ == "__main__":
     from server.db.database import engine

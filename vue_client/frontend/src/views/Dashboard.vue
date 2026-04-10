@@ -283,31 +283,31 @@ const getSeverityLabel = (severity: string) => {
         <el-col :span="4">
           <el-card class="stat-card total" shadow="hover">
             <div class="stat-value">{{ stats.totalVulns }}</div>
-            <div class="stat-label">漏洞总数</div>
+            <div class="stat-label" style="color: white">漏洞总数</div>
           </el-card>
         </el-col>
         <el-col :span="4">
           <el-card class="stat-card critical" shadow="hover">
             <div class="stat-value">{{ stats.critical }}</div>
-            <div class="stat-label">严重</div>
+            <div class="stat-label" style="color: white">严重</div>
           </el-card>
         </el-col>
         <el-col :span="4">
           <el-card class="stat-card high" shadow="hover">
             <div class="stat-value">{{ stats.high }}</div>
-            <div class="stat-label">高危</div>
+            <div class="stat-label" style="color: white">高危</div>
           </el-card>
         </el-col>
         <el-col :span="4">
           <el-card class="stat-card medium" shadow="hover">
-            <div class="stat-value">{{ stats.medium }}</div>
-            <div class="stat-label">中危</div>
+            <div class="stat-value"  style="color: white">{{ stats.medium }}</div>
+            <div class="stat-label" style="color: white">中危</div>
           </el-card>
         </el-col>
         <el-col :span="4">
           <el-card class="stat-card low" shadow="hover">
             <div class="stat-value">{{ stats.low }}</div>
-            <div class="stat-label">低危</div>
+            <div class="stat-label" style="color: white">低危</div>
           </el-card>
         </el-col>
       </el-row>
@@ -394,10 +394,17 @@ const getSeverityLabel = (severity: string) => {
           <el-table-column label="漏洞类型" width="150">
             <template #default="{ row }">{{ row.vulnerability_type || '--' }}</template>
           </el-table-column>
-          <el-table-column label="严重等级" width="100">
+          <el-table-column label="初始严重等级" width="120">
             <template #default="{ row }">
               <el-tag :type="getSeverityType(row.severity)" effect="dark">
                 {{ getSeverityLabel(row.severity) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="最终严重等级" width="120">
+            <template #default="{ row }">
+              <el-tag :type="getSeverityType(row.severity)" effect="dark">
+                {{ getSeverityLabel(row.final_severity) }}
               </el-tag>
             </template>
           </el-table-column>
@@ -431,8 +438,8 @@ const getSeverityLabel = (severity: string) => {
       <div v-if="currentVuln">
         <el-descriptions :column="1" border>
           <el-descriptions-item label="CVE ID">{{ currentVuln.cve_id || '无' }}</el-descriptions-item>
-          <el-descriptions-item label="严重等级">
-            <el-tag :type="getSeverityType(currentVuln.severity)">{{ getSeverityLabel(currentVuln.severity) }}</el-tag>
+          <el-descriptions-item label="最终严重等级">
+            <el-tag :type="getSeverityType(currentVuln.severity)">{{ getSeverityLabel(currentVuln.final_severity) }}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="漏洞类型">{{ currentVuln.vulnerability_type || '无' }}</el-descriptions-item>
           <el-descriptions-item label="影响子系统">{{ currentVuln.affected_subsystem || '无' }}</el-descriptions-item>

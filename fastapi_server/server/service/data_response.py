@@ -4,19 +4,23 @@
 import json
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends
+from pydantic import BaseModel
 from sqlalchemy import desc, func, exists, distinct
 from sqlalchemy.orm import Session, aliased
 
+
 from server.db.database import get_db
-from server.service.models import LLMAnalyse, GithubCommit
+from server.service.models import LLMAnalyse, GithubCommit, AIInsightsCache
 from server.service.schemas import (
     GetVulnDailyResponse, GetVulnDaily, LLMAnalyseOut,
     GetTrendAnalysis, GetTrendAnalysisResponse,
     TrendDataPoint, SeverityDistributionItem, ComponentRankingItem, VulnTypeDistributionItem,
     GetRiskAssessment, GetRiskAssessmentResponse,
     RiskScoreData, RiskBreakdown, RiskDistributionItem,
-    ComponentRiskItem, AttackSurfaceData, PriorityRecommendationItem, RiskTrendPoint, ReviewResult
+    ComponentRiskItem, PriorityRecommendationItem, RiskTrendPoint, ReviewResult,
+    AIInsightsData
 )
+from server.service.LLM_layer import LLMAnalyzer, logger
 
 router = APIRouter()
 
@@ -315,12 +319,40 @@ async def get_trend_analysis(
         for vtype, count in type_counts
     ]
 
+    # ================= 5. AI洞察分析 - 读取缓存 =================
+    # 从缓存表读取AI洞察结果，不再实时调用LLM
+    ai_insights = None
+    try:
+        cache_record = db.query(AIInsightsCache).filter(
+            AIInsightsCache.repo_id == repo_id,
+            AIInsightsCache.time_range == time_range
+        ).first()
+        
+        if cache_record and cache_record.insights:
+            # 解析缓存的JSON数据
+            try:
+                insights_list = json.loads(cache_record.insights) if cache_record.insights else []
+                vuln_types_list = json.loads(cache_record.common_vuln_types) if cache_record.common_vuln_types else []
+                
+                ai_insights = AIInsightsData(
+                    insights=insights_list,
+                    common_vuln_types=vuln_types_list,
+                    recommendations=cache_record.recommendations or "",
+                    llm_identified_count=cache_record.llm_identified_count or 0,
+                    summary=cache_record.summary or ""
+                )
+            except json.JSONDecodeError:
+                logger.warning(f"解析AI洞察缓存JSON失败: repo_id={repo_id}, time_range={time_range}")
+    except Exception as e:
+        logger.error(f"读取AI洞察缓存失败: {e}")
+
     return GetTrendAnalysisResponse(
         code=200,
         trend_data=trend_data,
         severity_distribution=severity_distribution,
         component_ranking=component_ranking,
-        vuln_type_distribution=vuln_type_distribution
+        vuln_type_distribution=vuln_type_distribution,
+        ai_insights=ai_insights
     )
 
 
@@ -486,29 +518,23 @@ async def get_risk_assessment(
     # 排序取前10
     component_risks = sorted(component_risks, key=lambda x: x.risk_score, reverse=True)[:10]
 
-    
-    # ================= 4. 攻击面分析 =================
-    # 统计受影响的子系统数量（作为入口点）
-    entry_points = len(set([c.affected_subsystem for c in component_data if c.affected_subsystem]))
-    if entry_points == 0:
-        entry_points = 5  # 默认值
-    
-    # 统计漏洞类型数量（作为暴露API的指标）
-    vuln_types = db.query(distinct(LLMAnalyse.vulnerability_type)).join(
+    # ================= 4. 漏洞类型分布（取Top 5）====================
+    type_counts = db.query(
+        LLMAnalyse.vulnerability_type, func.count(LLMAnalyse.id)
+    ).join(
         GithubCommit, LLMAnalyse.commit_id == GithubCommit.id
     ).filter(
         GithubCommit.repo_id == repo_id,
         LLMAnalyse.is_security_related == True,
+        LLMAnalyse.vulnerability_type != None,
         GithubCommit.commit_date >= start_date,
         GithubCommit.commit_date <= end_date
-    ).count()
+    ).group_by(LLMAnalyse.vulnerability_type).order_by(func.count(LLMAnalyse.id).desc()).all()
     
-    attack_surface = AttackSurfaceData(
-        entry_points=entry_points,
-        exposed_apis=vuln_types if vuln_types > 0 else 3,
-        third_party_deps=entry_points * 3,
-        vulnerable_deps=len(component_risks)
-    )
+    vuln_type_distribution = [
+        VulnTypeDistributionItem(value=count, name=vtype)
+        for vtype, count in type_counts
+    ]
     
     # ================= 5. 修复优先级建议 =================
     priority_recommendations = []
@@ -546,6 +572,158 @@ async def get_risk_assessment(
         risk_score=risk_score,
         risk_distribution=risk_distribution,
         component_risks=component_risks,
-        attack_surface=attack_surface,
+        vuln_type_distribution=vuln_type_distribution,
         priority_recommendations=priority_recommendations,
     )
+
+
+# ============== AI洞察相关API ==============
+
+class RefreshAIInsightsRequest(BaseModel):
+    """刷新AI洞察请求"""
+    id: int  # 仓库ID
+    time_range: str  # '7d', '30d', '90d', 'year'
+
+class RefreshAIInsightsResponse(BaseModel):
+    """刷新AI洞察响应"""
+    code: int
+    message: str
+    ai_insights: AIInsightsData | None = None
+
+
+@router.post("/refreshAIInsights", response_model=RefreshAIInsightsResponse)
+async def refresh_ai_insights(
+    request: RefreshAIInsightsRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    手动刷新指定仓库和时间范围的AI洞察分析
+    这会实时调用LLM分析并更新缓存
+    """
+    repo_id = request.id
+    time_range = request.time_range
+    
+    if time_range not in ['7d', '30d', '90d', 'year']:
+        return RefreshAIInsightsResponse(
+            code=400,
+            message="无效的时间范围，支持的值: 7d, 30d, 90d, year",
+            ai_insights=None
+        )
+    
+    try:
+        # 计算日期范围
+        end_date = datetime.now()
+        if time_range == '7d':
+            start_date = end_date - timedelta(days=7)
+        elif time_range == '30d':
+            start_date = end_date - timedelta(days=30)
+        elif time_range == '90d':
+            start_date = end_date - timedelta(days=90)
+        else:  # year
+            start_date = end_date - timedelta(days=365)
+        
+        # 获取commit messages
+        commit_messages_query = db.query(GithubCommit.message).join(
+            LLMAnalyse, GithubCommit.id == LLMAnalyse.commit_id
+        ).filter(
+            GithubCommit.repo_id == repo_id,
+            LLMAnalyse.is_security_related == True,
+            GithubCommit.commit_date >= start_date,
+            GithubCommit.commit_date <= end_date
+        ).limit(50).all()
+        
+        commit_messages = [msg[0] for msg in commit_messages_query if msg[0]]
+        
+        if not commit_messages:
+            # 创建空缓存
+            cache_record = db.query(AIInsightsCache).filter(
+                AIInsightsCache.repo_id == repo_id,
+                AIInsightsCache.time_range == time_range
+            ).first()
+            
+            if cache_record:
+                cache_record.insights = json.dumps([])
+                cache_record.common_vuln_types = json.dumps([])
+                cache_record.recommendations = "该时间段内暂无安全相关提交"
+                cache_record.llm_identified_count = 0
+                cache_record.summary = "暂无数据"
+                cache_record.analyzed_at = datetime.now()
+                cache_record.commit_count = 0
+            else:
+                cache_record = AIInsightsCache(
+                    repo_id=repo_id,
+                    time_range=time_range,
+                    insights=json.dumps([]),
+                    common_vuln_types=json.dumps([]),
+                    recommendations="该时间段内暂无安全相关提交",
+                    llm_identified_count=0,
+                    summary="暂无数据",
+                    commit_count=0
+                )
+                db.add(cache_record)
+            
+            db.commit()
+            return RefreshAIInsightsResponse(
+                code=200,
+                message="该时间段内没有安全相关的commits",
+                ai_insights=None
+            )
+        
+        # 调用LLM分析
+        analyzer = LLMAnalyzer()
+        insights_result = analyzer.analyze_commits_insights(commit_messages)
+        
+        # 构建响应数据
+        ai_insights = AIInsightsData(
+            insights=insights_result.get("insights", []),
+            common_vuln_types=insights_result.get("common_vuln_types", []),
+            recommendations=insights_result.get("recommendations", ""),
+            llm_identified_count=insights_result.get("llm_identified_count", 0),
+            summary=insights_result.get("summary", "")
+        )
+        
+        # 更新缓存
+        cache_record = db.query(AIInsightsCache).filter(
+            AIInsightsCache.repo_id == repo_id,
+            AIInsightsCache.time_range == time_range
+        ).first()
+        
+        if cache_record:
+            cache_record.insights = json.dumps(ai_insights.insights)
+            cache_record.common_vuln_types = json.dumps(ai_insights.common_vuln_types)
+            cache_record.recommendations = ai_insights.recommendations
+            cache_record.llm_identified_count = ai_insights.llm_identified_count
+            cache_record.summary = ai_insights.summary
+            cache_record.analyzed_at = datetime.now()
+            cache_record.analysis_cost = insights_result.get("analysis_cost", 0)
+            cache_record.commit_count = len(commit_messages)
+        else:
+            cache_record = AIInsightsCache(
+                repo_id=repo_id,
+                time_range=time_range,
+                insights=json.dumps(ai_insights.insights),
+                common_vuln_types=json.dumps(ai_insights.common_vuln_types),
+                recommendations=ai_insights.recommendations,
+                llm_identified_count=ai_insights.llm_identified_count,
+                summary=ai_insights.summary,
+                analysis_cost=insights_result.get("analysis_cost", 0),
+                commit_count=len(commit_messages)
+            )
+            db.add(cache_record)
+        
+        db.commit()
+        
+        return RefreshAIInsightsResponse(
+            code=200,
+            message="AI洞察分析已完成并缓存",
+            ai_insights=ai_insights
+        )
+        
+    except Exception as e:
+        db.rollback()
+        logger.error(f"手动刷新AI洞察失败: {e}")
+        return RefreshAIInsightsResponse(
+            code=500,
+            message=f"分析失败: {str(e)}",
+            ai_insights=None
+        )

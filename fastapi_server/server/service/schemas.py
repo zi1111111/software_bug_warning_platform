@@ -116,12 +116,21 @@ class VulnTypeDistributionItem(BaseModel):
     value: int
     name: str
 
+class AIInsightsData(BaseModel):
+    """AI洞察数据"""
+    insights: List[str]
+    common_vuln_types: List[str]
+    recommendations: str
+    llm_identified_count: int
+    summary: str
+
 class GetTrendAnalysisResponse(BaseModel):
     code: int
     trend_data: List[TrendDataPoint]
     severity_distribution: List[SeverityDistributionItem]
     component_ranking: List[ComponentRankingItem]
     vuln_type_distribution: List[VulnTypeDistributionItem]
+    ai_insights: Optional[AIInsightsData] = None
 
 
 # 风险评估相关Schema
@@ -177,7 +186,7 @@ class GetRiskAssessmentResponse(BaseModel):
     risk_score: RiskScoreData
     risk_distribution: List[RiskDistributionItem]
     component_risks: List[ComponentRiskItem]
-    attack_surface: AttackSurfaceData
+    vuln_type_distribution: List[VulnTypeDistributionItem]
     priority_recommendations: List[PriorityRecommendationItem]
 
 

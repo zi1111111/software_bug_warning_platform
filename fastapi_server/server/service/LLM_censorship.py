@@ -1,8 +1,8 @@
 """
 多模型漏洞严重性审查模块
-使用硅基流动平台的国产模型对DeepSeek初判结果进行投票复核
-模型：DeepSeek-V3.2、Qwen3.5-397B、GLM-5、Hunyuan
-权重分配：DeepSeek-V3.2 0.30, Qwen3.5-397B 0.30, GLM-5 0.25, Hunyuan 0.15
+使用DeepSeek、GLM-5、Qwen原厂API + 硅基流动Hunyuan进行投票复核
+模型：DeepSeek、GLM-5、Qwen、Hunyuan
+权重分配：DeepSeek 0.30, GLM-5 0.30, Qwen 0.25, Hunyuan 0.15
 """
 
 import json
@@ -65,12 +65,12 @@ class SeverityMapper:
     }
 
     # 模型权重配置（基于模型能力和可靠性）
-    # 选用硅基流动平台支持的国产顶级模型
+    # 三家原厂API + 硅基流动Hunyuan
     SEVERITY_WEIGHTS = {
-        "deepseek_v32": 0.30,   # DeepSeek-V3.2 代码理解最强
-        "qwen35_397b": 0.30,    # Qwen3.5-397B 综合能力最强
-        "glm5": 0.25,           # GLM-5 推理能力优秀
-        "hunyuan": 0.15         # Hunyuan 补充视角
+        "deepseek": 0.30,   # DeepSeek 原厂代码理解最强
+        "glm5": 0.30,       # 智普GLM-5 原厂推理优秀
+        "qianwen": 0.25,    # 千问原厂综合能力
+        "hunyuan": 0.15     # 腾讯Hunyuan 硅基流动补充视角
     }
 
     @classmethod
@@ -105,31 +105,36 @@ class LLMCensorship:
 
     def _init_clients(self):
         """初始化各个模型的API客户端"""
-        # 硅基流动平台（国产模型）
+        # DeepSeek 原厂 API
+        deepseek_key = os.getenv("DEEPSEEK_API_KEY")
+        if deepseek_key:
+            self.clients["deepseek"] = OpenAI(
+                api_key=deepseek_key,
+                base_url="https://api.deepseek.com"
+            )
+            logger.info("DeepSeek 审查客户端初始化成功")
+
+        # 智普GLM-5 原厂 API
+        glm5_key = os.getenv("GLM5_API_KEY")
+        if glm5_key:
+            self.clients["glm5"] = OpenAI(
+                api_key=glm5_key,
+                base_url="https://open.bigmodel.cn/api/paas/v4"
+            )
+            logger.info("GLM-5 审查客户端初始化成功")
+
+        # 千问Qwen 原厂 API
+        qianwen_key = os.getenv("QIANWEN_API_KEY")
+        if qianwen_key:
+            self.clients["qianwen"] = OpenAI(
+                api_key=qianwen_key,
+                base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+            )
+            logger.info("千问审查客户端初始化成功")
+
+        # 腾讯Hunyuan 通过硅基流动
         siliconflow_key = os.getenv("SILICONFLOW_API_KEY")
         if siliconflow_key:
-            # DeepSeek-V3.2 (通过硅基流动)
-            self.clients["deepseek_v32"] = OpenAI(
-                api_key=siliconflow_key,
-                base_url="https://api.siliconflow.cn/v1"
-            )
-            logger.info("DeepSeek-V3.2 客户端初始化成功")
-
-            # Qwen3.5-397B
-            self.clients["qwen35_397b"] = OpenAI(
-                api_key=siliconflow_key,
-                base_url="https://api.siliconflow.cn/v1"
-            )
-            logger.info("Qwen3.5-397B 客户端初始化成功")
-
-            # GLM-5
-            self.clients["glm5"] = OpenAI(
-                api_key=siliconflow_key,
-                base_url="https://api.siliconflow.cn/v1"
-            )
-            logger.info("GLM-5 客户端初始化成功")
-
-            # Hunyuan
             self.clients["hunyuan"] = OpenAI(
                 api_key=siliconflow_key,
                 base_url="https://api.siliconflow.cn/v1"
@@ -208,11 +213,11 @@ Commit Message: {commit_message}
 {{
     "severity": "Critical/High/Medium/Low/None",
     "confidence": 0.0-1.0,  // 你的判断置信度
-    "reasoning": "详细解释你的判断逻辑，包括上述四个维度的具体分析",
+    "reasoning": "简洁解释判断逻辑（200字内），包括四个维度的核心分析",
     "key_factors": [
-        "关键因素1: 具体说明",
-        "关键因素2: 具体说明",
-        "关键因素3: 具体说明"
+        "关键因素1: 简要说明",
+        "关键因素2: 简要说明",
+        "关键因素3: 简要说明"
     ],
     "disagreement_with_original": "如果你与DeepSeek初始判断不同，说明理由；如果相同，写'一致'"
 }}
@@ -231,13 +236,12 @@ Commit Message: {commit_message}
             logger.warning(f"{model_key} 客户端未初始化")
             return None
 
-        # 模型配置 - 硅基流动平台模型ID
-        # 选用国产顶级模型：DeepSeek-V3.2、Qwen3.5-397B、GLM-5、Hunyuan
+        # 模型配置 - 四家API的模型ID
         model_configs = {
-            "deepseek_v32": "Pro/deepseek-ai/DeepSeek-V3.2",
-            "qwen35_397b": "Qwen/Qwen3.5-397B-A17B",
-            "glm5": "Pro/zai-org/GLM-5",
-            "hunyuan": "tencent/Hunyuan-A13B-Instruct"
+            "deepseek": "deepseek-chat",           # DeepSeek原厂
+            "glm5": "glm-4-plus",                  # 智普GLM原厂
+            "qianwen": "qwen-max",                 # 千问原厂
+            "hunyuan": "tencent/Hunyuan-A13B-Instruct"  # 硅基流动Hunyuan
         }
 
         for attempt in range(max_retries):
@@ -249,18 +253,24 @@ Commit Message: {commit_message}
                         {"role": "user", "content": prompt}
                     ],
                     temperature=0.1,  # 低温度确保一致性
-                    max_tokens=2000
+                    max_tokens=2048
                 )
 
                 raw_content = response.choices[0].message.content
 
                 # 解析JSON响应
                 try:
-                    # 提取JSON块
+                    # 提取JSON块（支持Markdown code block和普通JSON）
                     import re
-                    json_match = re.search(r'\{{.*\}}', raw_content, re.DOTALL)
-                    if json_match:
-                        raw_content = json_match.group(0)
+                    # 先尝试提取```json ... ``` 或 ``` ... ``` 格式的代码块
+                    code_block_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_content, re.DOTALL)
+                    if code_block_match:
+                        raw_content = code_block_match.group(1).strip()
+                    else:
+                        # 回退：尝试提取 {...} 格式的JSON
+                        json_match = re.search(r'\{[\s\S]*\}', raw_content, re.DOTALL)
+                        if json_match:
+                            raw_content = json_match.group(0)
 
                     data = json.loads(raw_content)
                     return ModelReviewResult(
@@ -272,7 +282,7 @@ Commit Message: {commit_message}
                         raw_response=raw_content
                     )
                 except json.JSONDecodeError as e:
-                    logger.warning(f"{model_key} 响应解析失败: {e}, 原始内容: {raw_content[:200]}")
+                    logger.warning(f"{model_key} 响应解析失败: {e}, 原始内容: {raw_content[:500]}")
                     if attempt == max_retries - 1:
                         return None
                     continue

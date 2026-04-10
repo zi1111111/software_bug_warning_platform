@@ -112,7 +112,7 @@ const handleMenuSelect = (index: string) => {
   activeMenu.value = index
   switch (index) {
     case 'dashboard':
-      router.push('/')
+      router.push('/dashboard')
       break
     case 'analysis-trend':
       router.push('/analysis/trend')
