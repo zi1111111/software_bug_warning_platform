@@ -13,7 +13,7 @@ from server.service.models import Repository, LLMAnalyse, GithubCommit
 from server.service.schemas import RepositoryAdd, RepositoryAddResponse, RepositoryDelete, RepositoryDeleteResponse, \
     RepositoryGetAllResponse, RepositoryOut, RepositoryChangeResponse, RepositoryChange, SearchCommitResponse, \
     SearchCommit, GetVulnStats, GetVulnStatsResponse, GetVulnerabilities, GetVulnerabilitiesResponse, LLMAnalyseOut, \
-    AnalyzeRepo, AnalyzeRepoResponse
+    AnalyzeRepo, AnalyzeRepoResponse, ReviewResult
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -202,6 +202,16 @@ async def get_vulnerabilities(
     # 转换为响应模型列表
     vuln_list = []
     for llm in llms:
+        # 解析审查结果JSON
+        review_result = None
+        if llm.review_result:
+            try:
+                import json
+                review_data = json.loads(llm.review_result)
+                review_result = ReviewResult(**review_data)
+            except Exception:
+                pass
+
         vuln_list.append(LLMAnalyseOut(
             id=llm.id,
             vulnerability_type=llm.vulnerability_type,
@@ -211,7 +221,10 @@ async def get_vulnerabilities(
             summary=llm.summary,
             thinking=llm.thinking,
             model_name=llm.model_name,
-            analyzed_at=llm.analyzed_at.isoformat() if hasattr(llm.analyzed_at, 'isoformat') else str(llm.analyzed_at)
+            analyzed_at=llm.analyzed_at.isoformat() if hasattr(llm.analyzed_at, 'isoformat') else str(llm.analyzed_at),
+            review_status=llm.review_status,
+            final_severity=llm.final_severity,
+            review_result=review_result
         ))
 
     return GetVulnerabilitiesResponse(

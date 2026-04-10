@@ -1,6 +1,7 @@
 """
 关于前端图表，趋势，分析所需数据的相关处理和请求
 """
+import json
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends
 from sqlalchemy import desc, func, exists, distinct
@@ -14,7 +15,7 @@ from server.service.schemas import (
     TrendDataPoint, SeverityDistributionItem, ComponentRankingItem, VulnTypeDistributionItem,
     GetRiskAssessment, GetRiskAssessmentResponse,
     RiskScoreData, RiskBreakdown, RiskDistributionItem,
-    ComponentRiskItem, AttackSurfaceData, PriorityRecommendationItem, RiskTrendPoint
+    ComponentRiskItem, AttackSurfaceData, PriorityRecommendationItem, RiskTrendPoint, ReviewResult
 )
 
 router = APIRouter()
@@ -32,13 +33,17 @@ async def get_vuln_daily(
     severity_list = request.severity or []
     vuln_type_list = request.vuln_type or []  # 新增：漏洞类型筛选
 
+    day_start = date.replace(hour=0, minute=0, second=0, microsecond=0)
+    day_end = day_start + timedelta(days=1)
+
     # ================= 1. 基础查询（关联仓库，安全相关，日期匹配） =================
     base_query = db.query(LLMAnalyse).join(
         GithubCommit, LLMAnalyse.commit_id == GithubCommit.id
     ).filter(
         GithubCommit.repo_id == repo_id,
         LLMAnalyse.is_security_related == True,
-        func.date(GithubCommit.commit_date) == date
+        GithubCommit.commit_date >= day_start,
+        GithubCommit.commit_date <= day_end
     )
 
     # 严重程度筛选
@@ -53,7 +58,8 @@ async def get_vuln_daily(
         GithubCommit, LLMAnalyse.commit_id == GithubCommit.id
     ).filter(
         LLMAnalyse.is_security_related == True,
-        func.date(GithubCommit.commit_date) == date
+        GithubCommit.commit_date >= day_start,
+        GithubCommit.commit_date <= day_end
     )
     total_vulns_daily = total_query.count()
     new_vulns = base_query.count()
@@ -85,6 +91,15 @@ async def get_vuln_daily(
 
     vuln_list = []
     for llm in llms:
+        # 解析审查结果JSON
+        review_result = None
+        if llm.review_result:
+            try:
+                review_data = json.loads(llm.review_result)
+                review_result = ReviewResult(**review_data)
+            except Exception:
+                pass
+
         vuln_list.append(LLMAnalyseOut(
             id=llm.id,
             vulnerability_type=llm.vulnerability_type,
@@ -94,7 +109,10 @@ async def get_vuln_daily(
             summary=llm.summary,
             thinking=llm.thinking,
             model_name=llm.model_name,
-            analyzed_at=llm.analyzed_at.isoformat() if hasattr(llm.analyzed_at, 'isoformat') else str(llm.analyzed_at)
+            analyzed_at=llm.analyzed_at.isoformat() if hasattr(llm.analyzed_at, 'isoformat') else str(llm.analyzed_at),
+            review_status=llm.review_status,
+            final_severity=llm.final_severity,
+            review_result=review_result
         ))
     vuln_type_query = db.query(LLMAnalyse.vulnerability_type).distinct()
     vuln_type = [row[0] for row in vuln_type_query.all() if row[0] is not None]
@@ -277,16 +295,7 @@ async def get_trend_analysis(
         )
         for comp, data in sorted_components
     ]
-    
-    # 如果没有数据，提供默认排行
-    if not component_ranking:
-        component_ranking = [
-            ComponentRankingItem(name='核心模块', vuln_count=12, severity='high'),
-            ComponentRankingItem(name='网络模块', vuln_count=8, severity='critical'),
-            ComponentRankingItem(name='存储模块', vuln_count=6, severity='medium'),
-            ComponentRankingItem(name='工具模块', vuln_count=5, severity='low'),
-            ComponentRankingItem(name='测试模块', vuln_count=4, severity='medium')
-        ]
+
     
     # ================= 4. 漏洞类型分布 =================
     type_counts = db.query(
@@ -305,18 +314,7 @@ async def get_trend_analysis(
         VulnTypeDistributionItem(value=count, name=vtype)
         for vtype, count in type_counts
     ]
-    
-    # 如果没有数据，提供默认分布
-    if not vuln_type_distribution:
-        vuln_type_distribution = [
-            VulnTypeDistributionItem(value=45, name='代码注入'),
-            VulnTypeDistributionItem(value=32, name='权限问题'),
-            VulnTypeDistributionItem(value=28, name='缓冲区溢出'),
-            VulnTypeDistributionItem(value=20, name='资源泄露'),
-            VulnTypeDistributionItem(value=15, name='配置错误'),
-            VulnTypeDistributionItem(value=10, name='其他')
-        ]
-    
+
     return GetTrendAnalysisResponse(
         code=200,
         trend_data=trend_data,
@@ -381,21 +379,24 @@ async def get_risk_assessment(
     medium = severity_map.get('medium', 0)
     low = severity_map.get('low', 0)
     
-    # 计算总体风险评分 (0-100)，权重：Critical=10, High=5, Medium=2, Low=1
-    risk_score_value = min(100, critical * 10 + high * 5 + medium * 2 + low * 1)
+    # 计算总体风险评分 (0-100)
+    #Sum(wi*xi)/(max(wi)*Sum(xi))
+    all_counts = max(critical+high+medium+low,1) #防止除0
+    risk_score_value = (critical*0.5+high*0.3+medium*0.2+low*0.1)/(all_counts*0.5)*100
     
     # 计算各部分贡献百分比
-    total_weight = critical * 10 + high * 5 + medium * 2 + low * 1
-    if total_weight == 0:
-        total_weight = 1  # 避免除零
+    critical_weight = (critical*0.5)/(all_counts*0.5)*100
+    high_weight = (high * 0.3) / (all_counts * 0.5)*100
+    medium_weight = (medium*0.2) / (all_counts * 0.5)*100
+    low_weight = (low*0.1) / (all_counts * 0.5)*100
     
     risk_score = RiskScoreData(
-        overall=risk_score_value,
+        overall=int(risk_score_value),
         breakdown=RiskBreakdown(
-            critical=min(100, critical * 10 * 100 // total_weight),
-            high=min(100, high * 5 * 100 // total_weight),
-            medium=min(100, medium * 2 * 100 // total_weight),
-            low=min(100, low * 1 * 100 // total_weight)
+            critical=int(critical_weight),
+            high=int(high_weight),
+            medium=int(medium_weight),
+            low=int(low_weight)
         )
     )
     
@@ -474,7 +475,7 @@ async def get_risk_assessment(
         
         component_risks.append(ComponentRiskItem(
             name=comp,
-            version='latest',  # 从实际依赖信息获取
+            version='latest',
             risk_score=score,
             vuln_count=data['vuln_count'],
             max_severity=data['max_severity'],
@@ -484,15 +485,7 @@ async def get_risk_assessment(
     
     # 排序取前10
     component_risks = sorted(component_risks, key=lambda x: x.risk_score, reverse=True)[:10]
-    
-    # 如果没有数据，提供默认数据
-    if not component_risks:
-        component_risks = [
-            ComponentRiskItem(name='核心模块', version='1.0.0', risk_score=85, vuln_count=5, max_severity='critical', exposure='high', recommendation='立即修复严重漏洞'),
-            ComponentRiskItem(name='网络模块', version='2.1.0', risk_score=72, vuln_count=3, max_severity='high', exposure='high', recommendation='建议尽快升级'),
-            ComponentRiskItem(name='存储模块', version='1.5.0', risk_score=45, vuln_count=2, max_severity='medium', exposure='medium', recommendation='关注安全公告'),
-            ComponentRiskItem(name='工具模块', version='3.0.0', risk_score=28, vuln_count=1, max_severity='low', exposure='low', recommendation='保持正常更新')
-        ]
+
     
     # ================= 4. 攻击面分析 =================
     # 统计受影响的子系统数量（作为入口点）
@@ -513,7 +506,7 @@ async def get_risk_assessment(
     attack_surface = AttackSurfaceData(
         entry_points=entry_points,
         exposed_apis=vuln_types if vuln_types > 0 else 3,
-        third_party_deps=entry_points * 3,  # 估算
+        third_party_deps=entry_points * 3,
         vulnerable_deps=len(component_risks)
     )
     
@@ -547,36 +540,7 @@ async def get_risk_assessment(
             effort=effort,
             timeframe=timeframe
         ))
-    
-    # 如果没有数据，提供默认建议
-    if not priority_recommendations:
-        priority_recommendations = [
-            PriorityRecommendationItem(priority=1, title='检查核心模块安全', severity='critical', impact='系统安全风险', effort='高', timeframe='立即'),
-            PriorityRecommendationItem(priority=2, title='更新网络模块', severity='high', impact='网络暴露风险', effort='中', timeframe='3天内'),
-            PriorityRecommendationItem(priority=3, title='审计存储模块', severity='medium', impact='数据完整性', effort='中', timeframe='1周内')
-        ]
-    
-    # ================= 6. 历史风险趋势 =================
-    # 生成最近7个时间点的风险评分趋势
-    risk_trend = []
-    for i in range(7):
-        date_point = end_date - timedelta(days=6-i)
-        date_str = date_point.strftime('%m-%d')
-        
-        # 基于历史漏洞数量计算该时间点的风险评分
-        point_start = date_point - timedelta(days=7)
-        point_vulns = base_query.filter(
-            GithubCommit.commit_date >= point_start,
-            GithubCommit.commit_date < date_point + timedelta(days=1)
-        ).count()
-        
-        point_score = min(100, point_vulns * 5 + 40)  # 基础分40 + 漏洞贡献
-        
-        risk_trend.append(RiskTrendPoint(
-            date=date_str,
-            score=point_score
-        ))
-    
+
     return GetRiskAssessmentResponse(
         code=200,
         risk_score=risk_score,
@@ -584,5 +548,4 @@ async def get_risk_assessment(
         component_risks=component_risks,
         attack_surface=attack_surface,
         priority_recommendations=priority_recommendations,
-        risk_trend=risk_trend
     )

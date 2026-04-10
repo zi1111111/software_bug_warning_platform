@@ -4,11 +4,10 @@ import os
 import re
 from typing import Dict
 
-from click import prompt
-from django.db.models.functions import JSONObject
+
 from dotenv import load_dotenv
 from openai import OpenAI
-from openai.types import ResponseFormatJSONObject
+
 
 logger = logging.getLogger(__name__)
 class LLMAnalyzer:
@@ -41,22 +40,6 @@ class LLMAnalyzer:
             self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
             self.model_name = "deepseek-chat"
             logger.info("DeepSeek 分析器初始化成功")
-        elif model_type == "openai":
-            api_key = os.getenv("OPENAI_API_KEY")
-            if not api_key:
-                raise ValueError("未找到 OPENAI_API_KEY 环境变量")
-            self.client = OpenAI(api_key=api_key)
-            self.model_name = "gpt-4o-mini"
-            logger.info("OpenAI 分析器初始化成功")
-        elif model_type == "grok":
-            api_key = os.getenv("GROK_API_KEY")
-            if not api_key:
-                raise ValueError("未找到 GROK_API_KEY 环境变量")
-            self.client = OpenAI(api_key=api_key)
-            self.model_name = "GROK"
-            logger.info("GROK 分析器初始化成功")
-        else:
-            raise ValueError(f"不支持的模型类型: {model_type}")
 
 
     def should_analyze(self,commit_message:str,diff:str="") -> bool:
@@ -82,7 +65,7 @@ class LLMAnalyzer:
                 "vulnerability_type": "漏洞类型，如 use-after-free / buffer overflow / race condition / 其他，若不相关则为 null",
                 "affected_subsystem": "影响的子系统，如 netfilter / bpf / ext4 / kernel core / 其他，若不相关则为 null",
                 "severity": "Critical / High / Medium / Low，若不相关则为 null",
-                "cve_id": "关联的 CVE 编号，如 CVE-2024-1234，若无则为 null",
+                "cve_id": "关联的 CVE 编号，如 CVE-2024-1234，若无则为 null",如有多个只保留一个
                 "summary": "一句话总结此 commit 的安全影响或修复内容（中文，不超过 50 字）",
                 "thinking": "请用中文详细描述你的分析思考过程，包括：1) 为什么认为这个commit与安全相关/不相关；2) 如何判断漏洞类型和严重程度；3) 对代码变更的关键分析点"
                 }}"""

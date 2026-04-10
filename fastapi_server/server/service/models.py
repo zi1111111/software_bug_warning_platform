@@ -74,6 +74,11 @@ class LLMAnalyse(Base):
     raw_response = Column(Text, nullable=True, comment="大模型返回的原始 JSON 文本，用于审计")
     analyzed_at = Column(DateTime, server_default=func.now(), comment="分析时间")
 
+    # 多模型审查结果
+    review_status = Column(String(20), nullable=True, default="pending", comment="审查状态: pending/completed/failed")
+    review_result = Column(Text, nullable=True, comment="多模型审查结果的JSON序列化数据")
+    final_severity = Column(String(20), nullable=True, comment="多模型投票后的最终严重性")
+
     # 关联关系
     commit = relationship("GithubCommit", back_populates="analyses")
 

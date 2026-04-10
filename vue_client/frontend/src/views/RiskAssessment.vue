@@ -89,7 +89,6 @@ const loadRiskData = async () => {
       componentRisks.value = res.data.component_risks || []
       attackSurface.value = res.data.attack_surface || { entry_points: 0, exposed_apis: 0, third_party_deps: 0, vulnerable_deps: 0 }
       priorityRecommendations.value = res.data.priority_recommendations || []
-      riskTrendData.value = res.data.risk_trend || []
     } else {
       ElMessage.error(res.message || '加载风险评估数据失败')
     }

@@ -145,6 +145,30 @@ const viewDetail = (row: any) => {
   detailVisible.value = true
 }
 
+// 查看详情
+const showDetail = (vuln: VulnItem) => {
+  currentVuln.value = vuln
+  detailVisible.value = true
+}
+
+// 获取一致性颜色
+const getConsensusColor = (rate: number) => {
+  if (rate >= 0.9) return '#67c23a'  // 绿色 - 高度一致
+  if (rate >= 0.6) return '#e6a23c'  // 黄色 - 基本一致
+  return '#f56c6c'  // 红色 - 存在分歧
+}
+
+// 获取模型显示名称
+const getModelDisplayName = (name: string) => {
+  const nameMap: Record<string, string> = {
+    'deepseek_v32': 'DeepSeek-V3.2',
+    'qwen35_397b': 'Qwen3.5-397B',
+    'glm5': 'GLM-5',
+    'hunyuan': 'Hunyuan'
+  }
+  return nameMap[name] || name
+}
+
 // 手动分析（触发对未分析 commits 的分析）
 const manualAnalyze = async () => {
   if (!currentRepo.value) return
@@ -428,6 +452,98 @@ const getSeverityLabel = (severity: string) => {
             <div class="thinking-content">{{ currentVuln.thinking }}</div>
           </el-card>
         </div>
+
+        <!-- 多模型审查结果 -->
+        <div v-if="currentVuln.review_result" class="review-section">
+          <el-divider />
+          <h4 class="review-title">
+            <el-icon><ChatDotRound /></el-icon>
+            多模型严重性审查
+          </h4>
+
+          <!-- 审查概览 -->
+          <el-card class="review-overview" shadow="never">
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <div class="review-stat">
+                  <div class="stat-label">原始判断</div>
+                  <el-tag :type="getSeverityType(currentVuln.severity)" size="large">
+                    {{ getSeverityLabel(currentVuln.severity) }}
+                  </el-tag>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="review-stat">
+                  <div class="stat-label">最终判定</div>
+                  <el-tag :type="getSeverityType(currentVuln.final_severity)" size="large" effect="dark">
+                    {{ getSeverityLabel(currentVuln.final_severity) }}
+                  </el-tag>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="review-stat">
+                  <div class="stat-label">一致性</div>
+                  <el-progress
+                    :percentage="Math.round(currentVuln.review_result.consensus_rate * 100)"
+                    :color="getConsensusColor(currentVuln.review_result.consensus_rate)"
+                    :stroke-width="8"
+                  />
+                </div>
+              </el-col>
+            </el-row>
+            <div class="review-summary">{{ currentVuln.review_result.review_summary }}</div>
+          </el-card>
+
+          <!-- 各模型详细结果 -->
+          <div class="model-results">
+            <h5 class="model-results-title">各模型审查详情</h5>
+            <el-collapse>
+              <el-collapse-item
+                v-for="(modelResult, modelName) in currentVuln.review_result.model_results"
+                :key="modelName"
+                :title="getModelDisplayName(modelName) + ' - ' + getSeverityLabel(modelResult.severity)"
+              >
+                <div class="model-detail">
+                  <div class="confidence-bar">
+                    <span class="label">置信度:</span>
+                    <el-progress :percentage="Math.round(modelResult.confidence * 100)" :stroke-width="6" />
+                  </div>
+                  <div class="reasoning">
+                    <div class="label">判断理由:</div>
+                    <div class="reasoning-text">{{ modelResult.reasoning }}</div>
+                  </div>
+                  <div v-if="modelResult.key_factors?.length" class="key-factors">
+                    <div class="label">关键因素:</div>
+                    <el-tag
+                      v-for="(factor, idx) in modelResult.key_factors"
+                      :key="idx"
+                      type="info"
+                      size="small"
+                      class="factor-tag"
+                    >{{ factor }}</el-tag>
+                  </div>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </div>
+
+          <!-- 投票分布 -->
+          <div v-if="currentVuln.review_result.voting_breakdown" class="voting-breakdown">
+            <h5 class="voting-title">投票分布</h5>
+            <el-row :gutter="10">
+              <el-col
+                v-for="(weight, severity) in currentVuln.review_result.voting_breakdown"
+                :key="String(severity)"
+                :span="6"
+              >
+                <el-card class="vote-card" :class="String(severity).toLowerCase()" shadow="hover">
+                  <div class="vote-severity">{{ getSeverityLabel(String(severity)) }}</div>
+                  <div class="vote-weight">{{ (Number(weight) * 100).toFixed(1) }}%</div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
       </div>
     </el-dialog>
   </SidebarLayout>
@@ -595,5 +711,165 @@ body {
   color: #606266;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* 多模型审查结果样式 */
+.review-section {
+  margin-top: 20px;
+}
+
+.review-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a237e;
+  margin: 16px 0;
+}
+
+.review-overview {
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+}
+
+.review-stat {
+  text-align: center;
+  padding: 16px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #909399;
+  margin-bottom: 8px;
+}
+
+.review-summary {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #dcdfe6;
+  font-size: 14px;
+  color: #606266;
+  line-height: 1.6;
+}
+
+.model-results {
+  margin-bottom: 20px;
+}
+
+.model-results-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #303133;
+  margin-bottom: 12px;
+}
+
+.model-detail {
+  padding: 12px;
+}
+
+.confidence-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.confidence-bar .label {
+  font-size: 13px;
+  color: #606266;
+  min-width: 60px;
+}
+
+.reasoning {
+  margin-bottom: 12px;
+}
+
+.reasoning .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #303133;
+  margin-bottom: 8px;
+}
+
+.reasoning-text {
+  font-size: 13px;
+  color: #606266;
+  line-height: 1.6;
+  padding: 12px;
+  background: #f5f7fa;
+  border-radius: 6px;
+}
+
+.key-factors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.key-factors .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #303133;
+  margin-right: 8px;
+}
+
+.factor-tag {
+  margin-right: 4px;
+}
+
+.voting-breakdown {
+  margin-top: 16px;
+}
+
+.voting-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #303133;
+  margin-bottom: 12px;
+}
+
+.vote-card {
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.vote-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.vote-card.critical {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+  border-color: #f56c6c;
+}
+
+.vote-card.high {
+  background: linear-gradient(135deg, #fdf6ec 0%, #ffffff 100%);
+  border-color: #e6a23c;
+}
+
+.vote-card.medium {
+  background: linear-gradient(135deg, #f0f9eb 0%, #ffffff 100%);
+  border-color: #67c23a;
+}
+
+.vote-card.low {
+  background: linear-gradient(135deg, #f4f4f5 0%, #ffffff 100%);
+  border-color: #909399;
+}
+
+.vote-severity {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.vote-weight {
+  font-size: 12px;
+  color: #909399;
 }
 </style>

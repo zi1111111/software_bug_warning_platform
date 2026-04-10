@@ -10,7 +10,7 @@ from starlette.responses import JSONResponse
 from server.service.maintenance_service import start_scheduler, shutdown_scheduler
 from server.service.base_service import router as base_router
 from server.service.data_response import router as data_router
-from server.service.user_service import router as user_router
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,6 +24,7 @@ logging.basicConfig(
     ]
 )
 
+from server.service.user_service import router as user_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -82,7 +83,6 @@ async def global_exception_handler(request, exc):
 async def health_check():
     return {"status": "healthy", "version": app.version}
 
-
 # 根路径路由
 @app.get('/')
 async def root():
@@ -98,7 +98,7 @@ if __name__ == '__main__':
        "app:app",
        host="localhost",
        port=8000,
-       reload=True,
+       reload=False,
        log_level="info"
    )
 

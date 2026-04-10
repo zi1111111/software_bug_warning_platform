@@ -2,7 +2,7 @@
 邮件发送工具模块
 包含：SMTP连接池、验证码发送、验证码验证
 """
-
+import logging
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
@@ -33,11 +33,11 @@ CODE_EXPIRE_MINUTES = 5  # 验证码有效期(分钟)
 MAX_ATTEMPTS = 3  # 最大验证尝试次数
 
 # 邮件配置
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
-EMAIL_USER = os.getenv("EMAIL_USER", "")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
+EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD", "")
-EMAIL_FROM = os.getenv("EMAIL_FROM", EMAIL_USER)
+EMAIL_FROM = os.getenv("EMAIL_FROM")
 FAKE_EMAIL = os.getenv("FAKE_EMAIL", "0") == "1"
 
 # 验证码存储（如果没有Redis则使用内存字典）
@@ -56,9 +56,9 @@ if REDIS_AVAILABLE:
             socket_connect_timeout=2
         )
         redis_client.ping()
-        print("Redis连接成功")
+        logging.info("Redis连接成功")
     except Exception as e:
-        print(f"Redis连接失败，使用内存存储: {e}")
+        logging.info(f"Redis连接失败，使用内存存储: {e}")
         redis_client = None
 
 
@@ -114,11 +114,11 @@ class SMTPPool:
             server.login(self.username, self.password)
             return server
         except Exception as e:
-            print(f"创建SMTP连接失败: {e}")
+            logging.info(f"创建SMTP连接失败: {e}")
             raise
 
 
-# 初始化连接池（如果配置了邮箱）
+# 初始化连接池
 smtp_pool = None
 if EMAIL_USER and EMAIL_PASSWORD:
     try:
@@ -129,9 +129,9 @@ if EMAIL_USER and EMAIL_PASSWORD:
             password=EMAIL_PASSWORD,
             max_connections=MAX_CONNECTIONS
         )
-        print("SMTP连接池初始化成功")
+        logging.info("SMTP连接池初始化成功")
     except Exception as e:
-        print(f"SMTP连接池初始化失败: {e}")
+        logging.info(f"SMTP连接池初始化失败: {e}")
 
 
 def generate_verification_code(length=6) -> str:
@@ -155,7 +155,7 @@ def _store_code_in_redis(email: str, code: str) -> bool:
         )
         return True
     except Exception as e:
-        print(f"Redis存储验证码失败: {e}")
+        logging.info(f"Redis存储验证码失败: {e}")
         return False
 
 
@@ -180,7 +180,7 @@ def _get_code_from_redis(email: str) -> Optional[dict]:
             return json.loads(data)
         return None
     except Exception as e:
-        print(f"Redis获取验证码失败: {e}")
+        logging.info(f"Redis获取验证码失败: {e}")
         return None
 
 
@@ -210,7 +210,7 @@ def _update_code_attempts_in_redis(email: str, code_data: dict) -> bool:
             redis_client.setex(redis_key, ttl, json.dumps(code_data))
         return True
     except Exception as e:
-        print(f"Redis更新验证码失败: {e}")
+        logging.info(f"Redis更新验证码失败: {e}")
         return False
 
 
@@ -230,7 +230,7 @@ def _delete_code_in_redis(email: str) -> bool:
         redis_client.delete(redis_key)
         return True
     except Exception as e:
-        print(f"Redis删除验证码失败: {e}")
+        logging.info(f"Redis删除验证码失败: {e}")
         return False
 
 
@@ -247,7 +247,7 @@ def send_verification_email(email: str) -> bool:
 
     # 压测模式：验证码固定为000000
     if FAKE_EMAIL:
-        print(f"[压测模式] 验证码为000000，不发送邮件到 {email}")
+        logging.info(f"[压测模式] 验证码为000000，不发送邮件到 {email}")
         code = "000000"
         # 存储到Redis或内存
         if redis_client:
@@ -265,7 +265,7 @@ def send_verification_email(email: str) -> bool:
 
     # 如果没有配置SMTP，直接返回成功（仅用于测试）
     if not smtp_pool:
-        print(f"[测试模式] SMTP未配置，验证码 {code} 已存储但未发送邮件到 {email}")
+        logging.info(f"[测试模式] SMTP未配置，验证码 {code} 已存储但未发送邮件到 {email}")
         return True
 
     # 邮件内容
@@ -289,7 +289,7 @@ def send_verification_email(email: str) -> bool:
 
     # 创建邮件对象
     message = MIMEText(content, "html", "utf-8")
-    message["From"] = Header(f"安全漏洞分析平台 <{EMAIL_FROM}>", "utf-8")
+    message["From"] = Header(f"'=?UTF-8?5byA5rqQ6L2v5Lu25ryP5rSe6aKE6K2m5bmz5Y+w=?=' <{EMAIL_FROM}>")
     message["To"] = Header(email, "utf-8")
     message["Subject"] = Header(subject, "utf-8")
 
@@ -300,10 +300,10 @@ def send_verification_email(email: str) -> bool:
             server = smtp_pool.get_connection()
             server.sendmail(EMAIL_FROM, email, message.as_string())
             smtp_pool.release_connection(server)
-            print(f"邮件发送成功 to {email}")
+            logging.info(f"邮件发送成功 to {email}")
             return True
         except smtplib.SMTPServerDisconnected as e:
-            print(f"SMTP服务器断开连接 (尝试 {attempt + 1}/{MAX_RETRIES}): {e}")
+            logging.info(f"SMTP服务器断开连接 (尝试 {attempt + 1}/{MAX_RETRIES}): {e}")
             if server:
                 try:
                     server.quit()
@@ -311,7 +311,7 @@ def send_verification_email(email: str) -> bool:
                     pass
                 server = None
         except Exception as e:
-            print(f"邮件发送失败 (尝试 {attempt + 1}/{MAX_RETRIES}): {e}")
+            logging.info(f"邮件发送失败 (尝试 {attempt + 1}/{MAX_RETRIES}): {e}")
             if server:
                 try:
                     server.quit()
@@ -322,10 +322,10 @@ def send_verification_email(email: str) -> bool:
         # 指数退避
         if attempt < MAX_RETRIES - 1:
             backoff_time = INITIAL_BACKOFF * (2 ** attempt)
-            print(f"等待 {backoff_time} 秒后重试")
+            logging.info(f"等待 {backoff_time} 秒后重试")
             time.sleep(backoff_time)
 
-    print(f"邮件发送失败，已达到最大重试次数: {email}")
+    logging.info(f"邮件发送失败，已达到最大重试次数: {email}")
     return False
 
 

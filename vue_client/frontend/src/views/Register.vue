@@ -106,20 +106,6 @@
           </div>
           <h1 class="brand-title">安全漏洞预警平台</h1>
           <p class="brand-subtitle">智能化开源软件安全分析系统</p>
-          <div class="brand-stats">
-            <div class="stat-item">
-              <div class="stat-number">10K+</div>
-              <div class="stat-label">已分析仓库</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">50K+</div>
-              <div class="stat-label">检测漏洞</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">99%</div>
-              <div class="stat-label">检测准确率</div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -232,7 +218,7 @@ const handleRegister = async () => {
       verification_code: form.verification_code
     })
     if (success) {
-      router.push('/')
+     router.push('/')
     }
   } catch (e) {
     // 表单验证失败

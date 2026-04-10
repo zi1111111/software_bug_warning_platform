@@ -53,6 +53,25 @@ export  interface Stats {
     low: number
 }
 
+// 多模型审查相关类型
+export interface ModelResult {
+    model_name: string;
+    severity: string;
+    confidence: number;
+    reasoning: string;
+    key_factors: string[];
+}
+
+export interface ReviewResult {
+    original_severity: string;
+    final_severity: string;
+    weighted_score: number;
+    consensus_rate: number;
+    review_summary: string;
+    voting_breakdown: Record<string, number>;
+    model_results: Record<string, ModelResult>;
+}
+
 // 定义漏洞条目类型（根据实际字段补充）
 export  interface VulnItem {
     id:number
@@ -65,6 +84,10 @@ export  interface VulnItem {
     analyzed_at?: string
     affected_subsystem?: string
     model_name?: string
+    // 多模型审查结果
+    review_status?: string;
+    final_severity?: string;
+    review_result?: ReviewResult;
 }
 
 //复杂类型相应，请求定义
@@ -167,5 +190,4 @@ export interface GetRiskAssessmentResponse {
     component_risks: ComponentRiskItem[]
     attack_surface: AttackSurfaceData
     priority_recommendations: PriorityRecommendationItem[]
-    risk_trend: RiskTrendPoint[]
 }

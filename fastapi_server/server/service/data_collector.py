@@ -42,12 +42,12 @@ class GitHubCollector:
                 since_param = repo_model.last_fetched_at.replace(tzinfo=datetime.timezone.utc)
                 commits_iter = github_repo.get_commits(sha=branch.commit.sha, since=since_param)
             else:
-                commits_iter = github_repo.get_commits(sha=branch.commit.sha)[:200]
+                commits_iter = github_repo.get_commits(sha=branch.commit.sha)[:300]
 
             new_commits = []
             for idx, item in enumerate(commits_iter):
-                if idx >= 200:
-                    logger.info(f"已达到单次同步上限 200 条，停止拉取")
+                if idx >= 300:
+                    logger.info(f"已达到单次同步上限 300 条，停止拉取")
                     break
                 # 检查是否已存在
                 exists = db.query(GithubCommit).filter(GithubCommit.commit_hash == item.sha).first()

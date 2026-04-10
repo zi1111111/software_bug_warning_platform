@@ -1,7 +1,7 @@
 #数据验证与序列化
 #定义API相关Response的输入输出数据结构
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -21,6 +21,24 @@ class RepositoryOut(BaseModel):
     class Config:
         from_attributes = True
 
+class ModelResult(BaseModel):
+    """单个模型的审查结果"""
+    model_name: str
+    severity: str
+    confidence: float
+    reasoning: str
+    key_factors: List[str] = []
+
+class ReviewResult(BaseModel):
+    """多模型审查结果"""
+    original_severity: str
+    final_severity: str
+    weighted_score: float
+    consensus_rate: float
+    review_summary: str
+    voting_breakdown: Dict[str, float] = {}
+    model_results: Dict[str, ModelResult] = {}
+
 class LLMAnalyseOut(BaseModel):
     id: int
     vulnerability_type: Optional[str] = None
@@ -31,6 +49,10 @@ class LLMAnalyseOut(BaseModel):
     thinking: Optional[str] = None
     model_name: Optional[str] = None
     analyzed_at: str
+    # 多模型审查结果
+    review_status: Optional[str] = None
+    final_severity: Optional[str] = None
+    review_result: Optional[ReviewResult] = None
 
 
 class AnalyzeRepo(BaseModel):
@@ -157,7 +179,6 @@ class GetRiskAssessmentResponse(BaseModel):
     component_risks: List[ComponentRiskItem]
     attack_surface: AttackSurfaceData
     priority_recommendations: List[PriorityRecommendationItem]
-    risk_trend: List[RiskTrendPoint]
 
 
  #response

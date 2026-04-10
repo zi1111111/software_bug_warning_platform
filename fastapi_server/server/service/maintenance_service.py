@@ -18,9 +18,9 @@ def start_scheduler():
     """
     # 在app启动时收集一次并交给模型分析一次
     collector = GitHubCollector()
-    collector.sync_all_repositories()
+    # collector.sync_all_repositories()
     analysis_service = AnalysisService(model_type="deepseek")
-    analysis_service.analyze_unanalyzed_commits()
+    # analysis_service.analyze_unanalyzed_commits()
     scheduler.add_job(
         collector.sync_all_repositories,
         trigger=CronTrigger(
