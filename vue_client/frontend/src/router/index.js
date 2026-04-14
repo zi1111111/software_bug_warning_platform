@@ -28,6 +28,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/',
+    name: 'Main',
+    component: Login,
+    meta: { public: true }
+  },
+  {
     path: '/repositories',
     name: 'RepositoryManagement',
     component: RepositoryManagement,
@@ -51,12 +57,6 @@ const routes = [
     component: DailyVulnUpdate,
     meta: { requiresAuth: true }
   },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('../views/Dashboard.vue'),
-    meta: { requiresAuth: true }
-  }
 ]
 
 const router = createRouter({
@@ -74,7 +74,7 @@ router.beforeEach((to, from, next) => {
   }
   // 如果用户已登录且访问登录/注册页面，重定向到首页
   else if (to.meta.public && userStore.isLoggedIn) {
-    next('/')
+    next('/dashboard')
   }
   else {
     next()

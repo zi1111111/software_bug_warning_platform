@@ -3,7 +3,7 @@
 """
 import json
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, BackgroundTasks
 from pydantic import BaseModel
 from sqlalchemy import desc, func, exists, distinct
 from sqlalchemy.orm import Session, aliased
@@ -20,7 +20,7 @@ from server.service.schemas import (
     ComponentRiskItem, PriorityRecommendationItem, RiskTrendPoint, ReviewResult,
     AIInsightsData
 )
-from server.service.LLM_layer import LLMAnalyzer, logger
+from server.service.LLM_layer import LLMAnalyzer, logger, get_insights_commits
 
 router = APIRouter()
 
@@ -579,6 +579,10 @@ async def get_risk_assessment(
 
 # ============== AI洞察相关API ==============
 
+from server.service.LLM_layer import analyze_and_cache_insights
+from server.db.database import SessionLocal
+
+
 class RefreshAIInsightsRequest(BaseModel):
     """刷新AI洞察请求"""
     id: int  # 仓库ID
@@ -588,142 +592,39 @@ class RefreshAIInsightsResponse(BaseModel):
     """刷新AI洞察响应"""
     code: int
     message: str
-    ai_insights: AIInsightsData | None = None
 
 
 @router.post("/refreshAIInsights", response_model=RefreshAIInsightsResponse)
 async def refresh_ai_insights(
     request: RefreshAIInsightsRequest,
-    db: Session = Depends(get_db)
+    background_tasks: BackgroundTasks
 ):
     """
     手动刷新指定仓库和时间范围的AI洞察分析
-    这会实时调用LLM分析并更新缓存
+    后台执行LLM分析，立即返回不阻塞服务器
     """
     repo_id = request.id
     time_range = request.time_range
-    
+
     if time_range not in ['7d', '30d', '90d', 'year']:
         return RefreshAIInsightsResponse(
             code=400,
-            message="无效的时间范围，支持的值: 7d, 30d, 90d, year",
-            ai_insights=None
+            message="无效的时间范围，支持的值: 7d, 30d, 90d, year"
         )
-    
+
+    # 添加后台任务，不阻塞响应
+    background_tasks.add_task(_run_insights_analysis, repo_id, time_range)
+
+    return RefreshAIInsightsResponse(
+        code=200,
+        message="AI洞察分析已在后台启动，完成后可通过趋势分析页面查看"
+    )
+
+
+def _run_insights_analysis(repo_id: int, time_range: str):
+    """后台执行AI洞察分析"""
+    db = SessionLocal()
     try:
-        # 计算日期范围
-        end_date = datetime.now()
-        if time_range == '7d':
-            start_date = end_date - timedelta(days=7)
-        elif time_range == '30d':
-            start_date = end_date - timedelta(days=30)
-        elif time_range == '90d':
-            start_date = end_date - timedelta(days=90)
-        else:  # year
-            start_date = end_date - timedelta(days=365)
-        
-        # 获取commit messages
-        commit_messages_query = db.query(GithubCommit.message).join(
-            LLMAnalyse, GithubCommit.id == LLMAnalyse.commit_id
-        ).filter(
-            GithubCommit.repo_id == repo_id,
-            LLMAnalyse.is_security_related == True,
-            GithubCommit.commit_date >= start_date,
-            GithubCommit.commit_date <= end_date
-        ).limit(50).all()
-        
-        commit_messages = [msg[0] for msg in commit_messages_query if msg[0]]
-        
-        if not commit_messages:
-            # 创建空缓存
-            cache_record = db.query(AIInsightsCache).filter(
-                AIInsightsCache.repo_id == repo_id,
-                AIInsightsCache.time_range == time_range
-            ).first()
-            
-            if cache_record:
-                cache_record.insights = json.dumps([])
-                cache_record.common_vuln_types = json.dumps([])
-                cache_record.recommendations = "该时间段内暂无安全相关提交"
-                cache_record.llm_identified_count = 0
-                cache_record.summary = "暂无数据"
-                cache_record.analyzed_at = datetime.now()
-                cache_record.commit_count = 0
-            else:
-                cache_record = AIInsightsCache(
-                    repo_id=repo_id,
-                    time_range=time_range,
-                    insights=json.dumps([]),
-                    common_vuln_types=json.dumps([]),
-                    recommendations="该时间段内暂无安全相关提交",
-                    llm_identified_count=0,
-                    summary="暂无数据",
-                    commit_count=0
-                )
-                db.add(cache_record)
-            
-            db.commit()
-            return RefreshAIInsightsResponse(
-                code=200,
-                message="该时间段内没有安全相关的commits",
-                ai_insights=None
-            )
-        
-        # 调用LLM分析
-        analyzer = LLMAnalyzer()
-        insights_result = analyzer.analyze_commits_insights(commit_messages)
-        
-        # 构建响应数据
-        ai_insights = AIInsightsData(
-            insights=insights_result.get("insights", []),
-            common_vuln_types=insights_result.get("common_vuln_types", []),
-            recommendations=insights_result.get("recommendations", ""),
-            llm_identified_count=insights_result.get("llm_identified_count", 0),
-            summary=insights_result.get("summary", "")
-        )
-        
-        # 更新缓存
-        cache_record = db.query(AIInsightsCache).filter(
-            AIInsightsCache.repo_id == repo_id,
-            AIInsightsCache.time_range == time_range
-        ).first()
-        
-        if cache_record:
-            cache_record.insights = json.dumps(ai_insights.insights)
-            cache_record.common_vuln_types = json.dumps(ai_insights.common_vuln_types)
-            cache_record.recommendations = ai_insights.recommendations
-            cache_record.llm_identified_count = ai_insights.llm_identified_count
-            cache_record.summary = ai_insights.summary
-            cache_record.analyzed_at = datetime.now()
-            cache_record.analysis_cost = insights_result.get("analysis_cost", 0)
-            cache_record.commit_count = len(commit_messages)
-        else:
-            cache_record = AIInsightsCache(
-                repo_id=repo_id,
-                time_range=time_range,
-                insights=json.dumps(ai_insights.insights),
-                common_vuln_types=json.dumps(ai_insights.common_vuln_types),
-                recommendations=ai_insights.recommendations,
-                llm_identified_count=ai_insights.llm_identified_count,
-                summary=ai_insights.summary,
-                analysis_cost=insights_result.get("analysis_cost", 0),
-                commit_count=len(commit_messages)
-            )
-            db.add(cache_record)
-        
-        db.commit()
-        
-        return RefreshAIInsightsResponse(
-            code=200,
-            message="AI洞察分析已完成并缓存",
-            ai_insights=ai_insights
-        )
-        
-    except Exception as e:
-        db.rollback()
-        logger.error(f"手动刷新AI洞察失败: {e}")
-        return RefreshAIInsightsResponse(
-            code=500,
-            message=f"分析失败: {str(e)}",
-            ai_insights=None
-        )
+        analyze_and_cache_insights(db, repo_id, time_range)
+    finally:
+        db.close()

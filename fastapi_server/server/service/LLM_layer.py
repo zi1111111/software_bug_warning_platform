@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import re
+from datetime import datetime, timedelta
 from typing import Dict
 
 
@@ -251,3 +252,138 @@ Commit Messages:
                 "analysis_cost": 0,
                 "model_name": self.model_name
             }
+
+
+# ================= 批量分析和缓存工具函数 =================
+
+def get_date_range(time_range: str):
+    """计算日期范围"""
+    end_date = datetime.now()
+    if time_range == '7d':
+        start_date = end_date - timedelta(days=7)
+    elif time_range == '30d':
+        start_date = end_date - timedelta(days=30)
+    elif time_range == '90d':
+        start_date = end_date - timedelta(days=90)
+    else:  # year
+        start_date = end_date - timedelta(days=365)
+    return start_date, end_date
+
+
+def get_insights_commits(db, repo_id: int, time_range: str, max_total: int = 50):
+    """
+    智能获取用于AI洞察分析的commits
+    策略：按严重程度分层取样 + 时间倒序
+    """
+    from server.service.models import LLMAnalyse, GithubCommit
+
+    start_date, end_date = get_date_range(time_range)
+
+    severity_limits = {
+        'Critical': int(max_total * 0.3),
+        'High': int(max_total * 0.3),
+        'Medium': int(max_total * 0.25),
+        'Low': int(max_total * 0.15)
+    }
+
+    all_commits = []
+    used_commit_ids = set()
+
+    for severity, limit in severity_limits.items():
+        if limit <= 0:
+            continue
+
+        commits = db.query(GithubCommit, LLMAnalyse).join(
+            LLMAnalyse, GithubCommit.id == LLMAnalyse.commit_id
+        ).filter(
+            GithubCommit.repo_id == repo_id,
+            LLMAnalyse.is_security_related == True,
+            LLMAnalyse.severity == severity,
+            GithubCommit.commit_date >= start_date,
+            GithubCommit.commit_date <= end_date
+        ).order_by(GithubCommit.commit_date.desc()).limit(limit).all()
+
+        for commit, analysis in commits:
+            if commit.id not in used_commit_ids and commit.message:
+                all_commits.append(commit.message)
+                used_commit_ids.add(commit.id)
+
+    # 补充不足的部分
+    if len(all_commits) < max_total:
+        remaining = max_total - len(all_commits)
+        additional = db.query(GithubCommit, LLMAnalyse).join(
+            LLMAnalyse, GithubCommit.id == LLMAnalyse.commit_id
+        ).filter(
+            GithubCommit.repo_id == repo_id,
+            LLMAnalyse.is_security_related == True,
+            ~GithubCommit.id.in_(list(used_commit_ids)) if used_commit_ids else True,
+            GithubCommit.commit_date >= start_date,
+            GithubCommit.commit_date <= end_date
+        ).order_by(GithubCommit.commit_date.desc()).limit(remaining).all()
+
+        for commit, _ in additional:
+            if commit.message:
+                all_commits.append(commit.message)
+
+    return all_commits
+
+
+def analyze_and_cache_insights(db, repo_id: int, time_range: str) -> bool:
+    """
+    分析指定仓库和时间范围的AI洞察，并缓存结果
+    返回是否成功
+    """
+    from server.service.models import AIInsightsCache
+    from datetime import datetime
+    import json
+
+    try:
+        logger.info(f"开始AI洞察分析: repo_id={repo_id}, time_range={time_range}")
+
+        # 获取commits
+        commit_messages = get_insights_commits(db, repo_id, time_range, max_total=50)
+
+        # 获取或创建缓存记录
+        cache_record = db.query(AIInsightsCache).filter(
+            AIInsightsCache.repo_id == repo_id,
+            AIInsightsCache.time_range == time_range
+        ).first()
+
+        if not cache_record:
+            cache_record = AIInsightsCache(repo_id=repo_id, time_range=time_range)
+            db.add(cache_record)
+
+        if not commit_messages:
+            cache_record.insights = json.dumps([])
+            cache_record.common_vuln_types = json.dumps([])
+            cache_record.recommendations = "该时间段内暂无安全相关提交"
+            cache_record.llm_identified_count = 0
+            cache_record.summary = "暂无数据"
+            cache_record.analyzed_at = datetime.now()
+            cache_record.commit_count = 0
+            db.commit()
+            logger.info(f"仓库 {repo_id} 无数据，已创建空缓存")
+            return True
+
+        # 调用LLM分析
+        analyzer = LLMAnalyzer()
+        result = analyzer.analyze_commits_insights(commit_messages)
+
+        # 更新缓存
+        cache_record.insights = json.dumps(result.get("insights", []))
+        cache_record.common_vuln_types = json.dumps(result.get("common_vuln_types", []))
+        cache_record.recommendations = result.get("recommendations", "")
+        cache_record.llm_identified_count = result.get("llm_identified_count", 0)
+        cache_record.summary = result.get("summary", "")
+        cache_record.analyzed_at = datetime.now()
+        cache_record.analysis_cost = result.get("analysis_cost", 0)
+        cache_record.commit_count = len(commit_messages)
+
+        db.commit()
+        logger.info(f"AI洞察分析完成: repo_id={repo_id}, time_range={time_range}")
+        return True
+
+    except Exception as e:
+        db.rollback()
+        logger.error(f"AI洞察分析失败: {e}")
+        return False

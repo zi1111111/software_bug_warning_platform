@@ -159,7 +159,7 @@ const getConsensusColor = (rate: number) => {
 }
 
 // 获取模型显示名称
-const getModelDisplayName = (name: string) => {
+const getModelDisplayName = (name) => {
   const nameMap: Record<string, string> = {
     'deepseek_v32': 'DeepSeek-V3.2',
     'qwen35_397b': 'Qwen3.5-397B',
