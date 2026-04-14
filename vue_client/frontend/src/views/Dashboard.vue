@@ -579,90 +579,215 @@ body {
 }
 .stat-card {
   text-align: center;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  backdrop-filter: blur(10px);
 }
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
 .stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
+
 .stat-card.total {
-  background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
 }
+
+.stat-card.total:hover {
+  box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+}
+
 .stat-card.critical {
-  background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
+  background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
   color: white;
+  box-shadow: 0 10px 30px rgba(255, 65, 108, 0.4);
 }
+
+.stat-card.critical:hover {
+  box-shadow: 0 20px 50px rgba(255, 65, 108, 0.6);
+}
+
 .stat-card.high {
-  background: linear-gradient(135deg, #e65100 0%, #f57c00 100%);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
   color: white;
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
 }
+
+.stat-card.high:hover {
+  box-shadow: 0 20px 50px rgba(255, 107, 107, 0.5);
+}
+
 .stat-card.medium {
-  background: linear-gradient(135deg, #f9a825 0%, #ffca28 100%);
+  background: linear-gradient(135deg, #feca57 0%, #ff9f43 100%);
   color: #333;
+  box-shadow: 0 10px 30px rgba(254, 202, 87, 0.4);
 }
+
+.stat-card.medium:hover {
+  box-shadow: 0 20px 50px rgba(254, 202, 87, 0.5);
+}
+
 .stat-card.low {
-  background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+  background: linear-gradient(135deg, #1dd1a1 0%, #10ac84 100%);
   color: white;
+  box-shadow: 0 10px 30px rgba(29, 209, 161, 0.4);
 }
+
+.stat-card.low:hover {
+  box-shadow: 0 20px 50px rgba(29, 209, 161, 0.5);
+}
+
 .stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 4px;
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
 }
+
 .stat-label {
-  font-size: 13px;
-  opacity: 0.9;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 脉冲动画效果 */
+@keyframes pulse-stat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.stat-card.critical .stat-value {
+  animation: pulse-stat 2s ease-in-out infinite;
 }
 .repo-info-card {
-  margin-bottom: 20px;
-  border-radius: 8px;
+  margin-bottom: 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  transition: all 0.4s ease;
 }
+
+.repo-info-card:hover {
+  box-shadow: 
+    0 8px 30px rgba(102, 126, 234, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  transform: translateY(-2px);
+}
+
 .repo-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
+
 .repo-title-section {
   display: flex;
   align-items: center;
   gap: 16px;
 }
+
 .repo-icon {
-  color: #1a237e;
+  color: #667eea;
+  font-size: 32px;
+  filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.3));
 }
+
 .repo-title-info {
   flex: 1;
 }
+
 .repo-name {
   margin: 0 0 4px 0;
-  font-size: 22px;
-  font-weight: 600;
-  color: #1a237e;
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1a1f3c 0%, #667eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
+
 .repo-desc {
   margin: 0;
   color: #606266;
   font-size: 14px;
+  font-weight: 500;
 }
+
 .repo-actions {
   display: flex;
   gap: 12px;
 }
+
+.repo-actions .el-button {
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.repo-actions .el-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
 .repo-meta {
   display: flex;
   gap: 40px;
 }
+
 .meta-item {
   display: flex;
   align-items: center;
   gap: 8px;
   color: #606266;
   font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.meta-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.meta-item .el-icon {
+  color: #667eea;
 }
 
 .vuln-list-card {
-  border-radius: 8px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
 }
 .card-header {
   display: flex;

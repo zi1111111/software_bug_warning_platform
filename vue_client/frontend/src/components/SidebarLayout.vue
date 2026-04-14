@@ -328,19 +328,70 @@ const openDrawer = () => {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #f5f7fa;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 50%, #f0f3f8 100%);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  position: relative;
+}
+
+/* 添加动态光效背景 */
+.layout-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 10% 20%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(118, 75, 162, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .sidebar {
-  background: linear-gradient(180deg, #1a237e 0%, #283593 100%);
+  background: linear-gradient(180deg, #1a1f3c 0%, #252d4a 50%, #1e2642 100%);
   display: flex;
   flex-direction: column;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-  /* 保证侧边栏本身不滚动，滚动由内部菜单区域负责 */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    4px 0 24px rgba(0, 0, 0, 0.3),
+    inset -1px 0 0 rgba(255, 255, 255, 0.1);
   overflow: hidden;
+  position: relative;
+}
+
+/* 侧边栏霓虹光效 */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, rgba(102, 126, 234, 0.15) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* 动态边框光效 */
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    rgba(102, 126, 234, 0.5) 20%, 
+    rgba(118, 75, 162, 0.5) 50%, 
+    rgba(102, 126, 234, 0.5) 80%, 
+    transparent 100%);
+  animation: border-glow 3s ease-in-out infinite;
+}
+
+@keyframes border-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 .sidebar-header {
@@ -449,23 +500,46 @@ const openDrawer = () => {
 
 :deep(.el-menu-item),
 :deep(.el-sub-menu__title) {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 :deep(.el-menu-item:hover),
 :deep(.el-sub-menu__title:hover) {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
   color: #fff;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 :deep(.el-menu-item.is-active) {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 100%);
   color: #fff;
-  border-right: 3px solid #fff;
+  border-right: none;
+  box-shadow: 
+    0 4px 15px rgba(102, 126, 234, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+:deep(.el-menu-item.is-active)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
 }
 
 :deep(.el-sub-menu .el-menu-item) {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.15);
+  margin-left: 16px;
 }
 
 .sidebar-footer {

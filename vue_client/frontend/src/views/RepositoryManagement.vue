@@ -409,20 +409,36 @@ const goToHome = () => {
 
 .header-left .title {
   margin: 0 0 8px 0;
-  font-size: 28px;
-  font-weight: 600;
-  color: #1a237e;
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1a1f3c 0%, #667eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .header-left .subtitle {
   margin: 0;
   color: #909399;
   font-size: 14px;
+  font-weight: 500;
 }
 
 .header-right {
   display: flex;
   align-items: center;
+  gap: 12px;
+}
+
+.header-right .el-button {
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.header-right .el-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 .stats-row {
@@ -430,7 +446,38 @@ const goToHome = () => {
 }
 
 .stat-card {
-  border-radius: 8px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 30px rgba(102, 126, 234, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+.stat-card:hover::before {
+  opacity: 1;
 }
 
 .stat-content {
@@ -442,31 +489,40 @@ const goToHome = () => {
 .stat-icon {
   width: 56px;
   height: 56px;
-  border-radius: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .stat-icon.blue {
-  background: #ecf5ff;
-  color: #409eff;
+  background: linear-gradient(135deg, #ecf5ff 0%, #d9ecff 100%);
+  color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
 .stat-icon.green {
-  background: #f0f9eb;
-  color: #67c23a;
+  background: linear-gradient(135deg, #f0f9eb 0%, #e1f3d8 100%);
+  color: #1dd1a1;
+  box-shadow: 0 4px 12px rgba(29, 209, 161, 0.2);
 }
 
 .stat-icon.red {
-  background: #fef0f0;
-  color: #f56c6c;
+  background: linear-gradient(135deg, #fef0f0 0%, #fde2e2 100%);
+  color: #ff416c;
+  box-shadow: 0 4px 12px rgba(255, 65, 108, 0.2);
 }
 
 .stat-icon.orange {
-  background: #fdf6ec;
-  color: #e6a23c;
+  background: linear-gradient(135deg, #fdf6ec 0%, #fce6d4 100%);
+  color: #ff9f43;
+  box-shadow: 0 4px 12px rgba(255, 159, 67, 0.2);
 }
 
 .stat-info {
@@ -474,9 +530,12 @@ const goToHome = () => {
 }
 
 .stat-value {
-  font-size: 18px;
-  font-weight: 700;
-  color: #303133;
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1a1f3c 0%, #667eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1;
   margin-bottom: 4px;
 }
@@ -484,10 +543,17 @@ const goToHome = () => {
 .stat-label {
   font-size: 13px;
   color: #909399;
+  font-weight: 500;
 }
 
 .repo-table-card {
-  border-radius: 8px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  overflow: hidden;
 }
 
 .repo-info-cell {

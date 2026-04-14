@@ -21154,3 +21154,466 @@ WHERE llm_analyses.commit_id = %(commit_id_1)s AND llm_analyses.is_security_rela
 2026-04-13 19:40:29,948 - apscheduler.scheduler - INFO - Scheduler has been shut down
 2026-04-13 19:40:29,949 - server.service.maintenance_service - INFO - 调度器已关闭
 2026-04-13 19:40:29,949 - app - INFO - 定时任务调度器已关闭
+2026-04-14 12:41:55,001 - root - INFO - Redis连接成功
+2026-04-14 12:41:55,002 - root - INFO - SMTP连接池初始化成功
+2026-04-14 12:41:55,290 - app - INFO - 应用启动中...
+2026-04-14 12:41:55,291 - server.service.data_collector - INFO - 正从.env中读取github_token
+2026-04-14 12:41:55,298 - server.service.data_collector - INFO - 使用 GitHub Token 进行认证
+2026-04-14 12:41:55,519 - server.service.data_collector - INFO - 开始同步1 个活跃仓库
+2026-04-14 12:41:55,519 - server.service.data_collector - INFO - 开始同步仓库：Linux内核
+2026-04-14 12:42:38,039 - server.service.data_collector - INFO - 仓库 Linux内核 新增 42 个提交
+2026-04-14 12:42:38,516 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-14 12:42:38,798 - server.service.LLM_censorship - INFO - DeepSeek 审查客户端初始化成功
+2026-04-14 12:42:39,076 - server.service.LLM_censorship - INFO - GLM-5 审查客户端初始化成功
+2026-04-14 12:42:39,355 - server.service.LLM_censorship - INFO - 千问审查客户端初始化成功
+2026-04-14 12:42:39,640 - server.service.LLM_censorship - INFO - Hunyuan 客户端初始化成功
+2026-04-14 12:42:39,653 - server.service.analysis_service - INFO - 发现 42 个未分析的 commits
+2026-04-14 12:42:39,654 - server.service.analysis_service - INFO - 分析 Commit d60bc14 ...
+2026-04-14 12:42:40,417 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:42:48,869 - server.service.analysis_service - INFO - Commit d60bc14 分析完成，安全相关: False, 最终严重性: None
+2026-04-14 12:42:48,871 - server.service.analysis_service - INFO - 分析 Commit 1334d2a ...
+2026-04-14 12:42:49,041 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:42:58,145 - server.service.analysis_service - INFO - Commit 1334d2a 开始多模型严重性审查...
+2026-04-14 12:42:58,147 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:42:58,562 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:00,892 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:00,893 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:43:00,907 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:00,907 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:43:07,302 - server.service.LLM_censorship - INFO - deepseek 审查完成: None (置信度: 0.95)
+2026-04-14 12:43:16,674 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:16,675 - server.service.LLM_censorship - INFO - qianwen 审查完成: Low (置信度: 0.90)
+2026-04-14 12:43:16,677 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Low, 加权分数=1.10
+2026-04-14 12:43:16,677 - server.service.analysis_service - INFO - Commit 1334d2a 审查完成: Medium -> Low
+2026-04-14 12:43:16,684 - server.service.analysis_service - INFO - Commit 1334d2a 分析完成，安全相关: True, 最终严重性: Low
+2026-04-14 12:43:16,685 - server.service.analysis_service - INFO - 分析 Commit fbfb6bd ...
+2026-04-14 12:43:16,969 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:25,445 - server.service.analysis_service - INFO - Commit fbfb6bd 开始多模型严重性审查...
+2026-04-14 12:43:25,445 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:43:25,741 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:27,427 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:27,428 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.85)
+2026-04-14 12:43:28,056 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:28,057 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.80)
+2026-04-14 12:43:33,129 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:43:38,272 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:38,273 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:43:38,273 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=High, 加权分数=2.70
+2026-04-14 12:43:38,274 - server.service.analysis_service - INFO - Commit fbfb6bd 审查完成: Medium -> High
+2026-04-14 12:43:38,280 - server.service.analysis_service - INFO - Commit fbfb6bd 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:43:38,281 - server.service.analysis_service - INFO - 分析 Commit d7c8087 ...
+2026-04-14 12:43:38,666 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:47,862 - server.service.analysis_service - INFO - Commit d7c8087 分析完成，安全相关: False, 最终严重性: None
+2026-04-14 12:43:47,865 - server.service.analysis_service - INFO - 分析 Commit 2e31b16 ...
+2026-04-14 12:43:48,017 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:43:59,476 - server.service.analysis_service - INFO - Commit 2e31b16 开始多模型严重性审查...
+2026-04-14 12:43:59,476 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:43:59,694 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:01,545 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:01,545 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:44:01,865 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:01,865 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:44:06,398 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:44:11,306 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:11,308 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:44:11,309 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.00
+2026-04-14 12:44:11,309 - server.service.analysis_service - INFO - Commit 2e31b16 审查完成: Medium -> Medium
+2026-04-14 12:44:11,319 - server.service.analysis_service - INFO - Commit 2e31b16 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:44:11,320 - server.service.analysis_service - INFO - 分析 Commit 4793dae ...
+2026-04-14 12:44:11,520 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:20,461 - server.service.analysis_service - INFO - Commit 4793dae 开始多模型严重性审查...
+2026-04-14 12:44:20,461 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:44:20,641 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:22,137 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:22,138 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.85)
+2026-04-14 12:44:22,793 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:22,794 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.90)
+2026-04-14 12:44:29,013 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:44:33,495 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:33,496 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:44:33,497 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=High, 最终=High, 加权分数=2.71
+2026-04-14 12:44:33,497 - server.service.analysis_service - INFO - Commit 4793dae 审查完成: High -> High
+2026-04-14 12:44:33,506 - server.service.analysis_service - INFO - Commit 4793dae 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:44:33,507 - server.service.analysis_service - INFO - Commit d568788 预过滤跳过（无安全关键词）
+2026-04-14 12:44:33,511 - server.service.analysis_service - INFO - Commit cea4a90 预过滤跳过（无安全关键词）
+2026-04-14 12:44:33,515 - server.service.analysis_service - INFO - Commit 613b48b 预过滤跳过（无安全关键词）
+2026-04-14 12:44:33,519 - server.service.analysis_service - INFO - 分析 Commit cae0d23 ...
+2026-04-14 12:44:33,626 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:43,914 - server.service.analysis_service - INFO - Commit cae0d23 开始多模型严重性审查...
+2026-04-14 12:44:43,914 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:44:44,071 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:46,092 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:46,092 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:44:46,116 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:46,117 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:44:50,601 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:44:54,593 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:44:54,594 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:44:54,595 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.00
+2026-04-14 12:44:54,595 - server.service.analysis_service - INFO - Commit cae0d23 审查完成: Medium -> Medium
+2026-04-14 12:44:54,604 - server.service.analysis_service - INFO - Commit cae0d23 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:44:54,606 - server.service.analysis_service - INFO - Commit d142ab3 预过滤跳过（无安全关键词）
+2026-04-14 12:44:54,610 - server.service.analysis_service - INFO - Commit 370c388 预过滤跳过（无安全关键词）
+2026-04-14 12:44:54,615 - server.service.analysis_service - INFO - Commit 9932f00 预过滤跳过（无安全关键词）
+2026-04-14 12:44:54,619 - server.service.analysis_service - INFO - 分析 Commit 81dc1e4 ...
+2026-04-14 12:44:54,988 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:04,413 - server.service.analysis_service - INFO - Commit 81dc1e4 开始多模型严重性审查...
+2026-04-14 12:45:04,413 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:45:04,561 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:07,069 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:07,070 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.80)
+2026-04-14 12:45:07,082 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:07,083 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.90)
+2026-04-14 12:45:13,928 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:45:15,828 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:15,829 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:45:15,829 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=High, 最终=High, 加权分数=2.71
+2026-04-14 12:45:15,829 - server.service.analysis_service - INFO - Commit 81dc1e4 审查完成: High -> High
+2026-04-14 12:45:15,835 - server.service.analysis_service - INFO - Commit 81dc1e4 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:45:15,835 - server.service.analysis_service - INFO - 分析 Commit 0b0128e ...
+2026-04-14 12:45:16,009 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:24,707 - server.service.analysis_service - INFO - Commit 0b0128e 开始多模型严重性审查...
+2026-04-14 12:45:24,708 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:45:24,868 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:26,725 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:26,727 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:45:26,856 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:26,857 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:45:32,706 - server.service.LLM_censorship - INFO - deepseek 审查完成: Low (置信度: 0.85)
+2026-04-14 12:45:33,580 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:33,582 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:45:33,583 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=1.70
+2026-04-14 12:45:33,583 - server.service.analysis_service - INFO - Commit 0b0128e 审查完成: Medium -> Medium
+2026-04-14 12:45:33,592 - server.service.analysis_service - INFO - Commit 0b0128e 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:45:33,594 - server.service.analysis_service - INFO - 分析 Commit 230fb3a ...
+2026-04-14 12:45:33,734 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:43,527 - server.service.analysis_service - INFO - Commit 230fb3a 开始多模型严重性审查...
+2026-04-14 12:45:43,527 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:45:43,666 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:45,031 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:45,032 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.90)
+2026-04-14 12:45:45,803 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:45,804 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.80)
+2026-04-14 12:45:52,447 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:45:57,613 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:45:57,614 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:45:57,615 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=High, 最终=High, 加权分数=2.71
+2026-04-14 12:45:57,615 - server.service.analysis_service - INFO - Commit 230fb3a 审查完成: High -> High
+2026-04-14 12:45:57,624 - server.service.analysis_service - INFO - Commit 230fb3a 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:45:57,626 - server.service.analysis_service - INFO - 分析 Commit a62fe21 ...
+2026-04-14 12:45:57,895 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:09,182 - server.service.analysis_service - INFO - Commit a62fe21 开始多模型严重性审查...
+2026-04-14 12:46:09,182 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:46:09,417 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:11,663 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:11,664 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:46:13,677 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:13,679 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:46:16,835 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:46:21,272 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:21,273 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:46:21,274 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.00
+2026-04-14 12:46:21,274 - server.service.analysis_service - INFO - Commit a62fe21 审查完成: Medium -> Medium
+2026-04-14 12:46:21,281 - server.service.analysis_service - INFO - Commit a62fe21 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:46:21,282 - server.service.analysis_service - INFO - 分析 Commit f272982 ...
+2026-04-14 12:46:21,492 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:30,084 - server.service.analysis_service - INFO - Commit f272982 开始多模型严重性审查...
+2026-04-14 12:46:30,084 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:46:30,247 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:31,824 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:31,825 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.90)
+2026-04-14 12:46:32,117 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:32,119 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.90)
+2026-04-14 12:46:39,978 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:46:42,020 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:42,021 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:46:42,021 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=High, 最终=High, 加权分数=2.71
+2026-04-14 12:46:42,021 - server.service.analysis_service - INFO - Commit f272982 审查完成: High -> High
+2026-04-14 12:46:42,027 - server.service.analysis_service - INFO - Commit f272982 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:46:42,028 - server.service.analysis_service - INFO - 分析 Commit 4d99814 ...
+2026-04-14 12:46:42,209 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:53,841 - server.service.analysis_service - INFO - Commit 4d99814 开始多模型严重性审查...
+2026-04-14 12:46:53,841 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:46:54,011 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:55,594 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:55,595 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.90)
+2026-04-14 12:46:56,191 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:46:56,192 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.90)
+2026-04-14 12:47:04,289 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:04,291 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:47:04,410 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:47:04,411 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=High, 最终=High, 加权分数=2.71
+2026-04-14 12:47:04,411 - server.service.analysis_service - INFO - Commit 4d99814 审查完成: High -> High
+2026-04-14 12:47:04,418 - server.service.analysis_service - INFO - Commit 4d99814 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:47:04,419 - server.service.analysis_service - INFO - 分析 Commit f3756af ...
+2026-04-14 12:47:04,625 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:12,695 - server.service.analysis_service - INFO - Commit f3756af 开始多模型严重性审查...
+2026-04-14 12:47:12,695 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:47:12,829 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:14,748 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:14,749 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:47:14,842 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:14,843 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.90)
+2026-04-14 12:47:20,587 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:47:23,295 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:23,296 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:47:23,297 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.15
+2026-04-14 12:47:23,297 - server.service.analysis_service - INFO - Commit f3756af 审查完成: Medium -> Medium
+2026-04-14 12:47:23,303 - server.service.analysis_service - INFO - Commit f3756af 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:47:23,304 - server.service.analysis_service - INFO - 分析 Commit c92b4d3 ...
+2026-04-14 12:47:23,529 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:34,370 - server.service.analysis_service - INFO - Commit c92b4d3 开始多模型严重性审查...
+2026-04-14 12:47:34,370 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:47:34,540 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:36,539 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:36,540 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:47:37,511 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:37,512 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:47:41,479 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:47:48,954 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:48,955 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:47:48,956 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.00
+2026-04-14 12:47:48,956 - server.service.analysis_service - INFO - Commit c92b4d3 审查完成: Medium -> Medium
+2026-04-14 12:47:48,966 - server.service.analysis_service - INFO - Commit c92b4d3 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:47:48,967 - server.service.analysis_service - INFO - 分析 Commit 23acda7 ...
+2026-04-14 12:47:49,114 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:47:58,812 - server.service.analysis_service - INFO - Commit 23acda7 开始多模型严重性审查...
+2026-04-14 12:47:58,812 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:47:58,979 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:01,771 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:01,771 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.85)
+2026-04-14 12:48:03,050 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:03,050 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.80)
+2026-04-14 12:48:06,013 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:48:16,771 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:16,772 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:48:16,773 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.45
+2026-04-14 12:48:16,774 - server.service.analysis_service - INFO - Commit 23acda7 审查完成: Medium -> Medium
+2026-04-14 12:48:16,781 - server.service.analysis_service - INFO - Commit 23acda7 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:48:16,782 - server.service.analysis_service - INFO - 分析 Commit 7fe6ac1 ...
+2026-04-14 12:48:17,084 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:26,547 - server.service.analysis_service - INFO - Commit 7fe6ac1 开始多模型严重性审查...
+2026-04-14 12:48:26,548 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:48:26,772 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:29,184 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:29,185 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.90)
+2026-04-14 12:48:30,734 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:30,735 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.90)
+2026-04-14 12:48:33,888 - server.service.LLM_censorship - INFO - deepseek 审查完成: High (置信度: 0.85)
+2026-04-14 12:48:38,161 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:38,163 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:48:38,163 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=High, 最终=High, 加权分数=3.00
+2026-04-14 12:48:38,163 - server.service.analysis_service - INFO - Commit 7fe6ac1 审查完成: High -> High
+2026-04-14 12:48:38,172 - server.service.analysis_service - INFO - Commit 7fe6ac1 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:48:38,173 - server.service.analysis_service - INFO - 分析 Commit b8f82cb ...
+2026-04-14 12:48:38,319 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:46,755 - server.service.analysis_service - INFO - Commit b8f82cb 开始多模型严重性审查...
+2026-04-14 12:48:46,755 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:48:46,915 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:48,814 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:48,815 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:48:49,081 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:49,082 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:48:55,370 - server.service.LLM_censorship - INFO - deepseek 审查完成: Low (置信度: 0.85)
+2026-04-14 12:48:58,159 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:48:58,161 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:48:58,161 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=1.70
+2026-04-14 12:48:58,161 - server.service.analysis_service - INFO - Commit b8f82cb 审查完成: Medium -> Medium
+2026-04-14 12:48:58,168 - server.service.analysis_service - INFO - Commit b8f82cb 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:48:58,169 - server.service.analysis_service - INFO - 分析 Commit b206a6f ...
+2026-04-14 12:48:58,410 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:08,451 - server.service.analysis_service - INFO - Commit b206a6f 开始多模型严重性审查...
+2026-04-14 12:49:08,451 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:49:08,654 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:10,256 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:10,257 - server.service.LLM_censorship - INFO - glm5 审查完成: None (置信度: 0.95)
+2026-04-14 12:49:11,782 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:11,782 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Low (置信度: 0.80)
+2026-04-14 12:49:15,944 - server.service.LLM_censorship - INFO - deepseek 审查完成: Low (置信度: 0.95)
+2026-04-14 12:49:18,811 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:18,812 - server.service.LLM_censorship - INFO - qianwen 审查完成: Low (置信度: 0.90)
+2026-04-14 12:49:18,813 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Low, 最终=Low, 加权分数=0.69
+2026-04-14 12:49:18,813 - server.service.analysis_service - INFO - Commit b206a6f 审查完成: Low -> Low
+2026-04-14 12:49:18,820 - server.service.analysis_service - INFO - Commit b206a6f 分析完成，安全相关: True, 最终严重性: Low
+2026-04-14 12:49:18,821 - server.service.analysis_service - INFO - 分析 Commit 3ba310f ...
+2026-04-14 12:49:18,989 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:26,306 - server.service.analysis_service - INFO - Commit 3ba310f 开始多模型严重性审查...
+2026-04-14 12:49:26,306 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:49:26,466 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:28,032 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:28,034 - server.service.LLM_censorship - INFO - glm5 审查完成: High (置信度: 0.90)
+2026-04-14 12:49:29,273 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:29,274 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.90)
+2026-04-14 12:49:33,818 - server.service.LLM_censorship - INFO - deepseek 审查完成: High (置信度: 0.85)
+2026-04-14 12:49:35,607 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:35,607 - server.service.LLM_censorship - INFO - qianwen 审查完成: High (置信度: 0.90)
+2026-04-14 12:49:35,608 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=High, 最终=High, 加权分数=3.00
+2026-04-14 12:49:35,608 - server.service.analysis_service - INFO - Commit 3ba310f 审查完成: High -> High
+2026-04-14 12:49:35,618 - server.service.analysis_service - INFO - Commit 3ba310f 分析完成，安全相关: True, 最终严重性: High
+2026-04-14 12:49:35,618 - server.service.analysis_service - INFO - 分析 Commit de63934 ...
+2026-04-14 12:49:35,754 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:45,907 - server.service.analysis_service - INFO - Commit de63934 开始多模型严重性审查...
+2026-04-14 12:49:45,907 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:49:46,052 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:47,828 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:47,829 - server.service.LLM_censorship - INFO - glm5 审查完成: Low (置信度: 0.90)
+2026-04-14 12:49:48,052 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:48,053 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Low (置信度: 0.80)
+2026-04-14 12:49:52,678 - server.service.LLM_censorship - INFO - deepseek 审查完成: Low (置信度: 0.85)
+2026-04-14 12:49:55,189 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:49:55,190 - server.service.LLM_censorship - INFO - qianwen 审查完成: Low (置信度: 0.90)
+2026-04-14 12:49:55,191 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Low, 最终=Low, 加权分数=1.00
+2026-04-14 12:49:55,191 - server.service.analysis_service - INFO - Commit de63934 审查完成: Low -> Low
+2026-04-14 12:49:55,199 - server.service.analysis_service - INFO - Commit de63934 分析完成，安全相关: True, 最终严重性: Low
+2026-04-14 12:49:55,200 - server.service.analysis_service - INFO - 分析 Commit ef3da34 ...
+2026-04-14 12:49:55,351 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:05,991 - server.service.analysis_service - INFO - Commit ef3da34 开始多模型严重性审查...
+2026-04-14 12:50:05,991 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:50:06,169 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:07,750 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:07,751 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:50:09,045 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:09,047 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:50:15,534 - server.service.LLM_censorship - INFO - deepseek 审查完成: Low (置信度: 0.85)
+2026-04-14 12:50:18,863 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:18,864 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:50:18,864 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=1.69
+2026-04-14 12:50:18,864 - server.service.analysis_service - INFO - Commit ef3da34 审查完成: Medium -> Medium
+2026-04-14 12:50:18,872 - server.service.analysis_service - INFO - Commit ef3da34 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:50:18,874 - server.service.analysis_service - INFO - 分析 Commit 07c3ef5 ...
+2026-04-14 12:50:19,208 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:30,540 - server.service.analysis_service - INFO - Commit 07c3ef5 开始多模型严重性审查...
+2026-04-14 12:50:30,540 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:50:30,713 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:32,991 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:32,992 - server.service.LLM_censorship - INFO - glm5 审查完成: None (置信度: 0.95)
+2026-04-14 12:50:35,068 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:35,069 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.80)
+2026-04-14 12:50:39,846 - server.service.LLM_censorship - INFO - deepseek 审查完成: None (置信度: 0.95)
+2026-04-14 12:50:42,228 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:42,229 - server.service.LLM_censorship - INFO - qianwen 审查完成: None (置信度: 1.00)
+2026-04-14 12:50:42,230 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=None, 加权分数=0.38
+2026-04-14 12:50:42,230 - server.service.analysis_service - INFO - Commit 07c3ef5 审查完成: Medium -> None
+2026-04-14 12:50:42,240 - server.service.analysis_service - INFO - Commit 07c3ef5 分析完成，安全相关: True, 最终严重性: None
+2026-04-14 12:50:42,241 - server.service.analysis_service - INFO - Commit dc0dfa7 预过滤跳过（无安全关键词）
+2026-04-14 12:50:42,245 - server.service.analysis_service - INFO - 分析 Commit fc825e5 ...
+2026-04-14 12:50:42,409 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:50,573 - server.service.analysis_service - INFO - Commit fc825e5 分析完成，安全相关: False, 最终严重性: None
+2026-04-14 12:50:50,575 - server.service.analysis_service - INFO - 分析 Commit 2802f94 ...
+2026-04-14 12:50:50,669 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:50:58,512 - server.service.analysis_service - INFO - Commit 2802f94 分析完成，安全相关: False, 最终严重性: None
+2026-04-14 12:50:58,513 - server.service.analysis_service - INFO - 分析 Commit b7d74ea ...
+2026-04-14 12:50:58,608 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:08,950 - server.service.analysis_service - INFO - Commit b7d74ea 分析完成，安全相关: False, 最终严重性: None
+2026-04-14 12:51:08,951 - server.service.analysis_service - INFO - Commit 0f00132 预过滤跳过（无安全关键词）
+2026-04-14 12:51:08,956 - server.service.analysis_service - INFO - 分析 Commit 3383589 ...
+2026-04-14 12:51:09,043 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:21,954 - server.service.analysis_service - INFO - Commit 3383589 开始多模型严重性审查...
+2026-04-14 12:51:21,954 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:51:22,167 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:24,268 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:24,271 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:51:24,566 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:24,567 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:51:31,670 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:51:34,131 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:34,132 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:51:34,133 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.00
+2026-04-14 12:51:34,133 - server.service.analysis_service - INFO - Commit 3383589 审查完成: Medium -> Medium
+2026-04-14 12:51:34,143 - server.service.analysis_service - INFO - Commit 3383589 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:51:34,145 - server.service.analysis_service - INFO - 分析 Commit c8db081 ...
+2026-04-14 12:51:34,348 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:48,482 - server.service.analysis_service - INFO - Commit c8db081 开始多模型严重性审查...
+2026-04-14 12:51:48,482 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:51:48,793 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:50,568 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:50,569 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:51:51,858 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:51,860 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:51:57,210 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:51:57,212 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:51:58,347 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:51:58,348 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.00
+2026-04-14 12:51:58,348 - server.service.analysis_service - INFO - Commit c8db081 审查完成: Medium -> Medium
+2026-04-14 12:51:58,355 - server.service.analysis_service - INFO - Commit c8db081 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:51:58,356 - server.service.analysis_service - INFO - Commit 0e58e3f 预过滤跳过（无安全关键词）
+2026-04-14 12:51:58,359 - server.service.analysis_service - INFO - 分析 Commit 26ff969 ...
+2026-04-14 12:51:58,575 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:08,564 - server.service.analysis_service - INFO - Commit 26ff969 开始多模型严重性审查...
+2026-04-14 12:52:08,564 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:52:08,714 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:10,637 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:10,639 - server.service.LLM_censorship - INFO - glm5 审查完成: None (置信度: 0.95)
+2026-04-14 12:52:11,980 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:11,981 - server.service.LLM_censorship - INFO - hunyuan 审查完成: High (置信度: 0.80)
+2026-04-14 12:52:18,915 - server.service.LLM_censorship - INFO - deepseek 审查完成: None (置信度: 0.95)
+2026-04-14 12:52:20,291 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:20,293 - server.service.LLM_censorship - INFO - qianwen 审查完成: None (置信度: 1.00)
+2026-04-14 12:52:20,294 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=None, 加权分数=0.38
+2026-04-14 12:52:20,294 - server.service.analysis_service - INFO - Commit 26ff969 审查完成: Medium -> None
+2026-04-14 12:52:20,303 - server.service.analysis_service - INFO - Commit 26ff969 分析完成，安全相关: True, 最终严重性: None
+2026-04-14 12:52:20,304 - server.service.analysis_service - INFO - 分析 Commit 2848320 ...
+2026-04-14 12:52:20,456 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:30,986 - server.service.analysis_service - INFO - Commit 2848320 分析完成，安全相关: False, 最终严重性: None
+2026-04-14 12:52:30,987 - server.service.analysis_service - INFO - 分析 Commit 599bbba ...
+2026-04-14 12:52:31,172 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:43,495 - server.service.analysis_service - INFO - Commit 599bbba 开始多模型严重性审查...
+2026-04-14 12:52:43,496 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:52:43,727 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:47,879 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:47,880 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:52:47,931 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:47,932 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:52:57,499 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:52:57,500 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.90)
+2026-04-14 12:52:58,885 - server.service.LLM_censorship - INFO - deepseek 审查完成: Low (置信度: 0.90)
+2026-04-14 12:52:58,886 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=1.69
+2026-04-14 12:52:58,886 - server.service.analysis_service - INFO - Commit 599bbba 审查完成: Medium -> Medium
+2026-04-14 12:52:58,894 - server.service.analysis_service - INFO - Commit 599bbba 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:52:58,895 - server.service.analysis_service - INFO - 分析 Commit fdcbb1b ...
+2026-04-14 12:52:59,088 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:53:11,910 - server.service.analysis_service - INFO - Commit fdcbb1b 开始多模型严重性审查...
+2026-04-14 12:53:11,910 - server.service.LLM_censorship - INFO - 开始多模型严重性审查: None
+2026-04-14 12:53:12,117 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:53:14,517 - httpx - INFO - HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:53:14,518 - server.service.LLM_censorship - INFO - glm5 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:53:15,496 - httpx - INFO - HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:53:15,498 - server.service.LLM_censorship - INFO - hunyuan 审查完成: Medium (置信度: 0.80)
+2026-04-14 12:53:21,172 - server.service.LLM_censorship - INFO - deepseek 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:53:25,493 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:53:25,494 - server.service.LLM_censorship - INFO - qianwen 审查完成: Medium (置信度: 0.85)
+2026-04-14 12:53:25,495 - server.service.LLM_censorship - INFO - 多模型审查完成: 原始=Medium, 最终=Medium, 加权分数=2.00
+2026-04-14 12:53:25,495 - server.service.analysis_service - INFO - Commit fdcbb1b 审查完成: Medium -> Medium
+2026-04-14 12:53:25,504 - server.service.analysis_service - INFO - Commit fdcbb1b 分析完成，安全相关: True, 最终严重性: Medium
+2026-04-14 12:53:25,505 - server.service.analysis_service - INFO - Commit 4248ed1 预过滤跳过（无安全关键词）
+2026-04-14 12:53:25,507 - server.service.maintenance_service - INFO - 开始执行AI洞察分析定时任务
+2026-04-14 12:53:25,507 - server.service.maintenance_service - INFO - 找到 1 个活跃仓库
+2026-04-14 12:53:25,508 - server.service.LLM_layer - INFO - 开始AI洞察分析: repo_id=1, time_range=7d
+2026-04-14 12:53:25,829 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-14 12:53:26,192 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:53:42,028 - server.service.LLM_layer - INFO - AI洞察分析完成: repo_id=1, time_range=7d
+2026-04-14 12:53:42,029 - server.service.LLM_layer - INFO - 开始AI洞察分析: repo_id=1, time_range=30d
+2026-04-14 12:53:42,322 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-14 12:53:42,731 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:53:54,619 - server.service.LLM_layer - INFO - AI洞察分析完成: repo_id=1, time_range=30d
+2026-04-14 12:53:54,620 - server.service.LLM_layer - INFO - 开始AI洞察分析: repo_id=1, time_range=90d
+2026-04-14 12:53:54,911 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-14 12:53:55,190 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:54:08,058 - server.service.LLM_layer - INFO - AI洞察分析完成: repo_id=1, time_range=90d
+2026-04-14 12:54:08,060 - server.service.LLM_layer - INFO - 开始AI洞察分析: repo_id=1, time_range=year
+2026-04-14 12:54:08,379 - server.service.LLM_layer - INFO - DeepSeek 分析器初始化成功
+2026-04-14 12:54:08,768 - httpx - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-04-14 12:54:20,231 - server.service.LLM_layer - INFO - AI洞察分析完成: repo_id=1, time_range=year
+2026-04-14 12:54:20,231 - server.service.maintenance_service - INFO - AI洞察分析完成: 成功4, 失败0
+2026-04-14 12:54:20,231 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-14 12:54:20,232 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-14 12:54:20,232 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-04-14 12:54:20,232 - apscheduler.scheduler - INFO - Added job "GitHubCollector.sync_all_repositories" to job store "default"
+2026-04-14 12:54:20,232 - apscheduler.scheduler - INFO - Added job "AnalysisService.analyze_unanalyzed_commits" to job store "default"
+2026-04-14 12:54:20,232 - apscheduler.scheduler - INFO - Added job "update_all_ai_insights" to job store "default"
+2026-04-14 12:54:20,232 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-14 12:54:20,233 - server.service.maintenance_service - INFO - 调度器已启动，每天凌晨2:00进行仓库爬取和模型分析，2:30进行AI洞察分析
+2026-04-14 15:33:22,762 - app - INFO - 应用关闭中...
+2026-04-14 15:33:22,763 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2026-04-14 15:33:22,763 - server.service.maintenance_service - INFO - 调度器已关闭
+2026-04-14 15:33:22,763 - app - INFO - 定时任务调度器已关闭

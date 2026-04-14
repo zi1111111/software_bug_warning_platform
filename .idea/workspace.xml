@@ -5,13 +5,125 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f632431-dfbd-4b7b-b2c6-7dc67da6dff5" name="更改" comment="更新">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.12/3.12_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.12/3.12_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.14/3.14_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.14/3.14_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.16/3.16_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.16/3.16_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.18/3.18_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.18/3.18_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.2/3.2_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/3.2/3.2_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.1/4.1_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.1/4.1_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.10/4.10_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.10/4.10_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.11/4.11_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.11/4.11_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.12/4.12_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.12/4.12_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.13/4.13_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.13/4.13_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.14/4.14_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.14/4.14_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.15/4.15_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.15/4.15_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.16/4.16_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.16/4.16_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.17/4.17_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.17/4.17_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.18/4.18_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.18/4.18_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.19/4.19_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.19/4.19_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.20/4.20_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.20/4.20_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.3/4.3_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.3/4.3_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.4/4.4_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.4/4.4_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.5/4.5_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.5/4.5_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.6/4.6_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.6/4.6_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.7/4.7_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.7/4.7_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.8/4.8_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.8/4.8_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.9/4.9_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/4.9/4.9_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.0/5.0_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.0/5.0_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.1/5.1_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.1/5.1_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.10/5.10_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.10/5.10_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.11/5.11_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.11/5.11_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.12/5.12_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.12/5.12_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.13/5.13_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.13/5.13_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.14/5.14_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.14/5.14_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.15/5.15_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.15/5.15_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.16/5.16_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.16/5.16_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.17/5.17_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.17/5.17_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.18/5.18_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.18/5.18_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.19/5.19_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.19/5.19_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.2/5.2_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.2/5.2_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.3/5.3_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.3/5.3_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.4/5.4_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.4/5.4_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.5/5.5_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.5/5.5_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.6/5.6_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.6/5.6_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.7/5.7_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.7/5.7_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.8/5.8_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.8/5.8_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.9/5.9_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/5.9/5.9_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.0/6.0_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.0/6.0_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.1/6.1_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.1/6.1_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.2/6.2_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.2/6.2_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.3/6.3_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.3/6.3_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.4/6.4_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.4/6.4_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.5/6.5_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.5/6.5_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.6/6.6_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.6/6.6_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.7/6.7_CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/6.7/6.7_security.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/CVEs.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/cmts.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/kernel_cves.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/stream_data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fastapi_server/data/linux_kernel_cves/data/stream_fixes.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/fastapi_server/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/logs/app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/LLM_layer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/data_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/data_response.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/fastapi_server/server/service/maintenance_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/components/SidebarLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/DailyVulnUpdate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/DailyVulnUpdate.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/RepositoryManagement.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/RiskAssessment.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/RiskAssessment.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_client/frontend/src/views/TrendAnalysis.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_client/frontend/src/views/TrendAnalysis.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,7 +309,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775834037742</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="更新">
+      <option name="closed" value="true" />
+      <created>1776139016895</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1776139016895</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

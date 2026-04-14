@@ -606,8 +606,13 @@ const goToRepoManagement = () => {
 
 /* 风险分布卡片 */
 .risk-distribution-card {
-  border-radius: 8px;
+  border-radius: 20px;
   height: 100%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
 }
 
 .distribution-list {
@@ -632,11 +637,15 @@ const goToRepoManagement = () => {
 .level-name {
   font-weight: 600;
   font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .level-count {
   font-size: 13px;
   color: #606266;
+  font-weight: 500;
 }
 
 .percentage-text {
@@ -647,8 +656,13 @@ const goToRepoManagement = () => {
 
 /* 漏洞类型分布卡片 */
 .vuln-type-card {
-  border-radius: 8px;
+  border-radius: 20px;
   height: 100%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
 }
 
 .vuln-type-list {
@@ -662,6 +676,15 @@ const goToRepoManagement = () => {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 8px 12px;
+  background: rgba(102, 126, 234, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.vuln-type-item:hover {
+  background: rgba(102, 126, 234, 0.08);
+  transform: translateX(4px);
 }
 
 .vuln-type-header {
@@ -671,34 +694,37 @@ const goToRepoManagement = () => {
 }
 
 .vuln-type-rank {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: #f5f7fa;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
   color: #909399;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .vuln-type-rank.top3 {
-  background: #1a237e;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .vuln-type-name {
   flex: 1;
   font-size: 14px;
   color: #303133;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .vuln-type-count {
   font-size: 13px;
   color: #606266;
+  font-weight: 500;
 }
 
 .vuln-type-bar-wrapper {
@@ -712,6 +738,7 @@ const goToRepoManagement = () => {
   height: 100%;
   border-radius: 4px;
   transition: width 0.5s ease;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
 }
 
 /* 组件风险卡片 */
